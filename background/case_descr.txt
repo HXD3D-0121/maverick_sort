@@ -1,0 +1,70 @@
+Introduction
+The case companies and all numbers are made up for educational purposes. Any resemblance to
+real enterprises is purely coincidental.
+This casebook is designed for the Digital Innovation course (SDC MSc Innovation Management),
+featuring two enterprises and two AI development challenges.
+Each case provides rich business data, system context, and challenge descriptions. Student teams
+have 4 weeks to build runnable prototypes using the Kimi AI model.
+Cases are calibrated for MSc Innovation Management level, balancing technical innovation with
+business analysis. Suitable for predominantly non-technical teams (5 students, 1-2 with technical
+background).
+
+Case 1: Smart Warehouse Sorting & Dispatch System
+Company Background
+"A Large Pharmaceutical Logistics Enterprise" (hereinafter "the Enterprise") is one of China's leading
+pharmaceutical distribution companies, with over 40 years in the industry and annual revenue
+exceeding RMB 100 billion.
+The Enterprise operates a nationwide "integrated wholesale-retail-storage-distribution"
+pharmaceutical logistics service system, with 128 modern logistics centers, 856 terminal distribution
+stations, 2.65 million square meters of GSP-standard warehouse space, annual throughput exceeding
+90 million cases, covering 28 provinces and over 94% of administrative regions.
+In 2025, the Enterprise achieved revenue of RMB 138.76 billion, serving 12,800 public hospitals,
+5,832 chain pharmacies, 196,500 independent pharmacies, and 357,400 primary healthcare
+institutions.
+Business Data
+Metric Data
+Casebook | SDC MSc Innovation Management
+3
+Metric Data
+Logistics Centers 128 (incl. 6 central warehouses)
+Distribution Stations 856
+Warehouse Area 2.65m sqm (GSP-standard)
+Annual Throughput >90m cases
+Product Lines (SKU) 423,600 (Western/TCM 58,700, devices 231,400, TCM 79,500)
+Partner Manufacturers 8,600
+Public Hospital Clients 12,800
+Retail Pharmacy Clients >250,000 (incl. 5,832 chain)
+B2B Registered Users >580,000
+Next-Day Delivery Rate >88%
+Challenge Description
+The Enterprise's warehousing system faces these core challenges:
+• SKU complexity: Among 423,600 product lines, ~38% are near-expiry managed items with
+varying temperature requirements (ambient, cool, cold, frozen), making sorting rules highly
+complex.
+• Order fragmentation: The B2B platform sees >36,000 daily active customers, mostly small-
+batch multi-SKU orders averaging 3-5 items per order, yet total daily orders exceed 90,000.
+• Time pressure: The >88% next-day delivery promise requires same-day sorting and dispatch;
+peak periods (e.g., flu season) can spike order volume by 280%.
+• Labor bottleneck: Sorting relies heavily on manual labor; peak periods require 2.5x temporary
+staffing, with ~0.35% error rate and annual return losses exceeding RMB 9 million.
+• Inventory turnover: Some pharmaceutical products have near-expiry scrap rates of ~4.8%,
+urgently requiring smart dispatch systems to optimize FIFO strategy.
+Task Requirements
+Design and develop a smart warehouse sorting & dispatch system with these core features:
+• Smart wave allocation: Auto-generate sorting waves based on order characteristics, product
+attributes, and warehouse layout to optimize picking paths.
+Casebook | SDC MSc Innovation Management
+4
+• Dynamic inventory scheduling: Real-time monitoring of bin-level inventory with intelligent
+replenishment/reallocation recommendations.
+• Near-expiry alert: Generate expiry warnings and promotion suggestions based on product
+shelf life and outbound frequency.
+• Visual dashboard: Display real-time sorting progress, labor load, and exception alerts across all
+logistics centers.
+• Simulation: Provide "what-if" analysis to simulate system performance under different order
+volumes.
+Deliverables
+• Runnable system prototype (web app or demo)
+• System architecture documentation
+• One concrete business scenario demo (e.g., sorting dispatch simulation for a regional
+warehouse during flu season peak)

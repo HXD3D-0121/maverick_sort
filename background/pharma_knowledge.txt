@@ -1,0 +1,153 @@
+1. Physical Infrastructure Layout
+Receiving and inbound. Trucks arrive at dock doors. Items are unloaded, scanned, and checked against ASN (Advance Shipping Notice). Temperature-sensitive items are immediately probed with digital thermometers. Any temperature excursion during transit triggers quarantine. Items sit in a staging area until quality release.
+Temperature zones. The warehouse is physically divided into:
+
+    Ambient (15-25°C): largest area, 60-70% of SKUs
+    Cool (2-8°C): refrigerated rooms with airlocks, 15-20% of SKUs
+    Cold (-20°C): freezer rooms, limited access, 5% of SKUs
+    Frozen/Ultra-cold (-70°C): specialized freezers for vaccines/biologics, <1% of SKUs
+    Controlled substance vault: separate room with dual-access locks, cameras, limited personnel
+
+Zones are separated by physical walls and airlocks. Moving from ambient to cool requires passing through an airlock, which takes 30-60 seconds and causes condensation issues.
+Racking and storage.
+
+    Forward pick: Flow rack or static shelving at ground level, 1-2 cases deep. Pickers reach in and take units. High-velocity SKUs live here.
+    Reserve/bulk: Pallet racking 3-8 meters high. Forklifts or reach trucks access these. Items are moved to forward pick as needed.
+    Mezzanines: Second-level platforms for additional storage or pick stations, accessed by lifts or stairs.
+
+Conveyor network. Modern warehouses have a backbone conveyor system:
+
+    Receiving conveyors move inbound goods to putaway stations
+    Putaway conveyors feed into the storage system
+    Picking conveyors route totes between pick zones and consolidation
+    Shipping conveyors move packed orders to outbound dock doors
+
+Conveyors run along main arteries. Branch conveyors feed into pick zones.
+2. The Picking Models
+Pharmaceutical warehouses use multiple picking models simultaneously:
+Model A: Zone Picking with Conveyor Consolidation
+This is the most common model for high-volume pharmaceutical distribution.
+How it works:
+
+    The warehouse is divided into pick zones (e.g., Zone A: ambient fast movers, Zone B: ambient slow movers, Zone C: cool, Zone D: cold)
+    A tote is assigned to one order (or one order line)
+    The tote enters the conveyor system at induction
+    The conveyor routes the tote to Zone A. A picker at a station in Zone A picks the items for that order that exist in Zone A, scans them, places them in the tote
+    The tote returns to the conveyor, routes to Zone B, then Zone C, etc.
+    After visiting all required zones, the tote goes to a consolidation/packing station
+    If the order needs items from 3 zones, the tote visits 3 pick stations. Three different pickers each contribute part of the order
+
+Key feature: Each picker stays in one zone. They do not walk the warehouse. They stand at a station and pick from flow rack or static shelving into passing totes.
+The optimization problem here is not picker routing. It is which SKUs to put in which zone, which pick station within the zone, and in what sequence totes visit zones.
+Model B: Goods-to-Person (G2P)
+Used for dense storage of medium-velocity SKUs.
+How it works:
+
+    Inventory stored in dense shuttle systems or robotic cube storage
+    When an order needs an item, a robot retrieves the bin/case and brings it to a pick station
+    The picker takes the required quantity, scans it, places it in the tote
+    The robot returns the bin to storage
+
+Key feature: The picker does not move. The inventory moves. This eliminates walking entirely.
+The optimization problems here are bin storage location, robot assignment, and station balancing.
+Model C: Batch/Cart Picking
+Used for:
+
+    Slow movers not worth a dedicated pick station
+    Bulk case picks (hospital orders of 50+ units)
+    Overflow during peak when conveyors are saturated
+    Regional/smaller warehouses without conveyor investment
+    Cold zone picking (automation is harder in 2-8°C due to condensation)
+
+How it works:
+
+    A picker takes a cart with multiple totes (8-12 typically)
+    The cart moves through aisles. The picker stops at bin locations, scans, picks, places in correct tote
+    Returns to packing station when done
+
+Key feature: This is the only model where wave batching and route optimization apply directly.
+3. The Order Flow (End-to-End)
+Step 1: Order ingestion. Orders arrive from ERP (hospital EDI, pharmacy portal, B2B e-commerce). Each order has:
+
+    Customer ID and SLA (hospital morning delivery, pharmacy afternoon, B2B evening)
+    Line items with SKU, quantity, unit of measure (each, box, case)
+    Temperature requirements per line
+    Prescription/OTC flag
+    Controlled substance flag
+    Government tender flag
+
+Step 2: Order promising. The system checks inventory availability by lot, by zone, by quarantine status. It promises a delivery date. If stock is insufficient, it backorders or suggests substitution (if allowed).
+Step 3: Wave planning. Orders are grouped into waves for release to the warehouse. Waves are released based on:
+
+    Cutoff times (hospital orders must be picked by 4 PM for next-morning delivery)
+    Truck departure schedules
+    Conveyor capacity (too many waves causes conveyor jams)
+    Zone workload balance
+
+Step 4: Tote induction. For each order, empty totes are labeled and inducted onto the conveyor. The tote barcode is linked to the order ID.
+Step 5: Zone picking. Totes visit zones. Pickers scan tote, scan location, scan item, confirm quantity. Each scan is logged to the GSP audit trail.
+Step 6: Consolidation. After visiting all zones, the tote arrives at a packing station. A packer verifies all items are present, adds dunnage, seals the box, applies shipping label.
+Step 7: Shipping sortation. Packed boxes are sorted by route/truck on a shipping sorter (tilt-tray or cross-belt sorter).
+Step 8: Outbound loading. Boxes are loaded onto trucks. Temperature-controlled trucks for cold chain, ambient trucks for standard.
+4. The Technology Stack
+WMS (Warehouse Management System). The brain. SAP EWM, Manhattan Associates, Blue Yonder, or Chinese systems like Infor WMS. It manages:
+
+    Inventory by lot/bin
+    Order allocation
+    Wave creation (basic rules)
+    Pick task generation
+    Labor management
+
+WCS (Warehouse Control System). The nervous system. It sits between WMS and physical equipment:
+
+    Controls conveyor routing (which tote to which zone)
+    Manages pick-to-light displays
+    Coordinates shuttle/robot movements
+    Handles barcode scanner inputs
+
+WES (Warehouse Execution System). Emerging layer between WMS and WCS. It optimizes in real-time:
+
+    Dynamic wave release
+    Pick station workload balancing
+    Tote routing optimization
+    Exception handling
+
+ERP. SAP, Oracle, or Chinese systems (Yonyou, Kingdee). Handles:
+
+    Order entry
+    Customer master data
+    Pricing and tenders
+    Financial settlement
+
+TMS (Transport Management System). Plans routes, schedules trucks, tracks deliveries. Needs to know when waves finish so trucks can be loaded.
+5. The Real Constraints (What Makes Pharma Different)
+Lot control. Every unit picked must be traceable to a lot number. The WMS tracks lots at the bin level. Pickers must scan the lot on the item (2D Data Matrix). Two pallets of the same SKU with different lots are separate inventory records.
+Expiry management. FIFO is mandatory, but it is lot-level FIFO, not just "oldest expiry." A lot received today might expire in 2 years. A lot received 6 months ago might expire in 18 months. The older lot is picked first.
+Temperature compliance. Every temperature excursion must be logged. Cold items have time-out-of-zone limits. If exceeded, the item is destroyed. This requires:
+
+    Insulated totes with PCM gel packs for transport between zones
+    Temperature loggers in totes
+    Alerts if time limits approach
+
+Controlled substances. Dual-person pick, dual-person verification, locked cage, separate logging. Some systems require biometric authentication.
+Serialization. China requires 2D Data Matrix codes on individual saleable units for certain categories. Every unit scanned at pick must match the serial number in the national traceability database.
+GSP audit trail. Every action (who, what, when, where, lot, expiry, temperature) must be recorded and retained for years. Auditors can request full traceability for any unit.
+Returns. Returned items cannot go back to forward pick. They go to quarantine, are inspected, and either destroyed or returned to stock through a formal process.
+6. The Labor Reality
+Permanent pickers. Full-time employees, trained, certified for specific zones. 150-200 lines/hour in flow rack stations. 80-120 lines/hour in manual cart picking.
+Temporary pickers. Hired for peaks (flu season). Often day-1 untrained. 50-80 lines/hour. Higher error rates. Usually restricted to simple ambient zones.
+Specialized roles:
+
+    Cold zone pickers: trained for 2-8°C work, limited exposure time
+    Controlled substance handlers: background-checked, dual-person certified
+    Pharmacists: verify prescription orders, authorize substitutions
+    Quality assurance: release quarantined stock, handle temperature excursions
+
+Shift patterns. 2-3 shifts per day. Hospital orders often picked on afternoon shift for next-morning delivery. B2B orders picked on night shift for afternoon delivery.
+7. What Actually Breaks During Peaks
+Conveyor saturation. At 280% volume, the conveyor network jams. Totes back up at induction. Pick stations starve or flood.
+Zone imbalance. Ambient zone has 10 pick stations. Cool zone has 2. During flu season, cool zone (vaccines, antibiotics) becomes the bottleneck. Totes pile up waiting for cool zone while ambient stations sit idle.
+Tote shortage. More waves means more totes in the system. Totes are a finite resource. Storage space for empty totes is limited.
+Packing bottleneck. Picking speeds up with more staff. Packing does not scale linearly. Packed boxes pile up waiting for shipping sortation.
+Truck capacity. Even if everything is picked, there may not be enough trucks or drivers for 280% volume.
+Temp picker quality. 2.5x temp staffing means 2.5x the error rate from inexperienced pickers. The 0.35% error rate is an annual average. During peaks, it might spike to 1% or higher.
