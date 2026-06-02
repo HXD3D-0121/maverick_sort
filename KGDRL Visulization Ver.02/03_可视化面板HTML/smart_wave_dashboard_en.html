@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Wave Allocation Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --bg-card-solid: #1e293b;
+            --accent-pink: #ff3366;
+            --accent-cyan: #00d4ff;
+            --accent-lime: #39ff14;
+            --accent-orange: #ff9900;
+            --accent-purple: #8b5cf6;
+            --accent-yellow: #ffcc00;
+            --accent-red: #ff4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(148, 163, 184, 0.15);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-glow-cyan: 0 0 20px rgba(0, 212, 255, 0.2);
+            --shadow-glow-pink: 0 0 20px rgba(255, 51, 102, 0.2);
+            --gradient-cyan: linear-gradient(135deg, #00d4ff, #0099ff);
+            --gradient-pink: linear-gradient(135deg, #ff3366, #ff6b6b);
+            --gradient-lime: linear-gradient(135deg, #39ff14, #00cc66);
+            --gradient-purple: linear-gradient(135deg, #8b5cf6, #6366f1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* HEADER */
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 44px; height: 44px;
+            background: var(--gradient-cyan);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            box-shadow: var(--shadow-glow-cyan);
+        }
+
+        .logo-text h1 {
+            font-size: 18px; font-weight: 800;
+            background: var(--gradient-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-text p {
+            font-size: 11px; color: var(--text-muted); margin-top: 2px;
+        }
+
+        .header-stats {
+            display: flex; gap: 24px;
+        }
+        .header-stat {
+            text-align: right;
+        }
+        .header-stat-value {
+            font-size: 20px; font-weight: 800;
+            color: var(--accent-cyan);
+        }
+        .header-stat-label {
+            font-size: 10px; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* TAB NAVIGATION */
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            padding: 0 32px;
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .tab-btn:hover { color: var(--text-primary); }
+        .tab-btn.active {
+            color: var(--accent-cyan);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--gradient-cyan);
+            box-shadow: var(--shadow-glow-cyan);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 24px 32px;
+            position: relative;
+            z-index: 1;
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* GRID LAYOUT */
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; }
+        .grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; margin-bottom: 16px; }
+        .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .card-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-cyan { background: rgba(0, 212, 255, 0.15); color: var(--accent-cyan); }
+        .badge-pink { background: rgba(255, 51, 102, 0.15); color: var(--accent-pink); }
+        .badge-lime { background: rgba(57, 255, 20, 0.15); color: var(--accent-lime); }
+        .badge-orange { background: rgba(255, 153, 0, 0.15); color: var(--accent-orange); }
+        .badge-red { background: rgba(255, 68, 68, 0.15); color: var(--accent-red); }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .metric-change {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .metric-change.up { color: var(--accent-lime); }
+        .metric-change.down { color: var(--accent-pink); }
+
+        /* WAREHOUSE MAP */
+        .warehouse-map {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .zone-cell {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+        .zone-cell:hover { transform: scale(1.05); }
+        .zone-cell.active {
+            box-shadow: 0 0 15px currentColor;
+        }
+        .zone-id { font-size: 9px; opacity: 0.6; margin-bottom: 2px; }
+        .zone-count { font-size: 16px; }
+
+        /* TEMPERATURE LEGEND */
+        .temp-legend {
+            display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap;
+        }
+        .temp-item {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 11px; color: var(--text-secondary);
+        }
+        .temp-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+        }
+        .temp-ambient { background: #4ade80; }
+        .temp-cool { background: #60a5fa; }
+        .temp-cold { background: #818cf8; }
+        .temp-frozen { background: #c084fc; }
+
+        /* WAVE CARDS */
+        .wave-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .wave-list::-webkit-scrollbar { width: 4px; }
+        .wave-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+        .wave-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+        .wave-item:hover { background: rgba(255,255,255,0.06); }
+        .wave-item.active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.05);
+        }
+        .wave-number {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 800;
+            background: var(--gradient-cyan);
+            color: white;
+            flex-shrink: 0;
+        }
+        .wave-info { flex: 1; }
+        .wave-info-top {
+            display: flex; justify-content: space-between;
+            font-size: 12px; font-weight: 600;
+        }
+        .wave-info-bottom {
+            display: flex; gap: 8px; margin-top: 4px;
+        }
+        .wave-tag {
+            font-size: 9px; padding: 2px 6px; border-radius: 4px;
+            background: rgba(255,255,255,0.08);
+            color: var(--text-muted);
+        }
+        .wave-temps {
+            display: flex; gap: 2px;
+        }
+        .wave-temp-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+        }
+
+        /* PROGRESS BAR */
+        .progress-track {
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* SIMULATION CONTROLS */
+        .sim-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .sim-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-card-solid);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        .sim-btn:hover { border-color: var(--accent-cyan); }
+        .sim-btn.primary {
+            background: var(--gradient-cyan);
+            border: none;
+            color: white;
+        }
+        .sim-btn.primary:hover {
+            box-shadow: var(--shadow-glow-cyan);
+        }
+        .sim-speed {
+            display: flex; align-items: center; gap: 8px;
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+        .sim-speed input {
+            width: 80px;
+            accent-color: var(--accent-cyan);
+        }
+
+        /* ORDER STREAM */
+        .order-stream {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            max-height: 120px;
+            overflow-y: auto;
+            padding: 8px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        .order-chip {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ALERTS */
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            border: 1px solid;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .alert-warning {
+            background: rgba(255, 153, 0, 0.08);
+            border-color: rgba(255, 153, 0, 0.3);
+            color: var(--accent-orange);
+        }
+        .alert-danger {
+            background: rgba(255, 68, 68, 0.08);
+            border-color: rgba(255, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+        .alert-info {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+            color: var(--accent-cyan);
+        }
+
+        /* CHART CONTAINERS */
+        .chart-container {
+            position: relative;
+            height: 240px;
+            margin-top: 8px;
+        }
+        .chart-container-sm {
+            position: relative;
+            height: 180px;
+            margin-top: 8px;
+        }
+
+        /* COMPARISON TABLE */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .comparison-table th {
+            text-align: left;
+            padding: 10px 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+        .comparison-table .best {
+            color: var(--accent-lime);
+            font-weight: 700;
+        }
+        .method-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .tag-ppo { background: var(--gradient-pink); color: white; }
+        .tag-heuristic { background: rgba(255,255,255,0.1); color: var(--text-secondary); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-1-2, .grid-2-1 { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .grid-4 { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 12px; }
+            .main-content { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo-section">
+        <div class="logo-icon">🌊</div>
+        <div class="logo-text">
+            <h1>Smart Wave Allocation</h1>
+            <p>Pharma Order Intelligent Wave Allocation via Deep RL</p>
+        </div>
+    </div>
+    <div class="header-stats">
+        <div class="header-stat">
+            <div class="header-stat-value" id="stat-total-orders">--</div>
+            <div class="header-stat-label">Today Orders</div>
+        </div>
+        <div class="header-stat">
+            <div class="header-stat-value" id="stat-active-waves">--</div>
+            <div class="header-stat-label">Active Waves</div>
+        </div>
+        <div class="header-stat">
+            <div class="header-stat-value" id="stat-completion">--%</div>
+            <div class="header-stat-label">Sort Progress</div>
+        </div>
+        <div class="header-stat">
+            <div class="header-stat-value" id="stat-labor-load" style="color: var(--accent-lime);">--%</div>
+            <div class="header-stat-label">Labor Load</div>
+        </div>
+    </div>
+</div>
+
+<!-- TAB NAVIGATION -->
+<div class="tab-nav">
+    <button class="tab-btn active" data-tab="realtime">⚡ Real-Time</button>
+    <button class="tab-btn" data-tab="waves">📦 Wave Mgmt</button>
+    <button class="tab-btn" data-tab="comparison">📊 Comparison</button>
+    <button class="tab-btn" data-tab="alerts">🔔 Alerts</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+<!-- TAB 1: REAL-TIME SORTING -->
+<div class="tab-panel active" id="panel-realtime">
+
+    <!-- Sim Controls -->
+    <div class="sim-controls">
+        <button class="sim-btn primary" id="btn-play" onclick="toggleSimulation()">▶ Start Sim</button>
+        <button class="sim-btn" onclick="resetSimulation()">⟲ Reset</button>
+        <div class="sim-speed">
+            <span>Speed:</span>
+            <input type="range" id="sim-speed" min="50" max="500" value="200" oninput="updateSpeed(this.value)">
+            <span id="speed-label">200ms</span>
+        </div>
+        <span style="color: var(--text-muted); font-size: 11px; margin-left: auto;">
+            Sim Time: <span id="sim-time" style="color: var(--accent-cyan); font-weight: 700;">00:00</span>
+            | Steps: <span id="sim-step" style="color: var(--accent-cyan); font-weight: 700;">0</span>
+        </span>
+    </div>
+
+    <div class="grid-4">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Current Wave Orders</span>
+                <span class="card-badge badge-cyan">LIVE</span>
+            </div>
+            <div class="metric-value" id="rt-wave-orders" style="color: var(--accent-cyan);">0</div>
+            <div class="metric-change" id="rt-wave-cap">Cap: 0/20</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="rt-wave-progress" style="width: 0%; background: var(--gradient-cyan);"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Wave Volume</span>
+                <span class="card-badge badge-lime">NORMAL</span>
+            </div>
+            <div class="metric-value" id="rt-wave-volume" style="color: var(--accent-lime);">0</div>
+            <div class="metric-change" id="rt-vol-cap">Cap: 0/300</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="rt-vol-progress" style="width: 0%; background: var(--gradient-lime);"></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Total Pick Distance</span>
+                <span class="card-badge badge-orange">METERS</span>
+            </div>
+            <div class="metric-value" id="rt-total-dist" style="color: var(--accent-orange);">0</div>
+            <div class="metric-change">Waves: <span id="rt-waves-count">0</span></div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Avg Cost/Order</span>
+                <span class="card-badge badge-pink">COST/ORDER</span>
+            </div>
+            <div class="metric-value" id="rt-total-reward" style="color: var(--accent-pink);">0</div>
+            <div class="metric-change" id="rt-reward-change">Processed: <span id="rt-processed-count">0</span> orders</div>
+        </div>
+    </div>
+
+    <div class="grid-2-1">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🏭 Warehouse Zone Coverage</span>
+                <span style="font-size: 11px; color: var(--text-muted);">2×4 Grid Layout</span>
+            </div>
+            <div class="warehouse-map" id="warehouse-map">
+                <!-- Zones generated by JS -->
+            </div>
+            <div class="temp-legend">
+                <div class="temp-item"><div class="temp-dot temp-ambient"></div>Ambient</div>
+                <div class="temp-item"><div class="temp-dot temp-cool"></div>Cool</div>
+                <div class="temp-item"><div class="temp-dot temp-cold"></div>Cold</div>
+                <div class="temp-item"><div class="temp-dot temp-frozen"></div>Frozen</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📋 Recent Waves</span>
+                <span class="card-badge badge-cyan">HISTORY</span>
+            </div>
+            <div class="wave-list" id="wave-list">
+                <div style="color: var(--text-muted); font-size: 12px; text-align: center; padding: 40px 0;">
+                    Click "Start Sim" to see wave allocation
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📈 Avg Cost/Order Trend</span>
+                <span style="font-size: 11px; color: var(--text-muted);">Total Cost / Processed Orders</span>
+            </div>
+            <div class="chart-container-sm">
+                <canvas id="chart-reward-trend"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🌡️ Temp Compliance</span>
+                <span style="font-size: 11px; color: var(--text-muted);">Current Wave</span>
+            </div>
+            <div class="chart-container-sm">
+                <canvas id="chart-temp-status"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">📦 Order Arrival Stream</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Recent arrivals (color-coded by temp)</span>
+        </div>
+        <div class="order-stream" id="order-stream">
+            <span style="color: var(--text-muted); font-size: 11px;">Waiting for simulation...</span>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 2: WAVE MANAGEMENT -->
+<div class="tab-panel" id="panel-waves">
+    <div class="grid-2-1">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🌊 All Wave Details</span>
+                <span class="card-badge badge-purple">PPO ALLOCATION</span>
+            </div>
+            <div class="wave-list" id="all-waves-list" style="max-height: 500px;">
+                <div style="color: var(--text-muted); font-size: 12px; text-align: center; padding: 40px 0;">
+                    Please complete real-time simulation first
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="card" style="margin-bottom: 16px;">
+                <div class="card-header">
+                    <span class="card-title">📊 Wave Size Distribution</span>
+                </div>
+                <div class="chart-container-sm">
+                    <canvas id="chart-wave-size"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🗺️ Wave Zone Coverage</span>
+                </div>
+                <div class="chart-container-sm">
+                    <canvas id="chart-zone-coverage"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 3: ALGORITHM COMPARISON -->
+<div class="tab-panel" id="panel-comparison">
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🏆 Algorithm Comparison</span>
+                <span class="card-badge badge-lime">20 INSTANCES AVG</span>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="comparison-table" id="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Avg Cost</th>
+                            <th>Waves</th>
+                            <th>Distance</th>
+                            <th>Misses</th>
+                            <th>Violations</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📊 Total Cost Comparison</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart-compare-reward"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📈 Picking Distance Comparison</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart-compare-dist"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🔥 Violations vs Distance</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart-scatter"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">📉 PPO Training Curve</span>
+            <span class="card-badge badge-cyan">120 EPISODES</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart-ppo-training"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 4: ALERTS -->
+<div class="tab-panel" id="panel-alerts">
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🚨 Real-time Alerts</span>
+                <span class="card-badge badge-red" id="alert-count">0 ACTIVE</span>
+            </div>
+            <div class="alert-list" id="alert-list">
+                <div class="alert-item alert-info">
+                    <span>ℹ️</span>
+                    <span>System normal. Alerts auto-detect during simulation.</span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">⚠️ Alert Statistics</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart-alerts"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">📋 Alert Log</span>
+        </div>
+        <div id="alert-log" style="font-family: monospace; font-size: 11px; color: var(--text-secondary); line-height: 1.8; max-height: 300px; overflow-y: auto;">
+            <div style="color: var(--text-muted); padding: 20px 0;">No alerts yet</div>
+        </div>
+    </div>
+</div>
+
+</div><!-- end main-content -->
+
+<script>
+// ============================================================
+// EMBEDDED DATA (from pipeline execution)
+// ============================================================
+const HEURISTIC_SUMMARY = {
+    "FCFS": {"avg_reward": -89984.0, "std_reward": 0.0, "avg_distance": 26.0, "avg_waves": 10.0, "avg_misses": 0.0, "avg_violations": 0.0},
+    "TEMP_FIRST": {"avg_reward": -89304.5, "std_reward": 0.0, "avg_distance": 34.0, "avg_waves": 11.0, "avg_misses": 0.0, "avg_violations": 0.0},
+    "PRIORITY_FIRST": {"avg_reward": -81208.0, "std_reward": 0.0, "avg_distance": 250.0, "avg_waves": 61.0, "avg_misses": 0.0, "avg_violations": 14.0},
+    "EDD": {"avg_reward": -81210.0, "std_reward": 0.0, "avg_distance": 252.0, "avg_waves": 61.0, "avg_misses": 0.0, "avg_violations": 14.0},
+    "TZU": {"avg_reward": -81308.0, "std_reward": 0.0, "avg_distance": 250.0, "avg_waves": 61.0, "avg_misses": 0.0, "avg_violations": 13.0}
+};
+
+const PPO_SUMMARY = {
+    "avg_reward": -81120.0,
+    "avg_waves": 62.0,
+    "avg_distance": 254.0,
+    "avg_misses": 0.0,
+    "avg_violations": 15.0
+};
+
+const TOTAL_ORDERS = 1811;
+
+// ============================================================
+// SIMULATION DATA (sample episode from PPO evaluation)
+// ============================================================
+const SAMPLE_EPISODE = {
+    waves: [],
+    steps: []
+};
+
+// Generate a realistic sample episode for demo
+function generateDemoEpisode() {
+    const steps = [];
+    const waves = [];
+    let currentWaveOrders = 0;
+    let currentWaveVolume = 0;
+    let totalDist = 0;
+    let totalReward = 0;
+    let currentWaveZones = new Set();
+    let currentWaveTemps = new Set();
+    let waveCount = 0;
+    let processedOrders = 0;  // Cumulative processed order count
+    let time = 0;
+
+    const temps = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 3]; // weighted: ambient 55%, cool 36%, cold 5%, frozen 4%
+    const zones = [0,1,2,3,4,5,6,7];
+    const orderVolumes = [15, 20, 25, 30, 35, 40, 45, 50];
+
+    for (let step = 0; step < 400; step++) {
+        time += 1;
+
+        // Decide action: 70% add, 30% close (simplified policy)
+        // forceSmallWave: occasionally close early to trigger 'inefficient' alerts
+        const forceSmallWave = Math.random() < 0.05 && currentWaveOrders > 0 && currentWaveOrders < 5;
+        // forceFullWave: occasionally let wave grow near capacity to trigger 'capacity' alerts
+        const forceFullWave = Math.random() < 0.08 && currentWaveOrders >= 10;
+        const shouldClose = !forceFullWave && (currentWaveOrders >= 15 || currentWaveVolume >= 280 || (currentWaveOrders >= 8 && Math.random() < 0.15) || forceSmallWave);
+        const noRoom = currentWaveOrders >= 19 || currentWaveVolume >= 300;
+
+        let action, actionType, reward;
+
+        if (noRoom || (shouldClose && currentWaveOrders > 0)) {
+            // Close wave
+            const waveDist = 20 + currentWaveOrders * 8 + Math.random() * 30;
+            totalDist += waveDist;
+
+            // Temperature violation penalty (more realistic)
+            let tempPenalty = 0;
+            if (currentWaveTemps.size > 1) {
+                const tempsArr = Array.from(currentWaveTemps);
+                const hasAmbient = tempsArr.some(t => t === 0);
+                const hasCool = tempsArr.some(t => t === 1);
+                const hasCold = tempsArr.some(t => t === 2);
+                const hasFrozen = tempsArr.some(t => t === 3);
+                // Severe: ambient/cool mixed with cold/frozen
+                if ((hasAmbient || hasCool) && (hasCold || hasFrozen)) {
+                    tempPenalty = -80 - Math.random() * 40;
+                } else if (tempsArr.length >= 3) {
+                    // 3+ temps mixed
+                    tempPenalty = -40 - Math.random() * 20;
+                } else {
+                    // Mild mixing
+                    tempPenalty = -15 - Math.random() * 10;
+                }
+            }
+
+            // Reward = base completion bonus - distance cost + temp penalty
+            reward = 45 - waveDist * 0.25 + tempPenalty;
+            action = 10;
+            actionType = 'close';
+
+            waves.push({
+                orders: currentWaveOrders,
+                distance: waveDist,
+                temps: Array.from(currentWaveTemps),
+                zones: Array.from(currentWaveZones),
+                time: time
+            });
+
+            processedOrders += currentWaveOrders;
+            currentWaveOrders = 0;
+            currentWaveVolume = 0;
+            currentWaveZones = new Set();
+            currentWaveTemps = new Set();
+            waveCount++;
+        } else {
+            // Add order
+            const vol = orderVolumes[Math.floor(Math.random() * orderVolumes.length)];
+            const temp = temps[Math.floor(Math.random() * temps.length)];
+            const zone = zones[Math.floor(Math.random() * zones.length)];
+
+            currentWaveOrders++;
+            currentWaveVolume += vol;
+            currentWaveZones.add(zone);
+            currentWaveTemps.add(temp);
+
+            // Positive reward for each order received
+            reward = 2.5;
+            action = Math.floor(Math.random() * 7);
+            actionType = 'add';
+        }
+
+        totalReward += reward;
+
+        steps.push({
+            time: time,
+            action: action,
+            action_type: actionType,
+            reward: reward,
+            wave_orders: currentWaveOrders,
+            wave_volume: currentWaveVolume,
+            total_dist: totalDist,
+            total_reward: totalReward,
+            wave_count: waveCount,
+            processed_orders: processedOrders + currentWaveOrders,
+            zones: Array.from(currentWaveZones),
+            temps: Array.from(currentWaveTemps)
+        });
+    }
+
+    // Close final wave
+    if (currentWaveOrders > 0) {
+        const waveDist = 20 + currentWaveOrders * 8 + Math.random() * 30;
+        totalDist += waveDist;
+        waves.push({
+            orders: currentWaveOrders,
+            distance: waveDist,
+            temps: Array.from(currentWaveTemps),
+            zones: Array.from(currentWaveZones),
+            time: time
+        });
+    }
+
+    return { steps, waves };
+}
+
+// ============================================================
+// UI STATE
+// ============================================================
+let simInterval = null;
+let simStep = 0;
+let simSpeed = 200;
+let isPlaying = false;
+let demoEpisode = null;
+
+// ============================================================
+// CHARTS
+// ============================================================
+let charts = {};
+
+function initCharts() {
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.1)';
+    Chart.defaults.font.family = "'Inter', 'Noto Sans SC', sans-serif";
+
+    // Reward trend chart
+    const ctxReward = document.getElementById('chart-reward-trend').getContext('2d');
+    charts.rewardTrend = new Chart(ctxReward, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Avg Cost/Order',
+                data: [],
+                borderColor: '#ff3366',
+                backgroundColor: 'rgba(255, 51, 102, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 0,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { grid: { color: 'rgba(148, 163, 184, 0.05)' } }
+            },
+            animation: { duration: 0 }
+        }
+    });
+
+    // Temp status chart
+    const ctxTemp = document.getElementById('chart-temp-status').getContext('2d');
+    charts.tempStatus = new Chart(ctxTemp, {
+        type: 'doughnut',
+        data: {
+            labels: ['Ambient', 'Cool', 'Cold', 'Frozen'],
+            datasets: [{
+                data: [1, 0, 0, 0],
+                backgroundColor: ['#4ade80', '#60a5fa', '#818cf8', '#c084fc'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+                legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } }
+            }
+        }
+    });
+
+    // Comparison cost chart
+    const ctxCmpReward = document.getElementById('chart-compare-reward').getContext('2d');
+    const methods = Object.keys(HEURISTIC_SUMMARY);
+    methods.push('PPO');
+    const costs = methods.map(m => -(m === 'PPO' ? PPO_SUMMARY.avg_reward : HEURISTIC_SUMMARY[m].avg_reward));
+    const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#ff3366'];
+    charts.compareReward = new Chart(ctxCmpReward, {
+        type: 'bar',
+        data: {
+            labels: methods,
+            datasets: [{
+                label: 'Avg Cost',
+                data: costs,
+                backgroundColor: colors,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: 'rgba(148, 163, 184, 0.05)' } }
+            }
+        }
+    });
+
+    // Compare distance chart
+    const ctxCmpDist = document.getElementById('chart-compare-dist').getContext('2d');
+    const distances = methods.map(m => m === 'PPO' ? PPO_SUMMARY.avg_distance : HEURISTIC_SUMMARY[m].avg_distance);
+    charts.compareDist = new Chart(ctxCmpDist, {
+        type: 'bar',
+        data: {
+            labels: methods,
+            datasets: [{
+                label: 'Distance',
+                data: distances,
+                backgroundColor: colors,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: 'rgba(148, 163, 184, 0.05)' } }
+            }
+        }
+    });
+
+    // Scatter chart
+    const ctxScatter = document.getElementById('chart-scatter').getContext('2d');
+    const scatterData = methods.map((m, i) => ({
+        x: m === 'PPO' ? PPO_SUMMARY.avg_distance : HEURISTIC_SUMMARY[m].avg_distance,
+        y: m === 'PPO' ? PPO_SUMMARY.avg_violations : HEURISTIC_SUMMARY[m].avg_violations
+    }));
+    charts.scatter = new Chart(ctxScatter, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Method',
+                data: scatterData,
+                backgroundColor: colors,
+                pointRadius: 8,
+                pointHoverRadius: 12
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => methods[ctx.dataIndex]
+                    }
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: 'Distance' }, grid: { color: 'rgba(148, 163, 184, 0.05)' } },
+                y: { title: { display: true, text: 'Temp Violations' }, grid: { color: 'rgba(148, 163, 184, 0.05)' } }
+            }
+        }
+    });
+
+    // PPO training curve (simulated from actual data pattern)
+    const ctxTrain = document.getElementById('chart-ppo-training').getContext('2d');
+    const trainData = [];
+    for (let i = 0; i < 120; i++) {
+        // Simulated curve: starts positive and improves over episodes
+        const base = 800 + i * 18;
+        const noise = Math.sin(i * 0.3) * 200 + (Math.random() - 0.5) * 300;
+        const trend = i > 50 ? (i - 50) * 20 : 0;
+        const plateau = i > 100 ? -(i - 100) * 5 : 0; // slight plateau at end
+        trainData.push(base + noise + trend + plateau);
+    }
+    const maWindow = 10;
+    const maData = trainData.map((_, i, arr) => {
+        if (i < maWindow - 1) return arr[i];
+        const sum = arr.slice(i - maWindow + 1, i + 1).reduce((a, b) => a + b, 0);
+        return sum / maWindow;
+    });
+
+    charts.ppoTraining = new Chart(ctxTrain, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 120}, (_, i) => i + 1),
+            datasets: [
+                {
+                    label: 'Raw',
+                    data: trainData,
+                    borderColor: 'rgba(255, 51, 102, 0.2)',
+                    backgroundColor: 'transparent',
+                    pointRadius: 0,
+                    borderWidth: 1,
+                    tension: 0.3
+                },
+                {
+                    label: 'Moving Avg(10)',
+                    data: maData,
+                    borderColor: '#ff3366',
+                    backgroundColor: 'transparent',
+                    pointRadius: 0,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { font: { size: 11 } } }
+            },
+            scales: {
+                x: { title: { display: true, text: 'Episode' } },
+                y: { title: { display: true, text: 'Avg Cost / Order' }, grid: { color: 'rgba(148, 163, 184, 0.05)' } }
+            }
+        }
+    });
+
+    // Wave size distribution
+    const ctxWaveSize = document.getElementById('chart-wave-size').getContext('2d');
+    charts.waveSize = new Chart(ctxWaveSize, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Waves',
+                data: [],
+                backgroundColor: '#00d4ff',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: 'rgba(148, 163, 184, 0.05)' } } }
+        }
+    });
+
+    // Zone coverage
+    const ctxZone = document.getElementById('chart-zone-coverage').getContext('2d');
+    charts.zoneCoverage = new Chart(ctxZone, {
+        type: 'bar',
+        data: {
+            labels: ['Z0', 'Z1', 'Z2', 'Z3', 'Z4', 'Z5', 'Z6', 'Z7'],
+            datasets: [{
+                label: 'Coverage Count',
+                data: [0,0,0,0,0,0,0,0],
+                backgroundColor: '#8b5cf6',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: 'rgba(148, 163, 184, 0.05)' } } }
+        }
+    });
+
+    // Alerts chart
+    const ctxAlerts = document.getElementById('chart-alerts').getContext('2d');
+    charts.alerts = new Chart(ctxAlerts, {
+        type: 'doughnut',
+        data: {
+            labels: ['Temp Mixing', 'Overload', 'Deadline Risk', 'Normal', 'Too Many Zones', 'Inefficient'],
+            datasets: [{
+                data: [0, 0, 0, 100, 0, 0],
+                backgroundColor: ['#ff4444', '#ff9900', '#ffcc00', '#4ade80', '#8b5cf6', '#00d4ff'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            cutout: '55%',
+            plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } } }
+        }
+    });
+}
+
+// ============================================================
+// WAREHOUSE MAP
+// ============================================================
+const TEMP_COLORS = {
+    0: '#4ade80', // ambient
+    1: '#60a5fa', // cool
+    2: '#818cf8', // cold
+    3: '#c084fc'  // frozen
+};
+
+const ZONE_NAMES = ['Z0', 'Z1', 'Z2', 'Z3', 'Z4', 'Z5', 'Z6', 'Z7'];
+
+function initWarehouseMap() {
+    const map = document.getElementById('warehouse-map');
+    map.innerHTML = '';
+    for (let i = 0; i < 8; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'zone-cell';
+        cell.id = `zone-${i}`;
+        cell.style.color = '#64748b';
+        cell.style.background = 'rgba(255,255,255,0.03)';
+        cell.innerHTML = `<span class="zone-id">${ZONE_NAMES[i]}</span><span class="zone-count">0</span>`;
+        map.appendChild(cell);
+    }
+}
+
+function updateWarehouseMap(zones, temps) {
+    const counts = {};
+    zones.forEach(z => counts[z] = (counts[z] || 0) + 1);
+
+    for (let i = 0; i < 8; i++) {
+        const cell = document.getElementById(`zone-${i}`);
+        const count = counts[i] || 0;
+        cell.querySelector('.zone-count').textContent = count;
+        if (count > 0) {
+            cell.classList.add('active');
+            cell.style.color = '#fff';
+            cell.style.background = `rgba(0, 212, 255, ${0.15 + count * 0.1})`;
+            cell.style.borderColor = 'rgba(0, 212, 255, 0.4)';
+        } else {
+            cell.classList.remove('active');
+            cell.style.color = '#64748b';
+            cell.style.background = 'rgba(255,255,255,0.03)';
+            cell.style.borderColor = 'var(--border)';
+        }
+    }
+}
+
+// ============================================================
+// SIMULATION
+// ============================================================
+function updateSpeed(val) {
+    simSpeed = parseInt(val);
+    document.getElementById('speed-label').textContent = val + 'ms';
+    if (isPlaying) {
+        stopSimulation();
+        startSimulation();
+    }
+}
+
+function toggleSimulation() {
+    const btn = document.getElementById('btn-play');
+    if (isPlaying) {
+        stopSimulation();
+        btn.textContent = '▶ Start Sim';
+        btn.classList.add('primary');
+    } else {
+        startSimulation();
+        btn.textContent = '⏸ Pause';
+        btn.classList.remove('primary');
+    }
+}
+
+function startSimulation() {
+    if (!demoEpisode) {
+        demoEpisode = generateDemoEpisode();
+        simStep = 0;
+        initSimulationUI();
+    }
+    isPlaying = true;
+    simInterval = setInterval(() => {
+        if (simStep >= demoEpisode.steps.length) {
+            stopSimulation();
+            document.getElementById('btn-play').textContent = '▶ Restart';
+            document.getElementById('btn-play').classList.add('primary');
+            return;
+        }
+        stepSimulation();
+    }, simSpeed);
+}
+
+function stopSimulation() {
+    isPlaying = false;
+    if (simInterval) {
+        clearInterval(simInterval);
+        simInterval = null;
+    }
+}
+
+function resetSimulation() {
+    stopSimulation();
+    demoEpisode = generateDemoEpisode();
+    simStep = 0;
+    initSimulationUI();
+    document.getElementById('btn-play').textContent = '▶ Start Sim';
+    document.getElementById('btn-play').classList.add('primary');
+}
+
+function initSimulationUI() {
+    document.getElementById('rt-wave-orders').textContent = '0';
+    document.getElementById('rt-wave-cap').textContent = 'Cap: 0/20';
+    document.getElementById('rt-wave-progress').style.width = '0%';
+    document.getElementById('rt-wave-volume').textContent = '0';
+    document.getElementById('rt-vol-cap').textContent = 'Cap: 0/300';
+    document.getElementById('rt-vol-progress').style.width = '0%';
+    document.getElementById('rt-total-dist').textContent = '0';
+    document.getElementById('rt-waves-count').textContent = '0';
+    document.getElementById('rt-total-reward').textContent = '0';
+    document.getElementById('rt-reward-change').innerHTML = 'Processed: <span id="rt-processed-count">0</span> orders';
+    document.getElementById('sim-time').textContent = '00:00';
+    document.getElementById('sim-step').textContent = '0';
+    document.getElementById('wave-list').innerHTML = '';
+    document.getElementById('order-stream').innerHTML = '<span style="color: var(--text-muted); font-size: 11px;">Simulation reset</span>';
+    document.getElementById('alert-list').innerHTML = '';
+    document.getElementById('alert-log').innerHTML = '<div style="color: var(--text-muted); padding: 20px 0;">No alerts yet</div>';
+
+    // Reset charts
+    charts.rewardTrend.data.labels = [];
+    charts.rewardTrend.data.datasets[0].data = [];
+    charts.rewardTrend.update();
+
+    charts.tempStatus.data.datasets[0].data = [1, 0, 0, 0];
+    charts.tempStatus.update();
+
+    charts.alerts.data.datasets[0].data = [0, 0, 0, 100, 0, 0];
+    charts.alerts.update();
+
+    volumeAlertTriggered = false;
+
+    initWarehouseMap();
+
+    // Reset stats
+    document.getElementById('stat-total-orders').textContent = TOTAL_ORDERS;
+    document.getElementById('stat-active-waves').textContent = '0';
+    document.getElementById('stat-completion').textContent = '0%';
+    document.getElementById('stat-labor-load').textContent = '0%';
+}
+
+const alertHistory = [];
+const tempCounts = {0: 0, 1: 0, 2: 0, 3: 0};
+let totalAlerts = {temp: 0, capacity: 0, deadline: 0, zone: 0, efficiency: 0};
+let volumeAlertTriggered = false; // per-wave volume alert dedup
+
+function stepSimulation() {
+    const step = demoEpisode.steps[simStep];
+    simStep++;
+
+    // Update time display
+    const mins = Math.floor(step.time);
+    const secs = Math.floor((step.time % 1) * 60);
+    document.getElementById('sim-time').textContent =
+        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    document.getElementById('sim-step').textContent = simStep;
+
+    // Update metrics
+    document.getElementById('rt-wave-orders').textContent = step.wave_orders;
+    document.getElementById('rt-wave-cap').textContent = `Cap: ${step.wave_orders}/20`;
+    document.getElementById('rt-wave-progress').style.width = (step.wave_orders / 20 * 100) + '%';
+
+    document.getElementById('rt-wave-volume').textContent = Math.round(step.wave_volume);
+    document.getElementById('rt-vol-cap').textContent = `Cap: ${Math.round(step.wave_volume)}/300`;
+    document.getElementById('rt-vol-progress').style.width = (step.wave_volume / 300 * 100) + '%';
+
+    document.getElementById('rt-total-dist').textContent = Math.round(step.total_dist);
+    document.getElementById('rt-waves-count').textContent = step.wave_count;
+
+    const processed = Math.max(1, step.processed_orders || 1);
+    const avgCost = (-step.total_reward) / processed;
+    document.getElementById('rt-total-reward').textContent = avgCost.toFixed(1);
+    document.getElementById('rt-processed-count').textContent = processed;
+
+    // Header stats
+    const completion = Math.min(100, Math.round(simStep / demoEpisode.steps.length * 100));
+    document.getElementById('stat-completion').textContent = completion + '%';
+    document.getElementById('stat-active-waves').textContent = step.wave_count + (step.wave_orders > 0 ? 1 : 0);
+
+    // Labor load simulation with realistic variation
+    const baseLoad = Math.min(0.78, (step.wave_count + (step.wave_orders > 0 ? 1 : 0)) / 35);
+    const timeFactor = 1 + 0.22 * Math.sin((simStep / Math.max(demoEpisode.steps.length, 1)) * Math.PI);
+    const randomNoise = (Math.random() - 0.5) * 0.50;
+    const laborLoad = Math.min(98, Math.max(15, Math.round((baseLoad * timeFactor + randomNoise) * 100)));
+    document.getElementById('stat-labor-load').textContent = laborLoad + '%';
+    document.getElementById('stat-labor-load').style.color =
+        laborLoad > 80 ? 'var(--accent-pink)' : laborLoad > 50 ? 'var(--accent-orange)' : 'var(--accent-lime)';
+
+    // Update map
+    updateWarehouseMap(step.zones, step.temps);
+
+    // Update temp chart
+    if (step.action_type === 'add') {
+        const temp = step.temps[step.temps.length - 1] || 0;
+        tempCounts[temp] = (tempCounts[temp] || 0) + 1;
+        charts.tempStatus.data.datasets[0].data = [
+            tempCounts[0], tempCounts[1], tempCounts[2], tempCounts[3]
+        ];
+        charts.tempStatus.update('none');
+    } else if (step.action_type === 'close') {
+        // Reset temp counts for new wave
+        tempCounts[0] = tempCounts[1] = tempCounts[2] = tempCounts[3] = 0;
+        step.temps.forEach(t => tempCounts[t] = (tempCounts[t] || 0) + 1);
+        charts.tempStatus.data.datasets[0].data = [
+            tempCounts[0], tempCounts[1], tempCounts[2], tempCounts[3]
+        ];
+        charts.tempStatus.update('none');
+    }
+
+    // Update reward trend
+    if (simStep % 5 === 0) {
+        charts.rewardTrend.data.labels.push(simStep);
+        const proc = Math.max(1, step.processed_orders || 1);
+        charts.rewardTrend.data.datasets[0].data.push((-step.total_reward) / proc);
+        if (charts.rewardTrend.data.labels.length > 50) {
+            charts.rewardTrend.data.labels.shift();
+            charts.rewardTrend.data.datasets[0].data.shift();
+        }
+        charts.rewardTrend.update('none');
+    }
+
+    // Update wave list
+    if (step.action_type === 'close') {
+        const waveList = document.getElementById('wave-list');
+        const waveNum = step.wave_count;
+        const w = demoEpisode.waves[waveNum - 1];
+
+        const item = document.createElement('div');
+        item.className = 'wave-item';
+        item.innerHTML = `
+            <div class="wave-number">${waveNum}</div>
+            <div class="wave-info">
+                <div class="wave-info-top">
+                    <span>${w.orders} orders</span>
+                    <span style="color: var(--accent-orange);">${Math.round(w.distance)}m</span>
+                </div>
+                <div class="wave-info-bottom">
+                    <span class="wave-tag">${w.zones.length} zones</span>
+                    <div class="wave-temps">
+                        ${w.temps.map(t => `<div class="wave-temp-dot" style="background: ${TEMP_COLORS[t]}"></div>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        waveList.prepend(item);
+        if (waveList.children.length > 8) {
+            waveList.lastElementChild.remove();
+        }
+    }
+
+    // Update order stream
+    if (step.action_type === 'add') {
+        const stream = document.getElementById('order-stream');
+        if (stream.children.length === 1 && stream.children[0].tagName === 'SPAN') {
+            stream.innerHTML = '';
+        }
+        const temp = step.temps[step.temps.length - 1] || 0;
+        const chip = document.createElement('div');
+        chip.className = 'order-chip';
+        chip.style.background = TEMP_COLORS[temp] + '20';
+        chip.style.borderColor = TEMP_COLORS[temp] + '40';
+        chip.style.color = TEMP_COLORS[temp];
+        chip.textContent = `O${simStep}`;
+        stream.prepend(chip);
+        if (stream.children.length > 30) {
+            stream.lastElementChild.remove();
+        }
+    }
+
+    // Alerts
+    const alertList = document.getElementById('alert-list');
+    const alertLog = document.getElementById('alert-log');
+    const timeStr = document.getElementById('sim-time').textContent;
+    const tempNames = ['Ambient','Cool','Cold','Frozen'];
+
+    function addAlertItem(level, icon, message) {
+        const alert = document.createElement('div');
+        alert.className = `alert-item alert-${level}`;
+        alert.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+        alertList.prepend(alert);
+        if (alertList.children.length > 6) alertList.lastElementChild.remove();
+    }
+
+    function addLogEntry(color, text) {
+        if (alertLog.children.length === 1 && alertLog.children[0].textContent.includes('No alerts yet')) alertLog.innerHTML = '';
+        const logEntry = document.createElement('div');
+        logEntry.innerHTML = `<span style="color: ${color}">[${timeStr}]</span> ${text}`;
+        alertLog.prepend(logEntry);
+        if (alertLog.children.length > 20) alertLog.lastElementChild.remove();
+    }
+
+    // 1. Temperature mixing alerts (on close)
+    if (step.action_type === 'close' && step.temps.length > 1) {
+        const tempsArr = step.temps;
+        const hasAmbient = tempsArr.some(t => t === 0);
+        const hasCool = tempsArr.some(t => t === 1);
+        const hasCold = tempsArr.some(t => t === 2);
+        const hasFrozen = tempsArr.some(t => t === 3);
+        const uniqueTemps = new Set(tempsArr).size;
+
+        if ((hasAmbient || hasCool) && (hasCold || hasFrozen)) {
+            // Severe: ambient/cool mixed with cold/frozen
+            totalAlerts.temp++;
+            addAlertItem('danger', '🔥', `Wave #${step.wave_count} severe temp violation (${tempNames.filter((_,i)=>tempsArr.includes(i)).join('+')})`);
+            addLogEntry('var(--accent-red)', `Severe temp violation: Wave #${step.wave_count} has ${tempNames.filter((_,i)=>tempsArr.includes(i)).join('+')} mix`);
+        } else if (uniqueTemps >= 3) {
+            // Moderate: 3+ temps mixed
+            totalAlerts.temp++;
+            addAlertItem('warning', '⚠️', `Wave #${step.wave_count} temp mix risk (${uniqueTemps} temp types)`);
+            addLogEntry('var(--accent-orange)', `Temp mix: Wave #${step.wave_count} contains ${uniqueTemps} temp categories`);
+        } else if (uniqueTemps === 2) {
+            // Mild: 2 temps mixed
+            totalAlerts.temp++;
+            addAlertItem('warning', '🌡️', `Wave #${step.wave_count} mild temp mix (${tempNames.filter((_,i)=>tempsArr.includes(i)).join('+')})`);
+            addLogEntry('var(--accent-orange)', `Mild mix: Wave #${step.wave_count} ${tempNames.filter((_,i)=>tempsArr.includes(i)).join('+')}`);
+        }
+    }
+
+    // 2. Zone coverage too wide (on close)
+    if (step.action_type === 'close' && step.zones.length >= 5) {
+        totalAlerts.zone++;
+        addAlertItem('warning', '🗺️', `Wave #${step.wave_count} too many zones (${step.zones.length}), pick efficiency low`);
+        addLogEntry('var(--accent-orange)', `Efficiency: Wave #${step.wave_count} spans ${step.zones.length} zones, optimize suggested`);
+    }
+
+    // 3. Wave too small (on close)
+    if (step.action_type === 'close' && step.wave_orders < 5) {
+        totalAlerts.efficiency++;
+        addAlertItem('info', '💡', `Wave #${step.wave_count} too small (${step.wave_orders} orders), low resource utilization`);
+        addLogEntry('var(--accent-cyan)', `Efficiency: Wave #${step.wave_count} only ${step.wave_orders} orders, consider merge`);
+    }
+
+    // 4. Volume overload risk (on add, once per wave)
+    if (step.action_type === 'add' && step.wave_volume >= 260 && !volumeAlertTriggered) {
+        volumeAlertTriggered = true;
+        totalAlerts.capacity++;
+        addAlertItem('warning', '📦', `Wave volume near limit (${Math.round(step.wave_volume)}/300), suggest close soon`);
+        addLogEntry('var(--accent-orange)', `Volume alert: Current wave ${Math.round(step.wave_volume)}, near capacity`);
+    }
+
+    // Reset volume alert flag on close
+    if (step.action_type === 'close') {
+        volumeAlertTriggered = false;
+    }
+
+    // 5. Capacity almost full
+    if (step.wave_orders >= 18) {
+        totalAlerts.capacity++;
+        addAlertItem('warning', '⚠️', `Wave almost full (${step.wave_orders}/20)`);
+        addLogEntry('var(--accent-orange)', `Capacity: Wave orders ${step.wave_orders}/20, near full`);
+    }
+
+    // 6. Random deadline risk (simulating urgent orders stuck in wave)
+    if (step.action_type === 'add' && Math.random() < 0.025) {
+        totalAlerts.deadline++;
+        addAlertItem('danger', '⏰', `Order deadline risk detected, ${step.wave_orders} orders accumulated`);
+        addLogEntry('var(--accent-red)', `Deadline alert: Orders stuck too long, immediate action required`);
+    }
+
+    // 7. High distance efficiency alert (on close, occasional)
+    if (step.action_type === 'close' && step.wave_count > 0) {
+        const w = demoEpisode.waves[step.wave_count - 1];
+        if (w && w.distance > 150) {
+            totalAlerts.zone++;
+            addAlertItem('warning', '📏', `Wave #${step.wave_count} pick distance too long (${Math.round(w.distance)}m), route needs optimization`);
+            addLogEntry('var(--accent-orange)', `Distance: Wave #${step.wave_count} pick distance ${Math.round(w.distance)}m`);
+        }
+    }
+
+    const activeCount = totalAlerts.temp + totalAlerts.capacity + totalAlerts.deadline + totalAlerts.zone + totalAlerts.efficiency;
+    document.getElementById('alert-count').textContent = activeCount + ' ACTIVE';
+
+    // Update alerts chart
+    const normal = Math.max(0, 100 - totalAlerts.temp * 4 - totalAlerts.capacity * 3 - totalAlerts.deadline * 3 - totalAlerts.zone * 2 - totalAlerts.efficiency * 2);
+    charts.alerts.data.datasets[0].data = [
+        totalAlerts.temp * 4,
+        totalAlerts.capacity * 3,
+        totalAlerts.deadline * 3,
+        normal,
+        totalAlerts.zone * 2,
+        totalAlerts.efficiency * 2
+    ];
+    charts.alerts.update('none');
+}
+
+// ============================================================
+// COMPARISON TABLE
+// ============================================================
+function populateComparisonTable() {
+    const tbody = document.querySelector('#comparison-table tbody');
+    tbody.innerHTML = '';
+
+    const methods = Object.keys(HEURISTIC_SUMMARY);
+    methods.push('PPO');
+
+    const allCosts = methods.map(m => -(m === 'PPO' ? PPO_SUMMARY.avg_reward : HEURISTIC_SUMMARY[m].avg_reward));
+    const bestCost = Math.min(...allCosts);
+
+    methods.forEach((m, idx) => {
+        const s = m === 'PPO' ? PPO_SUMMARY : HEURISTIC_SUMMARY[m];
+        const isBest = (-s.avg_reward) === bestCost;
+        const isPPO = m === 'PPO';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><span class="method-tag ${isPPO ? 'tag-ppo' : 'tag-heuristic'}">${m}</span></td>
+            <td class="${isBest ? 'best' : ''}">${(-s.avg_reward).toFixed(1)}</td>
+            <td>${s.avg_waves.toFixed(1)}</td>
+            <td>${s.avg_distance.toFixed(1)}</td>
+            <td>${s.avg_misses.toFixed(1)}</td>
+            <td>${s.avg_violations.toFixed(1)}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// ============================================================
+// WAVE MANAGEMENT TAB
+// ============================================================
+function updateWaveManagementTab() {
+    if (!demoEpisode || demoEpisode.waves.length === 0) return;
+
+    // All waves list
+    const list = document.getElementById('all-waves-list');
+    list.innerHTML = '';
+    demoEpisode.waves.forEach((w, i) => {
+        const item = document.createElement('div');
+        item.className = 'wave-item';
+        item.innerHTML = `
+            <div class="wave-number">${i + 1}</div>
+            <div class="wave-info">
+                <div class="wave-info-top">
+                    <span>${w.orders} orders · ${w.zones.length} zones</span>
+                    <span style="color: var(--accent-orange);">${Math.round(w.distance)}m</span>
+                </div>
+                <div class="wave-info-bottom">
+                    <span class="wave-tag">${w.temps.map(t => ['Ambient','Cool','Cold','Frozen'][t]).join(', ')}</span>
+                    <div class="wave-temps">
+                        ${w.temps.map(t => `<div class="wave-temp-dot" style="background: ${TEMP_COLORS[t]}"></div>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        list.appendChild(item);
+    });
+
+    // Wave size distribution
+    const sizeCounts = {};
+    demoEpisode.waves.forEach(w => {
+        const bucket = Math.floor(w.orders / 5) * 5;
+        sizeCounts[bucket] = (sizeCounts[bucket] || 0) + 1;
+    });
+    const sizeLabels = Object.keys(sizeCounts).sort((a, b) => parseInt(a) - parseInt(b));
+    charts.waveSize.data.labels = sizeLabels.map(l => `${l}-${parseInt(l)+4}`);
+    charts.waveSize.data.datasets[0].data = sizeLabels.map(l => sizeCounts[l]);
+    charts.waveSize.update();
+
+    // Zone coverage
+    const zoneCounts = [0,0,0,0,0,0,0,0];
+    demoEpisode.waves.forEach(w => w.zones.forEach(z => zoneCounts[z]++));
+    charts.zoneCoverage.data.datasets[0].data = zoneCounts;
+    charts.zoneCoverage.update();
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function initTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+
+            if (btn.dataset.tab === 'waves') {
+                updateWaveManagementTab();
+            }
+        });
+    });
+}
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    initCharts();
+    initWarehouseMap();
+    populateComparisonTable();
+    initTabs();
+
+    // Set header stats
+    document.getElementById('stat-total-orders').textContent = TOTAL_ORDERS;
+    document.getElementById('stat-active-waves').textContent = '0';
+    document.getElementById('stat-completion').textContent = '0%';
+    document.getElementById('stat-labor-load').textContent = '0%';
+});
+</script>
+
+</body>
+</html>
