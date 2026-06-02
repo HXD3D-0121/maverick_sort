@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能仓储分拣调度可视化看板 | Smart Warehouse Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f0f4ff;
+            --bg-card: #ffffff;
+            --accent-pink: #ff3366;
+            --accent-cyan: #00d4ff;
+            --accent-lime: #39ff14;
+            --accent-orange: #ff9900;
+            --accent-purple: #8b5cf6;
+            --accent-yellow: #ffcc00;
+            --text-dark: #1a1a2e;
+            --text-muted: #6b7280;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --shadow-glow-pink: 0 0 20px rgba(255, 51, 102, 0.3);
+            --shadow-glow-cyan: 0 0 20px rgba(0, 212, 255, 0.3);
+            --shadow-glow-lime: 0 0 20px rgba(57, 255, 20, 0.3);
+            --gradient-pink: linear-gradient(135deg, #ff3366, #ff6b6b);
+            --gradient-cyan: linear-gradient(135deg, #00d4ff, #0099ff);
+            --gradient-lime: linear-gradient(135deg, #39ff14, #00cc66);
+            --gradient-purple: linear-gradient(135deg, #8b5cf6, #6366f1);
+            --gradient-orange: linear-gradient(135deg, #ff9900, #ff6600);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--bg-card);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-cyan);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-glow-cyan);
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .header-stat {
+            text-align: center;
+        }
+
+        .header-stat-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent-pink);
+        }
+
+        .header-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .clock {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+            background: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 2px solid var(--accent-cyan);
+        }
+
+        /* ===== MAIN GRID ===== */
+        .main-container {
+            padding: 24px 32px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 20px;
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-live {
+            background: rgba(57, 255, 20, 0.15);
+            color: #00aa00;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ===== SORTING PROCESS VISUALIZATION ===== */
+        .sorting-card {
+            grid-column: span 2;
+        }
+
+        .sorting-card::before {
+            background: var(--gradient-cyan);
+        }
+
+        .conveyor-container {
+            position: relative;
+            height: 320px;
+            background: linear-gradient(180deg, #f8faff 0%, #eef2ff 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid #e0e7ff;
+        }
+
+        .conveyor-belt {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: repeating-linear-gradient(
+                90deg,
+                #3b82f6 0px,
+                #3b82f6 20px,
+                #60a5fa 20px,
+                #60a5fa 40px
+            );
+            border-top: 3px solid #1d4ed8;
+            border-bottom: 3px solid #1d4ed8;
+        }
+
+        .conveyor-label {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 700;
+            color: #3b82f6;
+            letter-spacing: 2px;
+        }
+
+        .sorting-station {
+            position: absolute;
+            top: 20px;
+            width: 80px;
+            text-align: center;
+        }
+
+        .station-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .station-box:hover {
+            transform: scale(1.1);
+        }
+
+        .station-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .station-count {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .station-ambient { background: linear-gradient(135deg, #fef3c7, #fbbf24); }
+        .station-cool { background: linear-gradient(135deg, #dbeafe, #60a5fa); }
+        .station-cold { background: linear-gradient(135deg, #e0e7ff, #818cf8); }
+        .station-frozen { background: linear-gradient(135deg, #cffafe, #22d3ee); }
+        .station-urgent { background: linear-gradient(135deg, #fee2e2, #f87171); }
+
+        .package-item {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            animation: movePackage 8s linear infinite;
+            z-index: 10;
+        }
+
+        @keyframes movePackage {
+            0% { left: -40px; transform: translateY(0); }
+            10% { transform: translateY(-30px); }
+            20% { transform: translateY(0); }
+            30% { transform: translateY(-20px); }
+            40% { transform: translateY(0); }
+            50% { transform: translateY(-35px); }
+            60% { transform: translateY(0); }
+            70% { transform: translateY(-15px); }
+            80% { transform: translateY(0); }
+            90% { transform: translateY(-25px); }
+            100% { left: calc(100% + 40px); transform: translateY(0); }
+        }
+
+        .package-ambient { background: #fbbf24; }
+        .package-cool { background: #60a5fa; }
+        .package-cold { background: #818cf8; }
+        .package-frozen { background: #22d3ee; }
+        .package-urgent { background: #f87171; animation-duration: 4s !important; }
+
+        .sorting-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        /* ===== ALERTS CARD ===== */
+        .alerts-card {
+            grid-row: span 2;
+        }
+
+        .alerts-card::before {
+            background: var(--gradient-pink);
+        }
+
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            padding: 12px;
+            border-radius: 12px;
+            border-left: 4px solid;
+            animation: slideIn 0.5s ease;
+            transition: transform 0.2s;
+        }
+
+        .alert-item:hover {
+            transform: translateX(4px);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert-critical {
+            background: linear-gradient(90deg, #fee2e2, #fff5f5);
+            border-left-color: #dc2626;
+        }
+
+        .alert-warning {
+            background: linear-gradient(90deg, #fef3c7, #fffbeb);
+            border-left-color: #f59e0b;
+        }
+
+        .alert-info {
+            background: linear-gradient(90deg, #dbeafe, #eff6ff);
+            border-left-color: #3b82f6;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .alert-level {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .alert-level-critical {
+            background: #dc2626;
+            color: white;
+        }
+
+        .alert-level-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .alert-level-info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .alert-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .alert-message {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .alert-detail {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ===== LABOR LOAD CARD ===== */
+        .labor-card::before {
+            background: var(--gradient-lime);
+        }
+
+        .labor-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .labor-stat-box {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #bbf7d0;
+        }
+
+        .labor-stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #16a34a;
+        }
+
+        .labor-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .worker-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .worker-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .worker-item:hover {
+            background: #f1f5f9;
+        }
+
+        .worker-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .worker-info {
+            flex: 1;
+        }
+
+        .worker-name {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .worker-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .worker-load-bar {
+            width: 80px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .worker-load-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .worker-load-value {
+            font-size: 12px;
+            font-weight: 800;
+            width: 36px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* ===== KPI CARDS ===== */
+        .kpi-grid {
+            grid-column: span 3;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin: 0 auto 8px;
+        }
+
+        .kpi-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .kpi-change {
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .kpi-change-up { color: #16a34a; }
+        .kpi-change-down { color: #dc2626; }
+
+        .kpi-1::after { background: var(--gradient-cyan); }
+        .kpi-1 .kpi-icon { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
+        .kpi-1 .kpi-value { color: #0284c7; }
+
+        .kpi-2::after { background: var(--gradient-pink); }
+        .kpi-2 .kpi-icon { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+        .kpi-2 .kpi-value { color: #db2777; }
+
+        .kpi-3::after { background: var(--gradient-lime); }
+        .kpi-3 .kpi-icon { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+        .kpi-3 .kpi-value { color: #16a34a; }
+
+        .kpi-4::after { background: var(--gradient-purple); }
+        .kpi-4 .kpi-icon { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+        .kpi-4 .kpi-value { color: #7c3aed; }
+
+        .kpi-5::after { background: var(--gradient-orange); }
+        .kpi-5 .kpi-icon { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
+        .kpi-5 .kpi-value { color: #ea580c; }
+
+        .kpi-6::after { background: linear-gradient(90deg, #f472b6, #a78bfa); }
+        .kpi-6 .kpi-icon { background: linear-gradient(135deg, #fce7f3, #ede9fe); }
+        .kpi-6 .kpi-value { color: #9333ea; }
+
+        /* ===== CHARTS ===== */
+        .chart-card::before {
+            background: var(--gradient-purple);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 220px;
+        }
+
+        /* ===== WAREHOUSE MAP CARD ===== */
+        .map-card {
+            grid-column: span 2;
+        }
+
+        .map-card::before {
+            background: var(--gradient-orange);
+        }
+
+        .warehouse-map {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .zone-box {
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .zone-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .zone-title {
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .zone-temp {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .zone-metrics {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .zone-metric {
+            text-align: center;
+        }
+
+        .zone-metric-value {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .zone-metric-label {
+            font-size: 10px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .zone-a { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
+        .zone-b { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: #1e40af; }
+        .zone-c { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); color: #3730a3; }
+        .zone-d { background: linear-gradient(135deg, #cffafe, #a5f3fc); color: #155e75; }
+        .zone-e { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; }
+        .zone-f { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); color: #6b21a8; }
+        .zone-g { background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #166534; }
+        .zone-h { background: linear-gradient(135deg, #ffedd5, #fed7aa); color: #9a3412; }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* ===== ANIMATED BACKGROUND ELEMENTS ===== */
+        .floating-shape {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .sorting-card, .map-card {
+                grid-column: span 2;
+            }
+            .kpi-grid {
+                grid-column: span 2;
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+            .sorting-card, .map-card, .kpi-grid {
+                grid-column: span 1;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Shapes -->
+    <div class="floating-shape" style="width: 300px; height: 300px; background: var(--accent-pink); top: 10%; left: 5%;"></div>
+    <div class="floating-shape" style="width: 200px; height: 200px; background: var(--accent-cyan); top: 60%; right: 10%; animation-delay: -5s;"></div>
+    <div class="floating-shape" style="width: 250px; height: 250px; background: var(--accent-lime); bottom: 10%; left: 30%; animation-delay: -10s;"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-section">
+            <div class="logo-icon">🏥</div>
+            <div class="logo-text">
+                <h1>智能仓储分拣调度系统</h1>
+                <p>Smart Warehouse Sorting & Dispatch | Case 1 Demo</p>
+            </div>
+        </div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <div class="header-stat-value" id="totalOrders">92,847</div>
+                <div class="header-stat-label">今日订单</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-value" id="sortedOrders">78,293</div>
+                <div class="header-stat-label">已分拣</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-value" id="sortingRate">84.3%</div>
+                <div class="header-stat-label">完成率</div>
+            </div>
+        </div>
+        <div class="clock" id="clock">--:--:--</div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card kpi-1">
+                <div class="kpi-icon">📦</div>
+                <div class="kpi-value" id="kpiThroughput">90.2M</div>
+                <div class="kpi-label">年吞吐量(箱)</div>
+                <div class="kpi-change kpi-change-up">↑ 12.5%</div>
+            </div>
+            <div class="kpi-card kpi-2">
+                <div class="kpi-icon">🚚</div>
+                <div class="kpi-value" id="kpiDelivery">88.6%</div>
+                <div class="kpi-label">次日达达成率</div>
+                <div class="kpi-change kpi-change-up">↑ 2.1%</div>
+            </div>
+            <div class="kpi-card kpi-3">
+                <div class="kpi-icon">✅</div>
+                <div class="kpi-value" id="kpiAccuracy">99.72%</div>
+                <div class="kpi-label">分拣准确率</div>
+                <div class="kpi-change kpi-change-up">↑ 0.35%</div>
+            </div>
+            <div class="kpi-card kpi-4">
+                <div class="kpi-icon">🏭</div>
+                <div class="kpi-value">128</div>
+                <div class="kpi-label">物流中心</div>
+                <div class="kpi-change kpi-change-up">+3 新增</div>
+            </div>
+            <div class="kpi-card kpi-5">
+                <div class="kpi-icon">⚡</div>
+                <div class="kpi-value" id="kpiEfficiency">2.3x</div>
+                <div class="kpi-label">峰值效率倍数</div>
+                <div class="kpi-change kpi-change-down">↑ 压力</div>
+            </div>
+            <div class="kpi-card kpi-6">
+                <div class="kpi-icon">👥</div>
+                <div class="kpi-value" id="kpiStaff">1,247</div>
+                <div class="kpi-label">在岗人员</div>
+                <div class="kpi-change kpi-change-up">+186 临时工</div>
+            </div>
+        </div>
+
+        <!-- Sorting Process Visualization -->
+        <div class="card sorting-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #e0f2fe, #bae6fd);">🔄</div>
+                    实时分拣流程监控
+                </div>
+                <span class="badge badge-live">● 实时监控中</span>
+            </div>
+            <div class="conveyor-container" id="conveyorContainer">
+                <div class="conveyor-belt"></div>
+                <div class="conveyor-label">◀ 智能分拣传送带 ▶</div>
+
+                <!-- Sorting Stations -->
+                <div class="sorting-station" style="left: 8%;">
+                    <div class="station-box station-ambient">🌡️</div>
+                    <div class="station-name">常温区</div>
+                    <div class="station-count" id="ambientCount">12,453</div>
+                </div>
+                <div class="sorting-station" style="left: 28%;">
+                    <div class="station-box station-cool">❄️</div>
+                    <div class="station-name">阴凉区</div>
+                    <div class="station-count" id="coolCount">8,291</div>
+                </div>
+                <div class="sorting-station" style="left: 48%;">
+                    <div class="station-box station-cold">🧊</div>
+                    <div class="station-name">冷藏区</div>
+                    <div class="station-count" id="coldCount">5,847</div>
+                </div>
+                <div class="sorting-station" style="left: 68%;">
+                    <div class="station-box station-frozen">🧊</div>
+                    <div class="station-name">冷冻区</div>
+                    <div class="station-count" id="frozenCount">2,156</div>
+                </div>
+                <div class="sorting-station" style="left: 86%;">
+                    <div class="station-box station-urgent">🚨</div>
+                    <div class="station-name">加急区</div>
+                    <div class="station-count" id="urgentCount">1,038</div>
+                </div>
+
+                <!-- Packages will be dynamically added -->
+            </div>
+            <div class="sorting-legend">
+                <div class="legend-item"><div class="legend-dot" style="background: #fbbf24;"></div>常温药品 (10-30°C)</div>
+                <div class="legend-item"><div class="legend-dot" style="background: #60a5fa;"></div>阴凉药品 (≤20°C)</div>
+                <div class="legend-item"><div class="legend-dot" style="background: #818cf8;"></div>冷藏药品 (2-8°C)</div>
+                <div class="legend-item"><div class="legend-dot" style="background: #22d3ee;"></div>冷冻药品 (-20°C)</div>
+                <div class="legend-item"><div class="legend-dot" style="background: #f87171;"></div>加急订单 (2h内)</div>
+            </div>
+        </div>
+
+        <!-- Alerts Panel -->
+        <div class="card alerts-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #fee2e2, #fecaca);">🚨</div>
+                    异常预警中心
+                </div>
+                <span class="badge badge-live">● 实时</span>
+            </div>
+            <div class="alert-list" id="alertList">
+                <!-- Alerts will be dynamically added -->
+            </div>
+        </div>
+
+        <!-- Labor Load -->
+        <div class="card labor-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0);">💪</div>
+                    人员负载监控
+                </div>
+                <span class="badge badge-live">● 实时</span>
+            </div>
+            <div class="labor-stats">
+                <div class="labor-stat-box">
+                    <div class="labor-stat-value" id="avgLoad">78%</div>
+                    <div class="labor-stat-label">平均负载</div>
+                </div>
+                <div class="labor-stat-box">
+                    <div class="labor-stat-value" id">247</div>
+                    <div class="labor-stat-label">分拣员在岗</div>
+                </div>
+            </div>
+            <div class="worker-list" id="workerList">
+                <!-- Workers will be dynamically added -->
+            </div>
+        </div>
+
+        <!-- Throughput Chart -->
+        <div class="card chart-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ede9fe, #ddd6fe);">📈</div>
+                    实时分拣吞吐量
+                </div>
+                <span class="badge badge-live">● 实时</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="throughputChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Warehouse Zones Map -->
+        <div class="card map-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ffedd5, #fed7aa);">🏭</div>
+                    仓储分区实时状态
+                </div>
+                <span class="badge badge-live">● 实时监控</span>
+            </div>
+            <div class="warehouse-map">
+                <div class="zone-box zone-a">
+                    <div class="zone-title">A区 · 常温普药</div>
+                    <div class="zone-temp">🌡️ 24°C | 湿度 55%</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value" id="zoneAOrders">4,253</div>
+                            <div class="zone-metric-label">待分拣</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">92%</div>
+                            <div class="zone-metric-label">库容</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-box zone-b">
+                    <div class="zone-title">B区 · 阴凉药品</div>
+                    <div class="zone-temp">❄️ 18°C | 湿度 48%</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value" id="zoneBOrders">2,891</div>
+                            <div class="zone-metric-label">待分拣</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">78%</div>
+                            <div class="zone-metric-label">库容</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-box zone-c">
+                    <div class="zone-title">C区 · 冷藏生物</div>
+                    <div class="zone-temp">🧊 5°C | 湿度 42%</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value" id="zoneCOrders">1,547</div>
+                            <div class="zone-metric-label">待分拣</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">85%</div>
+                            <div class="zone-metric-label">库容</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-box zone-d">
+                    <div class="zone-title">D区 · 冷冻疫苗</div>
+                    <div class="zone-temp">🧊 -18°C | 湿度 35%</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value" id="zoneDOrders">612</div>
+                            <div class="zone-metric-label">待分拣</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">64%</div>
+                            <div class="zone-metric-label">库容</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-box zone-e">
+                    <div class="zone-title">E区 · 加急通道</div>
+                    <div class="zone-temp">🚨 优先处理 | 限时2h</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value" id="zoneEOrders">328</div>
+                            <div class="zone-metric-label">待处理</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value" style="color: #dc2626;">94%</div>
+                            <div class="zone-metric-label">负载</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-box zone-f">
+                    <div class="zone-title">F区 · 贵细药材</div>
+                    <div class="zone-temp">🔒 受控环境 | 双人复核</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">156</div>
+                            <div class="zone-metric-label">待分拣</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">71%</div>
+                            <div class="zone-metric-label">库容</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-box zone-g">
+                    <div class="zone-title">G区 · 医疗器械</div>
+                    <div class="zone-temp">📋 GSP标准 | 追溯码</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">892</div>
+                            <div class="zone-metric-label">待分拣</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">83%</div>
+                            <div class="zone-metric-label">库容</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zone-box zone-h">
+                    <div class="zone-title">H区 · 退货质检</div>
+                    <div class="zone-temp">🔍 质检中 | 待判定</div>
+                    <div class="zone-metrics">
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">234</div>
+                            <div class="zone-metric-label">待处理</div>
+                        </div>
+                        <div class="zone-metric">
+                            <div class="zone-metric-value">45%</div>
+                            <div class="zone-metric-label">库容</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CLOCK =====
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+            document.getElementById('clock').textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // ===== PACKAGE ANIMATION =====
+        const packageTypes = [
+            { class: 'package-ambient', icon: '💊', delay: 0 },
+            { class: 'package-cool', icon: '💉', delay: 1.5 },
+            { class: 'package-cold', icon: '🧬', delay: 3 },
+            { class: 'package-frozen', icon: '🧊', delay: 4.5 },
+            { class: 'package-urgent', icon: '⚡', delay: 2 },
+            { class: 'package-ambient', icon: '💊', delay: 6 },
+            { class: 'package-cool', icon: '💉', delay: 7.5 },
+            { class: 'package-cold', icon: '🧬', delay: 5.5 },
+        ];
+
+        function createPackages() {
+            const container = document.getElementById('conveyorContainer');
+            packageTypes.forEach((pkg, i) => {
+                const el = document.createElement('div');
+                el.className = `package-item ${pkg.class}`;
+                el.textContent = pkg.icon;
+                el.style.animationDelay = `${pkg.delay}s`;
+                el.style.bottom = `${70 + Math.random() * 10}px`;
+                container.appendChild(el);
+            });
+        }
+        createPackages();
+
+        // ===== ALERTS SYSTEM =====
+        const alertTemplates = [
+            { level: 'critical', message: 'E区加急通道负载过高', detail: '当前94%，建议立即调配3名分拣员支援' },
+            { level: 'warning', message: 'C区冷藏温度波动', detail: '温度从5.2°C上升至6.8°C，请检查制冷设备' },
+            { level: 'warning', message: '订单量激增预警', detail: '未来2小时预计订单增长180%，启动应急预案' },
+            { level: 'info', message: '临时工已到位', detail: '新增186名临时分拣员已分配至各区域' },
+            { level: 'critical', message: 'D区疫苗批次临近失效', detail: '批号VAC20260315，有效期剩余3天，优先出库' },
+            { level: 'warning', message: 'B区阴凉库湿度超标', detail: '当前湿度62%，超过标准上限60%' },
+            { level: 'info', message: '自动补货完成', detail: 'A区完成智能补货，库容从88%降至72%' },
+            { level: 'critical', message: '传送带B-07异常停机', detail: '机械故障，维修团队预计15分钟内恢复' },
+            { level: 'warning', message: 'F区贵细药材需复核', detail: '3笔订单触发双人复核规则' },
+            { level: 'info', message: '次日达承诺达成', detail: '当前进度84.3%，预计22:00前全部完成' },
+        ];
+
+        let alertIndex = 0;
+        const activeAlerts = [];
+
+        function addAlert() {
+            const alert = alertTemplates[alertIndex % alertTemplates.length];
+            const alertId = Date.now();
+            const timeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+
+            const alertEl = document.createElement('div');
+            alertEl.className = `alert-item alert-${alert.level}`;
+            alertEl.id = `alert-${alertId}`;
+            alertEl.innerHTML = `
+                <div class="alert-header">
+                    <span class="alert-level alert-level-${alert.level}">${alert.level === 'critical' ? '紧急' : alert.level === 'warning' ? '警告' : '提示'}</span>
+                    <span class="alert-time">${timeStr}</span>
+                </div>
+                <div class="alert-message">${alert.message}</div>
+                <div class="alert-detail">${alert.detail}</div>
+            `;
+
+            const list = document.getElementById('alertList');
+            list.insertBefore(alertEl, list.firstChild);
+            activeAlerts.unshift(alertId);
+
+            if (activeAlerts.length > 8) {
+                const oldId = activeAlerts.pop();
+                const oldEl = document.getElementById(`alert-${oldId}`);
+                if (oldEl) oldEl.remove();
+            }
+
+            alertIndex++;
+        }
+
+        // Initialize with some alerts
+        for (let i = 0; i < 4; i++) addAlert();
+        setInterval(addAlert, 5000);
+
+        // ===== WORKER SIMULATION =====
+        const workers = [
+            { name: '张伟', role: '常温区分拣员', load: 82, avatar: '张' },
+            { name: '李娜', role: '阴凉区分拣员', load: 95, avatar: '李' },
+            { name: '王强', role: '冷藏区分拣员', load: 67, avatar: '王' },
+            { name: '刘芳', role: '冷冻区分拣员', load: 45, avatar: '刘' },
+            { name: '陈明', role: '加急通道分拣员', load: 98, avatar: '陈' },
+            { name: '赵雪', role: '复核员', load: 73, avatar: '赵' },
+            { name: '孙鹏', role: '打包员', load: 88, avatar: '孙' },
+        ];
+
+        const avatarColors = ['#ff3366', '#00d4ff', '#8b5cf6', '#ff9900', '#39ff14', '#f472b6', '#6366f1'];
+
+        function renderWorkers() {
+            const list = document.getElementById('workerList');
+            list.innerHTML = '';
+            workers.forEach((worker, i) => {
+                const loadColor = worker.load > 90 ? '#dc2626' : worker.load > 75 ? '#f59e0b' : '#16a34a';
+                const el = document.createElement('div');
+                el.className = 'worker-item';
+                el.innerHTML = `
+                    <div class="worker-avatar" style="background: ${avatarColors[i % avatarColors.length]};">${worker.avatar}</div>
+                    <div class="worker-info">
+                        <div class="worker-name">${worker.name}</div>
+                        <div class="worker-role">${worker.role}</div>
+                    </div>
+                    <div class="worker-load-bar">
+                        <div class="worker-load-fill" style="width: ${worker.load}%; background: ${loadColor};"></div>
+                    </div>
+                    <div class="worker-load-value" style="color: ${loadColor};">${worker.load}%</div>
+                `;
+                list.appendChild(el);
+            });
+        }
+        renderWorkers();
+
+        // Update worker loads
+        setInterval(() => {
+            workers.forEach(w => {
+                const change = Math.floor(Math.random() * 11) - 5;
+                w.load = Math.max(20, Math.min(100, w.load + change));
+            });
+            renderWorkers();
+            const avgLoad = Math.round(workers.reduce((a, w) => a + w.load, 0) / workers.length);
+            document.getElementById('avgLoad').textContent = avgLoad + '%';
+        }, 3000);
+
+        // ===== COUNTERS UPDATE =====
+        function updateCounters() {
+            const ambient = parseInt(document.getElementById('ambientCount').textContent.replace(/,/g, ''));
+            const cool = parseInt(document.getElementById('coolCount').textContent.replace(/,/g, ''));
+            const cold = parseInt(document.getElementById('coldCount').textContent.replace(/,/g, ''));
+            const frozen = parseInt(document.getElementById('frozenCount').textContent.replace(/,/g, ''));
+            const urgent = parseInt(document.getElementById('urgentCount').textContent.replace(/,/g, ''));
+
+            document.getElementById('ambientCount').textContent = (ambient + Math.floor(Math.random() * 5)).toLocaleString();
+            document.getElementById('coolCount').textContent = (cool + Math.floor(Math.random() * 4)).toLocaleString();
+            document.getElementById('coldCount').textContent = (cold + Math.floor(Math.random() * 3)).toLocaleString();
+            document.getElementById('frozenCount').textContent = (frozen + Math.floor(Math.random() * 2)).toLocaleString();
+            document.getElementById('urgentCount').textContent = Math.max(0, urgent + Math.floor(Math.random() * 5) - 2).toLocaleString();
+
+            // Update zone orders
+            const zones = ['A', 'B', 'C', 'D', 'E'];
+            zones.forEach(z => {
+                const el = document.getElementById(`zone${z}Orders`);
+                if (el) {
+                    const current = parseInt(el.textContent.replace(/,/g, ''));
+                    el.textContent = Math.max(0, current + Math.floor(Math.random() * 10) - 3).toLocaleString();
+                }
+            });
+
+            // Update header stats
+            const total = parseInt(document.getElementById('totalOrders').textContent.replace(/,/g, ''));
+            const sorted = parseInt(document.getElementById('sortedOrders').textContent.replace(/,/g, ''));
+            document.getElementById('totalOrders').textContent = (total + Math.floor(Math.random() * 8)).toLocaleString();
+            document.getElementById('sortedOrders').textContent = (sorted + Math.floor(Math.random() * 6)).toLocaleString();
+            const rate = ((sorted / total) * 100).toFixed(1);
+            document.getElementById('sortingRate').textContent = rate + '%';
+        }
+        setInterval(updateCounters, 2000);
+
+        // ===== THROUGHPUT CHART =====
+        const ctx = document.getElementById('throughputChart').getContext('2d');
+        const hours = Array.from({length: 12}, (_, i) => `${8 + i}:00`);
+        const throughputData = [3200, 4100, 5800, 7200, 8900, 10500, 12300, 11800, 10200, 8700, 6500, 4800];
+        const targetData = throughputData.map(v => v * 1.1);
+
+        const throughputChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: hours,
+                datasets: [{
+                    label: '实际分拣量',
+                    data: throughputData,
+                    borderColor: '#00d4ff',
+                    backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#00d4ff',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                }, {
+                    label: '目标分拣量',
+                    data: targetData,
+                    borderColor: '#ff3366',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [8, 4],
+                    tension: 0.4,
+                    pointRadius: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 16,
+                            font: { size: 12, weight: '600' }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 26, 46, 0.9)',
+                        titleFont: { size: 13, weight: '700' },
+                        bodyFont: { size: 12, weight: '600' },
+                        padding: 12,
+                        cornerRadius: 10,
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { font: { size: 11, weight: '600' }, color: '#6b7280' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { font: { size: 11, weight: '600' }, color: '#6b7280' }
+                    }
+                }
+            }
+        });
+
+        // Update chart data periodically
+        setInterval(() => {
+            const newData = throughputChart.data.datasets[0].data.map(v =>
+                Math.max(2000, v + Math.floor(Math.random() * 400) - 200)
+            );
+            throughputChart.data.datasets[0].data = newData;
+            throughputChart.data.datasets[1].data = newData.map(v => v * 1.1);
+            throughputChart.update('none');
+        }, 5000);
+    </script>
+</body>
+</html>

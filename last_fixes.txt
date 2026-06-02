@@ -1,0 +1,1 @@
+1456: 'alert.innerHTML = `<span>🔥</span><span>Wave #${step.wave_count} 存在Temp Mixing风险（常温+冷冻）</span>`;'
