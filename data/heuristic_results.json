@@ -1,0 +1,756 @@
+{
+  "summary": {
+    "FCFS": {
+      "avg_reward": 2557.5556441288527,
+      "std_reward": 446.779709038038,
+      "avg_distance": 689.9693558711874,
+      "avg_waves": 85.8,
+      "avg_misses": 0.0,
+      "avg_violations": 37.6
+    },
+    "TEMP_FIRST": {
+      "avg_reward": -1703.494995464244,
+      "std_reward": 79.73242058934744,
+      "avg_distance": 989.7699954642654,
+      "avg_waves": 126.05,
+      "avg_misses": 0.0,
+      "avg_violations": 0.0
+    },
+    "ZONE_NN": {
+      "avg_reward": 2566.717413373337,
+      "std_reward": 450.5369463816228,
+      "avg_distance": 667.0575866267039,
+      "avg_waves": 82.55,
+      "avg_misses": 0.0,
+      "avg_violations": 37.3
+    },
+    "EDD": {
+      "avg_reward": 2537.8388930571214,
+      "std_reward": 397.48740642202216,
+      "avg_distance": 665.1861069429184,
+      "avg_waves": 82.7,
+      "avg_misses": 0.0,
+      "avg_violations": 37.0
+    },
+    "TZU": {
+      "avg_reward": 999.1442572359414,
+      "std_reward": 288.21211210374906,
+      "avg_distance": 664.630742764053,
+      "avg_waves": 82.55,
+      "avg_misses": 0.0,
+      "avg_violations": 21.6
+    }
+  },
+  "raw": {
+    "FCFS": [
+      {
+        "total_reward": 2652.809295215124,
+        "n_waves": 82,
+        "total_distance": 657.9907047849147,
+        "deadline_misses": 0,
+        "temp_violations": 38
+      },
+      {
+        "total_reward": 2636.3857864376732,
+        "n_waves": 83,
+        "total_distance": 667.4142135623731,
+        "deadline_misses": 0,
+        "temp_violations": 38
+      },
+      {
+        "total_reward": 1790.7705263323985,
+        "n_waves": 86,
+        "total_distance": 693.7294736676245,
+        "deadline_misses": 0,
+        "temp_violations": 30
+      },
+      {
+        "total_reward": 2778.99895345716,
+        "n_waves": 87,
+        "total_distance": 702.9010465428781,
+        "deadline_misses": 0,
+        "temp_violations": 40
+      },
+      {
+        "total_reward": 2538.9377223398737,
+        "n_waves": 83,
+        "total_distance": 667.1622776601685,
+        "deadline_misses": 0,
+        "temp_violations": 37
+      },
+      {
+        "total_reward": 2606.2989534571702,
+        "n_waves": 85,
+        "total_distance": 684.9010465428781,
+        "deadline_misses": 0,
+        "temp_violations": 38
+      },
+      {
+        "total_reward": 3121.9612311173482,
+        "n_waves": 91,
+        "total_distance": 733.7387688827099,
+        "deadline_misses": 0,
+        "temp_violations": 44
+      },
+      {
+        "total_reward": 2299.985786437658,
+        "n_waves": 86,
+        "total_distance": 687.4142135623731,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      },
+      {
+        "total_reward": 3156.500000000048,
+        "n_waves": 89,
+        "total_distance": 712.0,
+        "deadline_misses": 0,
+        "temp_violations": 44
+      },
+      {
+        "total_reward": 1991.7235087774864,
+        "n_waves": 86,
+        "total_distance": 694.5764912225416,
+        "deadline_misses": 0,
+        "temp_violations": 32
+      },
+      {
+        "total_reward": 3284.077099042043,
+        "n_waves": 94,
+        "total_distance": 756.7229009580049,
+        "deadline_misses": 0,
+        "temp_violations": 46
+      },
+      {
+        "total_reward": 3019.8808680903803,
+        "n_waves": 84,
+        "total_distance": 676.8191319096608,
+        "deadline_misses": 0,
+        "temp_violations": 42
+      },
+      {
+        "total_reward": 2408.2000000000453,
+        "n_waves": 85,
+        "total_distance": 686.0,
+        "deadline_misses": 0,
+        "temp_violations": 36
+      },
+      {
+        "total_reward": 1877.437722339856,
+        "n_waves": 80,
+        "total_distance": 643.1622776601685,
+        "deadline_misses": 0,
+        "temp_violations": 30
+      },
+      {
+        "total_reward": 1822.4092952151198,
+        "n_waves": 84,
+        "total_distance": 675.9907047849147,
+        "deadline_misses": 0,
+        "temp_violations": 30
+      },
+      {
+        "total_reward": 3213.0235087775063,
+        "n_waves": 92,
+        "total_distance": 738.5764912225414,
+        "deadline_misses": 0,
+        "temp_violations": 45
+      },
+      {
+        "total_reward": 2578.0989534571686,
+        "n_waves": 87,
+        "total_distance": 702.9010465428782,
+        "deadline_misses": 0,
+        "temp_violations": 38
+      },
+      {
+        "total_reward": 2369.6573593129174,
+        "n_waves": 88,
+        "total_distance": 702.2426406871193,
+        "deadline_misses": 0,
+        "temp_violations": 36
+      },
+      {
+        "total_reward": 2634.2847398948,
+        "n_waves": 83,
+        "total_distance": 670.3152601052512,
+        "deadline_misses": 0,
+        "temp_violations": 38
+      },
+      {
+        "total_reward": 2369.6715728752806,
+        "n_waves": 81,
+        "total_distance": 644.8284271247462,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      }
+    ],
+    "TEMP_FIRST": [
+      {
+        "total_reward": -1595.0207116084066,
+        "n_waves": 118,
+        "total_distance": 925.8207116084228,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1671.262224596835,
+        "n_waves": 123,
+        "total_distance": 975.0622245968542,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1731.8293527251262,
+        "n_waves": 129,
+        "total_distance": 1001.3293527251507,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1679.1748418132331,
+        "n_waves": 126,
+        "total_distance": 966.0748418132531,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1619.6299256676807,
+        "n_waves": 119,
+        "total_distance": 945.7299256676987,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1709.5479446944962,
+        "n_waves": 126,
+        "total_distance": 995.7479446945176,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1815.1812090107167,
+        "n_waves": 134,
+        "total_distance": 1055.881209010742,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1668.319078846328,
+        "n_waves": 123,
+        "total_distance": 970.719078846347,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1801.7293758645767,
+        "n_waves": 133,
+        "total_distance": 1050.2293758646026,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1671.7277662419579,
+        "n_waves": 124,
+        "total_distance": 968.0277662419784,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1843.8266980988192,
+        "n_waves": 138,
+        "total_distance": 1064.6266980988444,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1684.5386710796665,
+        "n_waves": 125,
+        "total_distance": 976.238671079688,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1597.6786340010328,
+        "n_waves": 118,
+        "total_distance": 926.8786340010492,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1618.7735912974238,
+        "n_waves": 119,
+        "total_distance": 944.3735912974403,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1671.2648591620823,
+        "n_waves": 122,
+        "total_distance": 979.6648591621007,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1861.114657238812,
+        "n_waves": 138,
+        "total_distance": 1082.714657238841,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1716.292847563401,
+        "n_waves": 128,
+        "total_distance": 992.2928475634221,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1810.0048205442401,
+        "n_waves": 134,
+        "total_distance": 1051.904820544266,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1663.285059214875,
+        "n_waves": 123,
+        "total_distance": 967.8850592148955,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -1639.697640015176,
+        "n_waves": 121,
+        "total_distance": 954.197640015193,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      }
+    ],
+    "ZONE_NN": [
+      {
+        "total_reward": 2588.7661130485144,
+        "n_waves": 79,
+        "total_distance": 637.0338869515238,
+        "deadline_misses": 0,
+        "temp_violations": 37
+      },
+      {
+        "total_reward": 3165.267262347467,
+        "n_waves": 80,
+        "total_distance": 653.5327376525803,
+        "deadline_misses": 0,
+        "temp_violations": 43
+      },
+      {
+        "total_reward": 2036.634963418309,
+        "n_waves": 83,
+        "total_distance": 662.865036581736,
+        "deadline_misses": 0,
+        "temp_violations": 32
+      },
+      {
+        "total_reward": 2432.9371808603837,
+        "n_waves": 84,
+        "total_distance": 663.9628191396583,
+        "deadline_misses": 0,
+        "temp_violations": 36
+      },
+      {
+        "total_reward": 2668.7940351098705,
+        "n_waves": 80,
+        "total_distance": 652.3059648901658,
+        "deadline_misses": 0,
+        "temp_violations": 38
+      },
+      {
+        "total_reward": 2141.9033303249544,
+        "n_waves": 82,
+        "total_distance": 664.2966696750805,
+        "deadline_misses": 0,
+        "temp_violations": 33
+      },
+      {
+        "total_reward": 2858.6819809732287,
+        "n_waves": 88,
+        "total_distance": 712.018019026819,
+        "deadline_misses": 0,
+        "temp_violations": 41
+      },
+      {
+        "total_reward": 2330.355266227155,
+        "n_waves": 83,
+        "total_distance": 672.0447337728758,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      },
+      {
+        "total_reward": 2886.0503478798873,
+        "n_waves": 86,
+        "total_distance": 697.4496521201633,
+        "deadline_misses": 0,
+        "temp_violations": 41
+      },
+      {
+        "total_reward": 2135.688070219694,
+        "n_waves": 82,
+        "total_distance": 670.6119297803318,
+        "deadline_misses": 0,
+        "temp_violations": 33
+      },
+      {
+        "total_reward": 3337.430710906836,
+        "n_waves": 89,
+        "total_distance": 728.3692890932125,
+        "deadline_misses": 0,
+        "temp_violations": 46
+      },
+      {
+        "total_reward": 3061.819095493601,
+        "n_waves": 81,
+        "total_distance": 649.8809045064409,
+        "deadline_misses": 0,
+        "temp_violations": 42
+      },
+      {
+        "total_reward": 2360.9114546408473,
+        "n_waves": 82,
+        "total_distance": 648.2885453591945,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      },
+      {
+        "total_reward": 2409.248130437796,
+        "n_waves": 77,
+        "total_distance": 626.3518695622412,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      },
+      {
+        "total_reward": 2148.1929885669983,
+        "n_waves": 81,
+        "total_distance": 665.207011433044,
+        "deadline_misses": 0,
+        "temp_violations": 33
+      },
+      {
+        "total_reward": 3649.222967298015,
+        "n_waves": 89,
+        "total_distance": 717.3770327020314,
+        "deadline_misses": 0,
+        "temp_violations": 49
+      },
+      {
+        "total_reward": 2534.1994585205553,
+        "n_waves": 83,
+        "total_distance": 666.80054147949,
+        "deadline_misses": 0,
+        "temp_violations": 37
+      },
+      {
+        "total_reward": 2106.090163305459,
+        "n_waves": 85,
+        "total_distance": 680.8098366945754,
+        "deadline_misses": 0,
+        "temp_violations": 33
+      },
+      {
+        "total_reward": 2468.789139902052,
+        "n_waves": 80,
+        "total_distance": 650.8108600980015,
+        "deadline_misses": 0,
+        "temp_violations": 36
+      },
+      {
+        "total_reward": 2013.3656079851187,
+        "n_waves": 77,
+        "total_distance": 621.1343920149122,
+        "deadline_misses": 0,
+        "temp_violations": 31
+      }
+    ],
+    "EDD": [
+      {
+        "total_reward": 2692.3857864376632,
+        "n_waves": 79,
+        "total_distance": 633.4142135623731,
+        "deadline_misses": 0,
+        "temp_violations": 38
+      },
+      {
+        "total_reward": 2553.6628854796577,
+        "n_waves": 81,
+        "total_distance": 660.1371145203781,
+        "deadline_misses": 0,
+        "temp_violations": 37
+      },
+      {
+        "total_reward": 1930.9328039925751,
+        "n_waves": 83,
+        "total_distance": 668.567196007456,
+        "deadline_misses": 0,
+        "temp_violations": 31
+      },
+      {
+        "total_reward": 2519.1612311173285,
+        "n_waves": 84,
+        "total_distance": 677.7387688827099,
+        "deadline_misses": 0,
+        "temp_violations": 37
+      },
+      {
+        "total_reward": 2281.685786437665,
+        "n_waves": 80,
+        "total_distance": 639.4142135623731,
+        "deadline_misses": 0,
+        "temp_violations": 34
+      },
+      {
+        "total_reward": 2351.3715728753023,
+        "n_waves": 82,
+        "total_distance": 654.8284271247462,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      },
+      {
+        "total_reward": 3367.2950816527687,
+        "n_waves": 88,
+        "total_distance": 703.4049183472877,
+        "deadline_misses": 0,
+        "temp_violations": 46
+      },
+      {
+        "total_reward": 2221.4092952151145,
+        "n_waves": 84,
+        "total_distance": 675.9907047849146,
+        "deadline_misses": 0,
+        "temp_violations": 34
+      },
+      {
+        "total_reward": 3095.5092952151335,
+        "n_waves": 86,
+        "total_distance": 687.9907047849146,
+        "deadline_misses": 0,
+        "temp_violations": 43
+      },
+      {
+        "total_reward": 2348.3000000000347,
+        "n_waves": 82,
+        "total_distance": 658.0,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      },
+      {
+        "total_reward": 3137.8251631398407,
+        "n_waves": 90,
+        "total_distance": 722.9748368602096,
+        "deadline_misses": 0,
+        "temp_violations": 44
+      },
+      {
+        "total_reward": 2760.295081652749,
+        "n_waves": 81,
+        "total_distance": 651.4049183472877,
+        "deadline_misses": 0,
+        "temp_violations": 39
+      },
+      {
+        "total_reward": 2259.0377223398746,
+        "n_waves": 81,
+        "total_distance": 655.1622776601683,
+        "deadline_misses": 0,
+        "temp_violations": 34
+      },
+      {
+        "total_reward": 2116.437722339861,
+        "n_waves": 77,
+        "total_distance": 619.1622776601685,
+        "deadline_misses": 0,
+        "temp_violations": 32
+      },
+      {
+        "total_reward": 1959.6612311173244,
+        "n_waves": 81,
+        "total_distance": 653.7387688827098,
+        "deadline_misses": 0,
+        "temp_violations": 31
+      },
+      {
+        "total_reward": 3251.437722339875,
+        "n_waves": 89,
+        "total_distance": 715.1622776601683,
+        "deadline_misses": 0,
+        "temp_violations": 45
+      },
+      {
+        "total_reward": 2527.8377223398793,
+        "n_waves": 83,
+        "total_distance": 673.1622776601683,
+        "deadline_misses": 0,
+        "temp_violations": 37
+      },
+      {
+        "total_reward": 2507.4857864376645,
+        "n_waves": 85,
+        "total_distance": 679.4142135623731,
+        "deadline_misses": 0,
+        "temp_violations": 37
+      },
+      {
+        "total_reward": 2470.950889359379,
+        "n_waves": 80,
+        "total_distance": 648.6491106406735,
+        "deadline_misses": 0,
+        "temp_violations": 36
+      },
+      {
+        "total_reward": 2404.095081652744,
+        "n_waves": 78,
+        "total_distance": 625.4049183472877,
+        "deadline_misses": 0,
+        "temp_violations": 35
+      }
+    ],
+    "TZU": [
+      {
+        "total_reward": 991.1776041053721,
+        "n_waves": 79,
+        "total_distance": 634.6223958946166,
+        "deadline_misses": 0,
+        "temp_violations": 21
+      },
+      {
+        "total_reward": 1075.980868090335,
+        "n_waves": 80,
+        "total_distance": 642.8191319096608,
+        "deadline_misses": 0,
+        "temp_violations": 22
+      },
+      {
+        "total_reward": 828.9420992076165,
+        "n_waves": 83,
+        "total_distance": 670.5579007923707,
+        "deadline_misses": 0,
+        "temp_violations": 20
+      },
+      {
+        "total_reward": 1028.017543887281,
+        "n_waves": 84,
+        "total_distance": 668.8824561127075,
+        "deadline_misses": 0,
+        "temp_violations": 22
+      },
+      {
+        "total_reward": 977.1185904301611,
+        "n_waves": 80,
+        "total_distance": 643.9814095698291,
+        "deadline_misses": 0,
+        "temp_violations": 21
+      },
+      {
+        "total_reward": 842.9666545279554,
+        "n_waves": 83,
+        "total_distance": 658.233345472034,
+        "deadline_misses": 0,
+        "temp_violations": 20
+      },
+      {
+        "total_reward": 750.9072021293186,
+        "n_waves": 88,
+        "total_distance": 719.792797870671,
+        "deadline_misses": 0,
+        "temp_violations": 20
+      },
+      {
+        "total_reward": 538.7524409655862,
+        "n_waves": 83,
+        "total_distance": 663.647559034407,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": 1392.6808680903428,
+        "n_waves": 86,
+        "total_distance": 690.8191319096608,
+        "deadline_misses": 0,
+        "temp_violations": 26
+      },
+      {
+        "total_reward": 1041.4082486722002,
+        "n_waves": 82,
+        "total_distance": 664.8917513277928,
+        "deadline_misses": 0,
+        "temp_violations": 22
+      },
+      {
+        "total_reward": 1245.7366757969487,
+        "n_waves": 89,
+        "total_distance": 720.0633242030465,
+        "deadline_misses": 0,
+        "temp_violations": 25
+      },
+      {
+        "total_reward": 863.709295215077,
+        "n_waves": 81,
+        "total_distance": 647.9907047849147,
+        "deadline_misses": 0,
+        "temp_violations": 20
+      },
+      {
+        "total_reward": 863.9759497430397,
+        "n_waves": 81,
+        "total_distance": 650.2240502569485,
+        "deadline_misses": 0,
+        "temp_violations": 20
+      },
+      {
+        "total_reward": 817.6185904301587,
+        "n_waves": 77,
+        "total_distance": 617.9814095698292,
+        "deadline_misses": 0,
+        "temp_violations": 19
+      },
+      {
+        "total_reward": 661.4185904301589,
+        "n_waves": 81,
+        "total_distance": 651.9814095698291,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": 1948.2109495774564,
+        "n_waves": 89,
+        "total_distance": 718.3890504225827,
+        "deadline_misses": 0,
+        "temp_violations": 32
+      },
+      {
+        "total_reward": 1027.856312769989,
+        "n_waves": 83,
+        "total_distance": 673.1436872299975,
+        "deadline_misses": 0,
+        "temp_violations": 22
+      },
+      {
+        "total_reward": 1100.9185904301578,
+        "n_waves": 85,
+        "total_distance": 685.9814095698291,
+        "deadline_misses": 0,
+        "temp_violations": 23
+      },
+      {
+        "total_reward": 1076.456312770015,
+        "n_waves": 80,
+        "total_distance": 643.1436872299975,
+        "deadline_misses": 0,
+        "temp_violations": 22
+      },
+      {
+        "total_reward": 909.0317574496561,
+        "n_waves": 77,
+        "total_distance": 625.4682425503344,
+        "deadline_misses": 0,
+        "temp_violations": 20
+      }
+    ]
+  }
+}
