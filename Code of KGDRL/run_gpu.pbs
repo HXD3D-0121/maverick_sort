@@ -1,0 +1,18 @@
+#!/bin/bash
+#PBS -P ACT
+#PBS -j oe
+#PBS -N time_test
+#PBS -q volta_login
+#PBS -l select=1:ncpus=10:mem=80gb:ngpus=1
+#PBS -l walltime=00:20:00
+
+cd "$PBS_O_WORKDIR";
+np=$(cat ${PBS_NODEFILE} | wc -l);
+
+image="/app1/common/singularity-img/3.0.0/pytorch_1.12_cuda_11.6.2_cudnn8-py38.sif"
+
+singularity exec -e $image bash << EOF > $PBS_O_WORKDIR/HPC/stdout.$PBS_JOBID 2> $PBS_O_WORKDIR/HPC/stderr.$PBS_JOBID
+
+python time_test.py
+
+EOF

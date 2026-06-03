@@ -1,0 +1,13 @@
+Total Chinese chars: 33
+Unique: 冷冻凉在存对常报数无暂次步比温盖离藏覆警距阴险风
+
+Line 720: <span class="card-title">📈 Distance对比</span>
+Line 728: <span class="card-title">🔥 Violations vs 距离</span>
+Line 961: labels: ['常温', '阴凉', '冷藏', '冷冻'],
+Line 1055: y: { title: { display: true, text: 'Violations次数' }, grid: { color: 'rgba(148, 163, 184, 0.05)' } }
+Line 1141: label: '覆盖次数',
+Line 1159: labels: ['Temp Mixing', 'Overload', 'Misses风险', 'Normal'],
+Line 1350: rcEl.textContent = rewardChange + '/步';
+Line 1456: alert.innerHTML = `<span>🔥</span><span>Wave #${step.wave_count} 存在Temp Mixing风险（常温+冷冻）</span>`;
+Line 1461: logEntry.innerHTML = `<span style="color: var(--accent-red)">[${document.getElementById('sim-time').textContent}]</span> Temp Mixing警报: Wave #${step.w
+Line 1462: if (alertLog.children.length === 1 && alertLog.children[0].textContent.includes('暂无')) alertLog.innerHTML = '';

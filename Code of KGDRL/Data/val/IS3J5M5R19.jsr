@@ -1,0 +1,29 @@
+<overall info: n_stages, n_jobs, n_machines>
+3,5,5
+<job info: arriving_time and average_processing_time>
+J1,0,S1,126,S2,121,S3,111
+J2,0,S1,69,S2,159,S3,93
+J3,0,S1,107,S2,95,S3,62
+J4,0,S1,100,S2,126,S3,60
+J5,0,S1,86,S2,81,S3,122
+<machine info: initial_stage and speed>
+M1,S2,S1,1.0,S2,0.2
+M2,S1,S1,0.7,S3,1.0
+M3,S1,S1,0.4
+M4,S3,S3,0.3
+M5,S2,S1,1.7,S2,1.5
+<reconfiguration info: setup_time>
+M1,S1,S2
+S1,0,197
+S2,182,0
+M2,S1,S3
+S1,0,186
+S3,164,0
+M3,S1
+S1,0
+M4,S3
+S3,0
+M5,S1,S2
+S1,0,241
+S2,188,0
+<end>

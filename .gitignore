@@ -46,3 +46,6 @@ Thumbs.db
 *.png
 *.jpg
 *.jpeg
+
+# Large CSV datasets (exceed GitHub 100MB limit)
+simulation_data/**/historical_sales.csv

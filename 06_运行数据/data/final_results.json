@@ -1,0 +1,52 @@
+{
+  "heuristic_summary": {
+    "FCFS": {
+      "avg_reward": -89984.0,
+      "std_reward": 0.0,
+      "avg_distance": 26.0,
+      "avg_waves": 10.0,
+      "avg_misses": 0.0,
+      "avg_violations": 0.0
+    },
+    "TEMP_FIRST": {
+      "avg_reward": -89508.5,
+      "std_reward": 0.0,
+      "avg_distance": 32.0,
+      "avg_waves": 10.0,
+      "avg_misses": 0.0,
+      "avg_violations": 0.0
+    },
+    "PRIORITY_FIRST": {
+      "avg_reward": -80908.0,
+      "std_reward": 0.0,
+      "avg_distance": 250.0,
+      "avg_waves": 61.0,
+      "avg_misses": 0.0,
+      "avg_violations": 17.0
+    },
+    "EDD": {
+      "avg_reward": -80810.0,
+      "std_reward": 0.0,
+      "avg_distance": 252.0,
+      "avg_waves": 61.0,
+      "avg_misses": 0.0,
+      "avg_violations": 18.0
+    },
+    "TZU": {
+      "avg_reward": -81118.0,
+      "std_reward": 0.0,
+      "avg_distance": 252.0,
+      "avg_waves": 62.0,
+      "avg_misses": 0.0,
+      "avg_violations": 15.0
+    }
+  },
+  "ppo_available": true,
+  "ppo_summary": {
+    "avg_reward": -81010.0,
+    "avg_waves": 61.0,
+    "avg_distance": 252.0,
+    "avg_misses": 0.0,
+    "avg_violations": 16.0
+  }
+}

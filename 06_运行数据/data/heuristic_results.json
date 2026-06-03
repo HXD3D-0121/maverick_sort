@@ -1,0 +1,406 @@
+{
+  "summary": {
+    "FCFS": {
+      "avg_reward": -89984.0,
+      "std_reward": 0.0,
+      "avg_distance": 26.0,
+      "avg_waves": 10.0,
+      "avg_misses": 0.0,
+      "avg_violations": 0.0
+    },
+    "TEMP_FIRST": {
+      "avg_reward": -89508.5,
+      "std_reward": 0.0,
+      "avg_distance": 32.0,
+      "avg_waves": 10.0,
+      "avg_misses": 0.0,
+      "avg_violations": 0.0
+    },
+    "PRIORITY_FIRST": {
+      "avg_reward": -80908.0,
+      "std_reward": 0.0,
+      "avg_distance": 250.0,
+      "avg_waves": 61.0,
+      "avg_misses": 0.0,
+      "avg_violations": 17.0
+    },
+    "EDD": {
+      "avg_reward": -80810.0,
+      "std_reward": 0.0,
+      "avg_distance": 252.0,
+      "avg_waves": 61.0,
+      "avg_misses": 0.0,
+      "avg_violations": 18.0
+    },
+    "TZU": {
+      "avg_reward": -81118.0,
+      "std_reward": 0.0,
+      "avg_distance": 252.0,
+      "avg_waves": 62.0,
+      "avg_misses": 0.0,
+      "avg_violations": 15.0
+    }
+  },
+  "raw": {
+    "FCFS": [
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89984.0,
+        "n_waves": 10,
+        "total_distance": 26.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      }
+    ],
+    "TEMP_FIRST": [
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      },
+      {
+        "total_reward": -89508.5,
+        "n_waves": 10,
+        "total_distance": 32.0,
+        "deadline_misses": 0,
+        "temp_violations": 0
+      }
+    ],
+    "PRIORITY_FIRST": [
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      },
+      {
+        "total_reward": -80908.0,
+        "n_waves": 61,
+        "total_distance": 250.0,
+        "deadline_misses": 0,
+        "temp_violations": 17
+      }
+    ],
+    "EDD": [
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      },
+      {
+        "total_reward": -80810.0,
+        "n_waves": 61,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 18
+      }
+    ],
+    "TZU": [
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      },
+      {
+        "total_reward": -81118.0,
+        "n_waves": 62,
+        "total_distance": 252.0,
+        "deadline_misses": 0,
+        "temp_violations": 15
+      }
+    ]
+  }
+}

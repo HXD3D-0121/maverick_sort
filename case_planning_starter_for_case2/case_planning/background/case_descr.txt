@@ -1,0 +1,41 @@
+Case 2: Pharmaceutical Demand Forecasting & Intelligent Replenishment
+Company Background
+Same enterprise as Case 1. The Enterprise operates China's largest out-of-hospital (OOH) sales network, with OOH sales accounting for >68%. Its B2B e-commerce platform achieved 2025 sales revenue of RMB 19.847 billion (+19.86% YoY).
+The platform has >580,000 registered users, 340,000 active users, and 95.1% terminal customer satisfaction. It integrates intelligent search, AI customer service, smart procurement, and automated order verification.
+Business Data
+Metric	Data
+B2B Annual Sales	RMB 19.847b (+19.86%)
+Registered Users	>580,000 (clinics, chain & independent pharmacies)
+Active Users	340,000
+Customer Satisfaction	95.1%
+Daily Active Customers	>36,000
+Self-Operated SKUs	380,000
+Partner Manufacturers	8,600
+Franchise Pharmacies	>28,600
+Volume Procurement Rights	3,247 (286 exclusive)
+Challenge Description
+The Enterprise's pharmaceutical supply chain management faces these challenges:
+•  High demand volatility: Pharmaceutical demand is affected by seasonal diseases (flu, allergy seasons), public health emergencies, and policy changes (volume procurement), resulting in low forecast accuracy.
+•  Long-tail SKUs: Among 380,000 SKUs, 78% are low-frequency items; some sell fewer than 100 boxes annually, yet stockouts lead to customer churn.
+•  Stockouts and overstock coexist: Hot-selling products frequently stock out (annual loss ~RMB 420m), while slow-moving items pile up with turnover exceeding 165 days for some categories.
+•  Decentralized replenishment: 28,600 franchise pharmacies each make independent ordering decisions, lacking unified smart restock recommendations; most rely on experience-based ordering.
+•  Policy shock: National volume procurement policies have reduced selected drug prices by ~51% on average, causing volatile sales that break traditional forecasting models.
+Task Requirements
+Design and develop a demand forecasting & intelligent replenishment system:
+•  Multi-factor demand forecasting: Integrate seasonality, epidemiological data, policy changes, and historical sales to forecast 14-30 day demand by category.
+•  Intelligent replenishment recommendations: Generate personalized restock lists for hospitals, chain pharmacies, and independent stores with suggested order quantities and optimal timing.
+•  Inventory health diagnosis: Analyze terminal inventory structure, identify slow-moving, fast-moving, and near-expiry items, and provide reallocation suggestions.
+•  Policy impact simulation: Model how volume procurement and other policy changes affect specific drug demand.
+•  Alerts & notifications: Proactively push alerts for impending stockouts or inventory overages.
+Deliverables
+•  Runnable forecasting & replenishment system prototype
+•  One SKU-level forecast demo (e.g., 3-month sales trend prediction vs. actual for a chronic disease medication)
+•  Business feasibility analysis (target users, value proposition, go-to-market strategy)
+How to Use
+Case Selection
+Each team selects one of the two cases. Choose based on your team's technical background and interest.
+Development Tips
+•  Leverage Kimi's code generation, data analysis, and NLP capabilities fully.
+•  Don't aim for completeness — focus on polishing 1-2 core features with excellent UX.
+•  Treat AI as a "collaborator" not a "black box" — show how you used AI tools to accelerate development.
+•  Focus on business feasibility: your solution needs technical viability AND a clear answer to "who will pay for this?"
