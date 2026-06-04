@@ -177,8 +177,12 @@ def load_json(filename):
     base = Path(__file__).parent / "data"
     path = base / filename
     if path.exists():
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, UnicodeDecodeError, OSError) as e:
+            st.warning(f"Failed to load {filename}: {e}")
+            return None
     return None
 
 @st.cache_data
@@ -378,11 +382,20 @@ st.sidebar.markdown("---")
 st.sidebar.caption("Powered by PPO Deep RL + KGDRL")
 
 # =============================================================================
-# AUTO-REFRESH MECHANISM
+# AUTO-REFRESH MECHANISM — using streamlit-autorefresh for reliability
 # =============================================================================
 if st.session_state.live_mode:
-    time.sleep(3)
-    st.rerun()
+    try:
+        from streamlit_autorefresh import st_autorefresh
+        st_autorefresh(interval=3000, limit=None, key="auto_refresh")
+    except ImportError:
+        # Fallback: manual refresh button if autorefresh not installed
+        st.sidebar.button("🔄 Refresh Now", on_click=lambda: st.rerun())
+        st.sidebar.caption("Install `streamlit-autorefresh` for automatic refresh")
+else:
+    # Show manual refresh button when live mode is off
+    if st.sidebar.button("🔄 Refresh Now", key="manual_refresh"):
+        st.rerun()
 
 # =============================================================================
 # VIEW 1: ADMIN — OMNI-CHANNEL ORDERS
@@ -465,7 +478,7 @@ if view == "📦 Admin: Omni-Channel Orders":
 
     with left:
         st.markdown('<div class="section-header">Live Order Log</div>', unsafe_allow_html=True)
-        st.dataframe(df_filtered, use_container_width=True, hide_index=True, height=420)
+        st.dataframe(df_filtered, hide_index=True, height=420)
 
     with center:
         st.markdown('<div class="section-header">Work Order Status</div>', unsafe_allow_html=True)
@@ -499,7 +512,7 @@ if view == "📦 Admin: Omni-Channel Orders":
             x=alt.X("Window:N", title="", sort=["Morning Peak", "Afternoon", "Night Peak"]),
             y=alt.Y("Count:Q", title="Order Count"),
         ).properties(height=120)
-        st.altair_chart(chart_time, use_container_width=True)
+        st.altair_chart(chart_time)
 
         # Bulk vs Small pie
         bulk_count = (df_filtered["SKU Count"] >= 4).sum()
@@ -509,7 +522,7 @@ if view == "📦 Admin: Omni-Channel Orders":
             theta=alt.Theta("Count:Q"),
             color=alt.Color("Type:N", scale=alt.Scale(range=["#10b981", "#f59e0b"]), legend=alt.Legend(orient="bottom", labelColor="#e2e8f0")),
         ).properties(height=130)
-        st.altair_chart(chart_bulk, use_container_width=True)
+        st.altair_chart(chart_bulk)
 
         # Temperature pie
         temp_dist = df_filtered["Temperature"].value_counts().reset_index()
@@ -518,7 +531,7 @@ if view == "📦 Admin: Omni-Channel Orders":
             theta=alt.Theta("Count:Q"),
             color=alt.Color("Zone:N", legend=alt.Legend(orient="bottom", labelColor="#e2e8f0")),
         ).properties(height=130)
-        st.altair_chart(chart_temp, use_container_width=True)
+        st.altair_chart(chart_temp)
 
 
 # =============================================================================
@@ -578,7 +591,6 @@ if view == "🌡️ Admin: Warehouse & Temperature Zones":
 
     st.dataframe(
         df_inv.style.apply(highlight_risk, axis=1),
-        use_container_width=True,
         hide_index=True,
         height=350,
     )
@@ -610,7 +622,7 @@ if view == "🌡️ Admin: Warehouse & Temperature Zones":
             theta=alt.Theta("Utilization:Q"),
             color=alt.Color("Zone:N", legend=alt.Legend(orient="bottom", labelColor="#e2e8f0")),
         ).properties(height=280)
-        st.altair_chart(chart_zone, use_container_width=True)
+        st.altair_chart(chart_zone)
 
     with c2:
         st.markdown('<div class="section-header">Near-Expiry by Medicine Type</div>', unsafe_allow_html=True)
@@ -621,7 +633,7 @@ if view == "🌡️ Admin: Warehouse & Temperature Zones":
             y=alt.Y("Stock Qty:Q", title="Stock Quantity"),
             color=alt.Color("Category:N", legend=None),
         ).properties(height=280)
-        st.altair_chart(chart_type, use_container_width=True)
+        st.altair_chart(chart_type)
 
 
 # =============================================================================
@@ -649,7 +661,7 @@ if view == "📊 Admin: Customer SLA Analytics":
         y=alt.Y("Volume:Q", title="Order Volume"),
         color=alt.Color("Client:N", legend=alt.Legend(orient="top", labelColor="#e2e8f0")),
     ).properties(height=300)
-    st.altair_chart(chart_vol, use_container_width=True)
+    st.altair_chart(chart_vol)
 
     st.markdown("---")
 
@@ -665,7 +677,7 @@ if view == "📊 Admin: Customer SLA Analytics":
             x=alt.X("Client:N", title=""),
             y=alt.Y("Avg SKUs:Q", title="Average SKU Count"),
         ).properties(height=260)
-        st.altair_chart(chart_sku, use_container_width=True)
+        st.altair_chart(chart_sku)
 
     with c2:
         st.markdown('<div class="section-header">SLA Fulfillment + 14-Day AI Forecast</div>', unsafe_allow_html=True)
@@ -699,7 +711,7 @@ if view == "📊 Admin: Customer SLA Analytics":
             y=alt.Y("SLA (%):Q"),
             color=alt.Color("Client:N"),
         )
-        st.altair_chart(hist_chart + fc_chart, use_container_width=True)
+        st.altair_chart(hist_chart + fc_chart)
 
     st.markdown("---")
 
@@ -718,7 +730,7 @@ if view == "📊 Admin: Customer SLA Analytics":
         })
     df_comp = pd.DataFrame(compliance)
     df_comp["Fulfillment Score"] = (df_comp["On-Time Rate (%)"] * 0.4 + df_comp["Next-Day Rate (%)"] * 0.4 + df_comp["Temp Compliance (%)"] * 0.2).round(1)
-    st.dataframe(df_comp.sort_values("Fulfillment Score", ascending=False), use_container_width=True, hide_index=True)
+    st.dataframe(df_comp.sort_values("Fulfillment Score", ascending=False), hide_index=True)
 
 
 # =============================================================================
@@ -747,7 +759,7 @@ if view == "👷 Worker: Task Workstation":
             y=alt.Y("Count:Q", title="Headcount"),
             color=alt.Color("Color:N", scale=alt.Scale(domain=["#3b82f6", "#f59e0b", "#ef4444"], range=["#3b82f6", "#f59e0b", "#ef4444"]), legend=None),
         ).properties(height=220)
-        st.altair_chart(chart_labor, use_container_width=True)
+        st.altair_chart(chart_labor)
 
         # Peak cap threshold annotation
         st.markdown(f"""
@@ -761,7 +773,7 @@ if view == "👷 Worker: Task Workstation":
     with c2:
         st.markdown('<div class="section-header">Picking Efficiency by Zone</div>', unsafe_allow_html=True)
         df_eff = generate_labor_data()
-        st.dataframe(df_eff[["Zone", "Total Headcount", "SKUs/Hour/Person", "Shift"]], use_container_width=True, hide_index=True, height=250)
+        st.dataframe(df_eff[["Zone", "Total Headcount", "SKUs/Hour/Person", "Shift"]], hide_index=True, height=250)
 
     st.markdown("---")
 
@@ -801,7 +813,7 @@ if view == "👷 Worker: Task Workstation":
     with tab_completed:
         df_done = df_tasks[df_tasks["Status"] == "Completed"]
         if len(df_done) > 0:
-            st.dataframe(df_done[["Task ID", "Source Zone", "Target Client", "Assigned Worker", "SKU Checklist"]], use_container_width=True, hide_index=True)
+            st.dataframe(df_done[["Task ID", "Source Zone", "Target Client", "Assigned Worker", "SKU Checklist"]], hide_index=True)
         else:
             st.info("No completed tasks")
 
@@ -823,7 +835,7 @@ if view == "👷 Worker: Task Workstation":
     st.markdown('<div class="section-header">My Dispatched Tasks</div>', unsafe_allow_html=True)
     my_tasks = df_tasks[df_tasks["Assigned Worker"] == "Worker-01"]
     if len(my_tasks) > 0:
-        st.dataframe(my_tasks[["Task ID", "Source Zone", "Target Client", "Status", "Priority", "Est. Duration (min)"]], use_container_width=True, hide_index=True)
+        st.dataframe(my_tasks[["Task ID", "Source Zone", "Target Client", "Status", "Priority", "Est. Duration (min)"]], hide_index=True)
     else:
         st.info("No tasks currently dispatched to Worker-01")
 
@@ -840,9 +852,17 @@ if view == "⚡ Real-time Simulation":
     # Embed the original HTML dashboard via iframe (English version)
     html_path = Path(__file__).parent / "smart_wave_dashboard_en.html"
     if html_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            html_content = f.read()
-        components.html(html_content, height=900, scrolling=True)
+        try:
+            with open(html_path, "r", encoding="utf-8") as f:
+                html_content = f.read()
+            # Validate minimum content size to catch truncated files
+            if len(html_content) < 1000:
+                st.error("HTML dashboard file appears to be truncated or corrupted.")
+            else:
+                components.html(html_content, height=900, scrolling=True)
+        except Exception as e:
+            st.error(f"Failed to load simulation dashboard: {e}")
+            st.info("Try refreshing the page or checking that smart_wave_dashboard_en.html is not corrupted.")
     else:
         st.error("smart_wave_dashboard_en.html not found. Please ensure the file is in the same directory as streamlit_app_v3.py")
 
@@ -873,24 +893,27 @@ if view == "📈 Order Analytics":
     temp_names = {"ambient": "Ambient", "cool": "Cool", "cold": "Cold", "frozen": "Frozen",
                   0: "Ambient", 1: "Cool", 2: "Cold", 3: "Frozen"}
 
-    temp_df = pd.DataFrame([
-        {"Category": temp_names.get(k, k), "Count": v, "Percentage": v / stats.get("total_orders", 1) * 100}
-        for k, v in temp_dist.items()
-    ])
+    if temp_dist:
+        temp_df = pd.DataFrame([
+            {"Category": temp_names.get(k, k), "Count": v, "Percentage": v / max(stats.get("total_orders", 1), 1) * 100}
+            for k, v in temp_dist.items()
+        ])
 
-    col_chart, col_table = st.columns([2, 1])
-    with col_chart:
-        chart = alt.Chart(temp_df).mark_arc(innerRadius=50).encode(
-            theta=alt.Theta(field="Count", type="quantitative"),
-            color=alt.Color(field="Category", type="nominal",
-                            scale=alt.Scale(domain=["Ambient", "Cool", "Cold", "Frozen"],
-                                            range=["#ff7f0e", "#2ca02c", "#1f77b4", "#9467bd"])),
-            tooltip=["Category", "Count", "Percentage"]
-        ).properties(height=350)
-        st.altair_chart(chart, use_container_width=True)
+        col_chart, col_table = st.columns([2, 1])
+        with col_chart:
+            chart = alt.Chart(temp_df).mark_arc(innerRadius=50).encode(
+                theta=alt.Theta(field="Count", type="quantitative"),
+                color=alt.Color(field="Category", type="nominal",
+                                scale=alt.Scale(domain=["Ambient", "Cool", "Cold", "Frozen"],
+                                                range=["#ff7f0e", "#2ca02c", "#1f77b4", "#9467bd"])),
+                tooltip=["Category", "Count", "Percentage"]
+            ).properties(height=350)
+            st.altair_chart(chart)
 
-    with col_table:
-        st.dataframe(temp_df, use_container_width=True, hide_index=True)
+        with col_table:
+            st.dataframe(temp_df, hide_index=True)
+    else:
+        st.info("No temperature distribution data available.")
 
     st.markdown("---")
     st.markdown("### 📈 Order Arrival Timeline")
@@ -908,7 +931,7 @@ if view == "📈 Order Analytics":
                             scale=alt.Scale(domain=["Ambient", "Cool", "Cold", "Frozen"],
                                             range=["#ff7f0e", "#2ca02c", "#1f77b4", "#9467bd"]))
         ).properties(height=350, title="Order Arrivals by Temperature Category")
-        st.altair_chart(hist_chart, use_container_width=True)
+        st.altair_chart(hist_chart)
 
         urgent_chart = alt.Chart(df_time).mark_circle(opacity=0.6, size=30).encode(
             x=alt.X("time:Q", title="Time (minutes)"),
@@ -918,7 +941,7 @@ if view == "📈 Order Analytics":
                             title="Priority"),
             tooltip=["time", "temp_name", "urgent_label"]
         ).properties(height=300, title="Order Priority Over Time")
-        st.altair_chart(urgent_chart, use_container_width=True)
+        st.altair_chart(urgent_chart)
 
     st.markdown("---")
     st.markdown("### 📋 Generation Parameters")
