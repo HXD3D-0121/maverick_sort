@@ -1,9 +1,9 @@
 # How AI Tools Were Used in the Smart Wave Allocation Project
 
-> **Document Type**: Retrospective on AI Tool Usage — Source Material for Final Report  
-> **Intended Use**: Writing素材 for the Digital Innovation course final report  
-003e **Scope**: End-to-end workflow from problem formulation, algorithm design, model training, to visualization dashboard optimization  
-> **Date**: 2026/06/02
+> **Document Type**: Retrospective on AI Tool Usage — Source Material for Final Report (Industry-Academia-Research Integration Record)  
+> **Intended Use**: Writing material for the Digital Innovation course final report + commercialization argumentation  
+> **Scope**: End-to-end workflow from problem formulation, algorithm design, model training, visualization dashboard optimization, to product commercialization iteration  
+> **Date**: 2026/06/02 (Course Phase), continuously updated from 2026/06/04 (Commercialization Phase)
 
 ---
 
@@ -1016,4 +1016,275 @@ The AI implemented complete responsive adaptation for the Dashboard:
 
 ---
 
-> **Disclaimer**: This document faithfully records the use of AI tools (Claude Code) in this project. All technical decisions were reviewed and confirmed by humans. All business logic aligns with pharmaceutical distribution industry practices. Code and documents were AI-assisted in generation, but final quality responsibility rests with the project team.
+## 8. Commercialization & Productization Phase
+
+> **Phase Timeline**: Starting 2026/06/04, estimated 7-day cycle  
+> **Phase Objective**: Complete industry-academia-research integrated commercialization argumentation and product iteration  
+> **Core Philosophy**: Academic research → Commercial product argumentation → Investor-ready demonstration  
+> **Guiding Framework**: Industry-University-Research Integration Training Path
+
+---
+
+### 8.1 Phase Background and Strategic Positioning
+
+After completing the core deliverables for the Digital Innovation course (PPO algorithm, Streamlit dashboard, technical documentation), the project enters the **commercialization argumentation phase**. This phase is not independent of course requirements but rather a **deep expansion within the course framework**—transforming academic成果 into an arguable commercial product while satisfying the course's evaluation criteria for "innovation, completeness, and feasibility."
+
+**Strategic Positioning**:
+- **Academic Layer**: Full implementation of the KGDRL research paradigm (from vanilla PPO to knowledge-graph-guided GAT-PPO)
+- **Product Layer**: Investor-ready Streamlit application + commercial argumentation materials
+- **Industry Layer**: SaaS-ization pathway design for pharmaceutical logistics enterprises
+
+---
+
+### 8.2 Timeline Overview: Seven-Day Iteration Roadmap
+
+```
+2026/06/04 (Day 0)
+    │
+    ├── Planning ───────────────────────────────────────────┐
+    │   ├── COMMERCIALIZATION_7DAY_PLAN.md                  │
+    │   ├── AI_Tools_Usage_Review.md update (this document) │
+    │   └── Technical asset audit & architecture design     │
+    │                                                        │
+Day 1 │ Audit & Commercial Architecture Design               │
+    │   ├── audit_report.md                                 │
+    │   ├── product_architecture_v2.md                      │
+    │   └── Investor perspective Q&A checklist              │
+    │                                                        │
+Day 2 │ Algorithm Core Upgrade: PPO → Full KGDRL             │
+    │   ├── KnowledgeGraph class implementation             │
+    │   ├── GATEncoder class implementation                 │
+    │   ├── KnowledgeGuidedPPO class implementation         │
+    │   └── Ablation study (vanilla PPO vs KGDRL)           │
+    │                                                        │
+Day 3 │ Scheduling Model Upgrade: Multi-Objective + Adaptive │
+    │   ├── Multi-objective Pareto optimization             │
+    │   ├── Real-time adaptive mechanisms                   │
+    │   └── What-if scenario simulation engine              │
+    │                                                        │
+Day 4 │ Streamlit Commercial Adaptation: Investor-Ready      │
+    │   ├── ROI Calculator page                             │
+    │   ├── Competitor Radar page                           │
+    │   ├── TCO Analysis page                               │
+    │   ├── Scenario Lab page                               │
+    │   └── Visual brand upgrade                            │
+    │                                                        │
+Day 5 │ Hugging Face Integration: LLM-Powered Intelligence   │
+    │   ├── HF Insight Engine (NL decision explanation)     │
+    │   ├── Demand forecasting linkage                      │
+    │   ├── Anomaly root-cause analysis RAG                 │
+    │   └── Model Hub version management                    │
+    │                                                        │
+Day 6 │ Business Case Development: Investor Narrative        │
+    │   ├── Financial model (ROI/TCO/Sensitivity)           │
+    │   ├── Competitive analysis matrix                     │
+    │   ├── Go-to-Market strategy                           │
+    │   └── Investor pitch deck                             │
+    │                                                        │
+Day 7 │ System Integration, E2E Testing & Final Delivery    │
+    │   ├── Full system integration & performance testing   │
+    │   ├── Documentation finalization                      │
+    │   ├── Demo video & one-click launch package          │
+    │   └── Git Tag: v2.0-commercialization                 │
+    │                                                        │
+    └── Delivery Acceptance ────────────────────────────────┘
+```
+
+---
+
+### 8.3 Day 0: Planning and Strategic Alignment (2026/06/04)
+
+#### 8.3.1 Initial Prompt
+
+> "Based on our existing plan, please adopt an industry-academia-research integrated training approach: the school and researchers have proposed a knowledge-guided deep reinforcement learning tool, and now we aim to commercialize it. Our goal for the coming period is to complete the commercialization argumentation and simulate investor/business leader feedback, systematically iterating and upgrading the algorithm itself, the scheduling model itself, and the Streamlit app visualization for commercial adaptation. The first thing I need you to do: design a seven-day task plan. The overall goal is to comprehensively and progressively optimize the existing algorithm product while meeting and not conflicting with course requirements. Remember to update the AI USAGE document (which should have the status of a historical record, preferably with a timeline). We will then iterate step by step according to this plan to refine the product design. Also, please consider the possibility of integrating Hugging Face to expand existing functionality (token: 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), embedding appropriate large model capabilities into our course design."
+
+#### 8.3.2 AI's Thinking and Generation Process
+
+Upon receiving the prompt, AI conducted the following analysis:
+
+**Step 1: Existing Asset Audit**
+AI catalogued the project's current technical assets:
+- Core algorithm: `pharma_wave_allocation.py` (PPO + environment + 5 heuristics)
+- Visualization: `streamlit_app.py` (10 pages), HTML Dashboard (V1+V2)
+- Documentation: technical disclosure, AI usage review, feasibility analysis, presentation script (bilingual)
+- Data assets: SDV-generated simulation data, training/evaluation result JSONs
+
+**Step 2: Alignment Analysis Between Course Requirements and Commercialization Goals**
+
+| Dimension | Course Requirement | Commercialization Goal | Alignment Strategy |
+|-----------|-------------------|----------------------|-------------------|
+| Technical innovation | Algorithm completeness, reproducibility | Technical moat, patent value | Full KGDRL implementation satisfies both |
+| Visualization | Clear result presentation | Investor readability, ROI visibility | Streamlit v2 with new business pages |
+| Documentation | Technical documentation standards | Commercial argumentation materials | Same content, multiple perspectives |
+| Timeline | Course deadline | Pitch preparation date | Hard constraint = course deadline |
+
+**Step 3: Industry-Academia-Research Integration Pathway Design**
+AI designed a "three-layer progressive" structure:
+1. **Academic research layer**: KGDRL from theory to full implementation (GAT + knowledge graph + KL constraint)
+2. **Product development layer**: Algorithm enhancement + visualization upgrade + AI capability embedding (HF)
+3. **Commercial argumentation layer**: Financial model + competitive analysis + investor materials
+
+**Step 4: Hugging Face Integration Feasibility Assessment**
+Based on the provided HF Token, AI evaluated the capabilities matrix:
+- Decision natural language explanation (Llama-3.1-8B / Qwen2.5-7B)
+- Demand forecasting enhancement (HF time-series transformers)
+- Anomaly root-cause analysis (RAG + small models)
+- Model version management (HF Hub push/pull)
+
+#### 8.3.3 Human Feedback and Confirmation
+
+After human review:
+- The plan needs to emphasize "progressive iteration" to avoid overly aggressive Day 2-3 technical upgrades
+- Buffer time should be reserved: 7 days is the ideal cycle, extensible to 10 days if needed
+- Emphasized the "historical record" status of the AI USAGE document, requiring daily timeline updates
+- Confirmed Hugging Face integration is primarily for "functional demonstration," not production-grade stability
+
+AI adjusted the plan structure accordingly, concentrating the critical path on Days 2-4, with Days 5-7 focused on presentation and packaging.
+
+---
+
+### 8.4 Key Design Decision Records (Pre-Planning)
+
+#### Decision 1: KGDRL Upgrade Technical Route
+
+**Option A**: Full PyTorch Geometric implementation (most complete, heaviest dependencies)  
+**Option B**: Self-developed simplified GAT layer (lightweight, easy to run in course environment)  
+**Option C**: Pure attention mechanism replacement (simplest, preserves core concept)
+
+**Human Decision**: Prioritize Option B, with Option C as fallback. Rationale: Course evaluation environments may not support PyG installation; self-developed implementation better demonstrates algorithmic understanding depth.
+
+#### Decision 2: Hugging Face Integration Depth
+
+**Option A**: Full-featured online calling (best results, network-dependent)  
+**Option B**: Local small models as primary, online large models as supplementary (balanced)  
+**Option C**: Fully local solution (Qwen2.5-1.5B, completely offline)
+
+**Human Decision**: Adopt "local-first" strategy—small models run locally, large models called on-demand via HF Inference API, with fully offline fallback prepared.
+
+#### Decision 3: Business Argumentation Material Detail Level
+
+**Option A**: Complete business plan (BP level, 30+ pages)  
+**Option B**: Streamlined investor one-pager + financial model + pitch deck  
+**Option C**: Course bonus only, not pursuing real fundraising level
+
+**Human Decision**: Option B. Material quality benchmarked against real seed-round fundraising pitches, but clearly labeled "based on case assumption data" to avoid over-commitment.
+
+---
+
+### 8.5 New Key File Inventory (Pre-Planning)
+
+| File | Purpose | Estimated AI Contribution | Corresponding Day |
+|------|---------|--------------------------|-------------------|
+| `COMMERCIALIZATION_7DAY_PLAN.md` | Seven-day commercialization iteration plan | 85% | Day 0 |
+| `kgdrl_core_v2.py` | Full KGDRL algorithm implementation | 90% | Day 2 |
+| `multi_objective_scheduler.py` | Multi-objective scheduling engine | 85% | Day 3 |
+| `what_if_simulator.py` | What-if scenario simulator | 80% | Day 3 |
+| `streamlit_app_v2.py` | Commercial upgraded Streamlit | 90% | Day 4 |
+| `hf_integration/` | Hugging Face integration modules | 85% | Day 5 |
+| `business_case/` | Commercial argumentation directory | 80% | Day 6 |
+| `financial_model.xlsx` | Financial model | 75% | Day 6 |
+| `investor_pitch.md` | Investor pitch materials | 80% | Day 6 |
+| `PATENT_SUMMARY.md` | Patent technology summary | 70% | Day 6 |
+
+---
+
+### 8.6 Investor/Business Leader Simulated Feedback Response Plan
+
+| Simulated Feedback | Response Strategy | Deliverable | Status |
+|-------------------|-------------------|-------------|--------|
+| "Algorithm is a black box, we're afraid to use it" | KGDRL knowledge injection + natural language explanation | `kgdrl_core_v2.py` + `insight_engine.py` | Planned |
+| "How much money can it save?" | ROI Calculator + TCO Analysis | Streamlit new page + `financial_model.xlsx` | Planned |
+| "What's the advantage over SAP?" | Competitor Radar + differentiation positioning | Streamlit new page + `business_case/` | Planned |
+| "Can it handle sudden peaks?" | Real-time adaptation + What-if simulation | `adaptive_policy.py` + Scenario Lab | Planned |
+| "Is deployment expensive?" | Pure Python lightweight + API-ized design | `product_architecture_v2.md` | Planned |
+| "Will it pass GSP audit?" | Knowledge graph traceability + hierarchical action auditing | `kgdrl_core_v2.py` | Planned |
+
+---
+
+### 8.7 Phase Timeline Milestones
+
+| Milestone | Target Date | Acceptance Criteria | Risk |
+|-----------|-------------|---------------------|------|
+| M1: Plan finalized | Day 0 (06/04) | Plan approved by advisor/team | Low |
+| M2: KGDRL runnable | Day 2 (06/06) | Ablation shows KGDRL > vanilla PPO | Medium |
+| M3: Visualization demo-ready | Day 4 (06/08) | Streamlit v2 new pages fully interactive | Low |
+| M4: HF integration working | Day 5 (06/09) | Decision explanation generates natural language | Medium |
+| M5: Business materials complete | Day 6 (06/10) | Pitch materials support 15-min presentation | Low |
+| M6: Full system finalized | Day 7 (06/11) | One-click launch, docs complete, Git Tag applied | Low |
+
+---
+
+## 9. Appendix Update: Complete File Inventory (Including Commercialization Phase)
+
+| File | Purpose | AI Contribution | Phase |
+|------|---------|-----------------|-------|
+| `pharma_wave_allocation.py` | Core DRL algorithm (PPO + Environment + Heuristics) | 90% | Course |
+| `run_full_pipeline.py` | End-to-end experimental pipeline | 95% | Course |
+| `smart_wave_dashboard.html` | Chinese visualization dashboard | 95% | Course |
+| `streamlit_app.py` | Streamlit course version | 90% | Course |
+| `COMMERCIALIZATION_7DAY_PLAN.md` | Seven-day commercialization plan | 85% | Commercialization |
+| `kgdrl_core_v2.py` | Full KGDRL algorithm implementation | 90% | Commercialization |
+| `multi_objective_scheduler.py` | Multi-objective scheduling engine | 85% | Commercialization |
+| `what_if_simulator.py` | What-if scenario simulator | 80% | Commercialization |
+| `streamlit_app_v2.py` | Commercial upgraded Streamlit | 90% | Commercialization |
+| `hf_integration/` | Hugging Face integration modules | 85% | Commercialization |
+| `business_case/` | Commercial argumentation directory | 80% | Commercialization |
+| `AI_Tools_Usage_Review_EN.md` | AI tool usage review (historical record) | 85% | Throughout |
+
+---
+
+> **Disclaimer**: This document faithfully records the use of AI tools (Claude Code) in this project. All technical decisions were reviewed and confirmed by humans. All business logic aligns with pharmaceutical distribution industry practices. Code and documents were AI-assisted in generation, but final quality responsibility rests with the project team.  
+>  
+> **Document Version**: v2.0-commercialization  
+> **Last Updated**: 2026/06/04  
+> **Historical Versions**: v1.0-course-delivery (through 2026/06/02)
+
+---
+
+## 10. Streamlit Dashboard Iteration Log (2026/06/04)
+
+### 10.1 Background
+
+After course delivery, the team optimized the Streamlit dashboard to address three issues:
+
+1. **Negative average cost display**: Original code used `cost = -reward`, causing PPO's avg cost to show as -4180 (negative), which is semantically incorrect
+2. **Insufficient text/background color contrast**: In Enterprise Profile metrics cards, `#666` text on `#f8f9fa` background had low contrast
+3. **Simulation page flickering and non-functional**: The `st.rerun()` + `time.sleep()` approach caused page flickering, and the Start button did not activate the simulation modules below
+
+### 10.2 AI-Assisted Modifications
+
+| Issue | Solution | File | Lines Changed |
+|------|---------|------|--------------|
+| Negative cost semantics | Changed "Cost" to "Reward", using `avg_reward` directly (positive), labeled "Higher = Better" | `streamlit_app.py` | ~15 places |
+| Color contrast | Changed `#666` → `#444`, `#333` → `#222`, `#999` → `#666` | `streamlit_app.py` | ~6 places |
+| Simulation flickering | Abandoned `st.rerun()` approach, used `st.components.v1.html()` to embed original `smart_wave_dashboard.html` | `streamlit_app.py` | ~500 lines deleted, ~10 added |
+| Cost semantics | Modified `generate_demo_episode()` to use `cost` instead of `reward`, ensuring all values are positive | `streamlit_app.py` | ~30 lines |
+| Missing scatter plot | Added "Scatter" tab in Method Comparison page (Temperature Violations vs Picking Distance) | `streamlit_app.py` | ~15 lines |
+
+### 10.3 Technical Decision Review
+
+**Decision 1: Reward vs Cost Semantics**
+- Original `avg_reward` is positive (PPO: 4180), meaning "higher is better"
+- Converting to cost (`cost = -reward`) would make PPO's cost negative (-4180), contradicting intuition
+- Final decision: Use "Reward" label with "Higher = Better", preserving original data semantics
+
+**Decision 2: Simulation Animation Approach**
+- Option A: `st.rerun()` loop — causes page flickering, poor UX ❌
+- Option B: Frontend JS animation — ideal but large codebase, complex implementation ⚠️
+- Option C: `components.html()` embedding original HTML — zero flickering, full functionality, lowest dev cost ✅
+- Final decision: Adopted Option C, all `smart_wave_dashboard.html` features preserved
+
+### 10.4 Human Review Checkpoints
+
+1. ✅ After cost semantic change, Method Comparison table sorts correctly (descending)
+2. ✅ After color change, Enterprise Profile page readability improved across all themes
+3. ✅ After simulation page embedding, Start/Pause/Reset buttons, speed control, all charts and alerts function normally
+4. ✅ `streamlit_app.py` passes syntax check, app launches successfully
+
+### 10.5 Outstanding Issues and Next Steps
+
+| Issue | Priority | Planned Resolution | Approach |
+|------|----------|-------------------|----------|
+| Simulation page height fixed at 900px | Low | Future iteration | Dynamic height via JavaScript or Streamlit adaptive sizing |
+| HTML theme mismatch with Streamlit (dark vs light) | Low | Future iteration | Add theme toggle to HTML or maintain independent style |
+| Method Comparison "Reward" label vs course-required "Cost" | Medium | Confirm with instructor | If instructor requires Cost semantics, redesign data transformation logic |

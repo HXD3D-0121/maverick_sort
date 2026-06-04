@@ -5,7 +5,9 @@ Digital Innovation Course Project | SDC MSc Innovation Management
 """
 
 import streamlit as st
+import streamlit.components.v1 as components
 import json
+import time
 import numpy as np
 import pandas as pd
 import altair as alt
@@ -113,6 +115,7 @@ page = st.sidebar.radio(
     "Go to",
     [
         "🏠 Home",
+        "⚡ Real-time Simulation",
         "🏢 Enterprise Profile",
         "📦 Order Analytics",
         "🔧 Heuristics & Baselines",
@@ -204,9 +207,9 @@ if page == "🏠 Home":
         fr = data["final_results"]
         c1, c2, c3, c4 = st.columns(4)
         ppo = fr.get("ppo_summary", {})
-        # Display as cost (negative of reward)
-        ppo_cost = -ppo.get("avg_reward", 0)
-        c1.metric("PPO Avg Cost", f"{ppo_cost:,.1f}", "Lowest = Best")
+        # Display as reward (higher = better performance)
+        ppo_reward = ppo.get("avg_reward", 0)
+        c1.metric("PPO Avg Reward", f"{ppo_reward:,.1f}", "Higher = Better")
         c2.metric("PPO Avg Waves", f"{ppo.get('avg_waves', 0):.1f}")
         c3.metric("PPO Avg Distance", f"{ppo.get('avg_distance', 0):.1f} m")
         c4.metric("PPO Temp Violations", f"{ppo.get('avg_violations', 0):.1f}")
@@ -259,9 +262,9 @@ if page == "🏢 Enterprise Profile":
             st.markdown(f"""
             <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin-bottom: 0.8rem;
                         border-left: 4px solid {'#1f77b4' if i % 2 == 0 else '#ff7f0e'};">
-                <div style="font-size: 0.85rem; color: #666;">{label}</div>
-                <div style="font-size: 1.6rem; font-weight: 700; color: #333;">{value}</div>
-                <div style="font-size: 0.75rem; color: #999;">{note}</div>
+                <div style="font-size: 0.85rem; color: #444;">{label}</div>
+                <div style="font-size: 1.6rem; font-weight: 700; color: #222;">{value}</div>
+                <div style="font-size: 0.75rem; color: #666;">{note}</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -652,7 +655,7 @@ if page == "📊 Method Comparison":
         rows.append({
             "Method": name,
             "Avg Reward": s["avg_reward"],
-            "Cost (-Reward)": -s["avg_reward"],
+            "Reward": s["avg_reward"],
             "Std Reward": s["std_reward"],
             "Avg Distance": s["avg_distance"],
             "Avg Waves": s["avg_waves"],
@@ -666,7 +669,7 @@ if page == "📊 Method Comparison":
         rows.append({
             "Method": "PPO (DRL)",
             "Avg Reward": ppo.get("avg_reward", 0),
-            "Cost (-Reward)": -ppo.get("avg_reward", 0),
+            "Reward": ppo.get("avg_reward", 0),
             "Std Reward": 0,
             "Avg Distance": ppo.get("avg_distance", 0),
             "Avg Waves": ppo.get("avg_waves", 0),
@@ -678,24 +681,24 @@ if page == "📊 Method Comparison":
     df_comp = pd.DataFrame(rows)
 
     st.markdown("### 📋 Comparison Table")
-    st.dataframe(df_comp.sort_values("Cost (-Reward)"), use_container_width=True, hide_index=True)
+    st.dataframe(df_comp.sort_values("Reward", ascending=False), use_container_width=True, hide_index=True)
 
     st.markdown("---")
     st.markdown("### 📈 Visual Comparisons")
 
-    tab1, tab2, tab3, tab4 = st.tabs(["Cost Ranking", "Distance", "Waves", "Violations"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Reward Ranking", "Distance", "Waves", "Violations", "Scatter"])
 
     with tab1:
-        df_sorted = df_comp.sort_values("Cost (-Reward)", ascending=True)
+        df_sorted = df_comp.sort_values("Reward", ascending=False)
         colors = ["#2ca02c" if m == "PPO (DRL)" else "#1f77b4" for m in df_sorted["Method"]]
         chart = alt.Chart(df_sorted).mark_bar().encode(
-            x=alt.X("Cost (-Reward):Q", title="Cost (Lower = Better)"),
+            x=alt.X("Reward:Q", title="Reward (Higher = Better)"),
             y=alt.Y("Method:N", sort="-x", title=""),
             color=alt.Color("Type:N", scale=alt.Scale(domain=["Heuristic", "Deep RL"],
                                                        range=["#1f77b4", "#2ca02c"]))
-        ).properties(height=350, title="Total Cost Ranking")
+        ).properties(height=350, title="Performance Ranking")
         st.altair_chart(chart, use_container_width=True)
-        st.markdown("<div class='success-box'><strong>Insight:</strong> PPO achieves the lowest cost, outperforming all heuristics.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='success-box'><strong>Insight:</strong> PPO achieves the highest reward, outperforming all heuristics.</div>", unsafe_allow_html=True)
 
     with tab2:
         chart = alt.Chart(df_comp).mark_bar().encode(
@@ -721,10 +724,19 @@ if page == "📊 Method Comparison":
         ).properties(height=400)
         st.altair_chart(chart, use_container_width=True)
 
+    with tab5:
+        scatter_chart = alt.Chart(df_comp).mark_circle(size=100).encode(
+            x=alt.X("Avg Distance:Q", title="Picking Distance (m)"),
+            y=alt.Y("Violations:Q", title="Temperature Violations"),
+            color=alt.Color("Method:N", legend=alt.Legend(title="Method")),
+            tooltip=["Method", "Avg Distance", "Violations"]
+        ).properties(height=400, title="Temperature Violations vs Picking Distance")
+        st.altair_chart(scatter_chart, use_container_width=True)
+
     st.markdown("---")
     st.markdown("### 🏆 Performance Ranking")
 
-    ranking = df_comp.nsmallest(len(df_comp), "Cost (-Reward)")["Method"].tolist()
+    ranking = df_comp.nlargest(len(df_comp), "Reward")["Method"].tolist()
     for i, method in enumerate(ranking, 1):
         medal = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else f"{i}."
         row = df_comp[df_comp["Method"] == method].iloc[0]
@@ -732,7 +744,7 @@ if page == "📊 Method Comparison":
         <div style="padding: 0.8rem; background: {'#e8f5e9' if i==1 else '#f8f9fa'};
                     border-radius: 8px; margin-bottom: 0.5rem;
                     border-left: 4px solid {'#4caf50' if i==1 else '#999'};">
-            <strong>{medal} {method}</strong> — Cost: {row['Cost (-Reward)']:.1f},
+            <strong>{medal} {method}</strong> — Reward: {row['Reward']:.1f},
             Distance: {row['Avg Distance']:.1f}m, Waves: {row['Avg Waves']:.1f}
         </div>
         """, unsafe_allow_html=True)
@@ -994,7 +1006,7 @@ if page == "🛠️ AI Tools Review":
         <div style="text-align: center; padding: 1.5rem; background: #f0f7ff; border-radius: 12px;">
             <div style="font-size: 2.5rem;">📝</div>
             <div style="font-size: 1.5rem; font-weight: 700;">6</div>
-            <div style="color: #666;">Major Documents</div>
+            <div style="color: #444;">Major Documents</div>
         </div>
         """, unsafe_allow_html=True)
     with col2:
@@ -1002,7 +1014,7 @@ if page == "🛠️ AI Tools Review":
         <div style="text-align: center; padding: 1.5rem; background: #fff8e1; border-radius: 12px;">
             <div style="font-size: 2.5rem;">💻</div>
             <div style="font-size: 1.5rem; font-weight: 700;">4</div>
-            <div style="color: #666;">Dashboard Versions</div>
+            <div style="color: #444;">Dashboard Versions</div>
         </div>
         """, unsafe_allow_html=True)
     with col3:
@@ -1010,7 +1022,7 @@ if page == "🛠️ AI Tools Review":
         <div style="text-align: center; padding: 1.5rem; background: #e8f5e9; border-radius: 12px;">
             <div style="font-size: 2.5rem;">🌐</div>
             <div style="font-size: 1.5rem; font-weight: 700;">2</div>
-            <div style="color: #666;">Languages (CN/EN)</div>
+            <div style="color: #444;">Languages (CN/EN)</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1121,3 +1133,198 @@ pip install streamlit pandas numpy altair
 # Run the app
 streamlit run streamlit_app.py
     """, language="bash")
+
+
+# =============================================================================
+# REAL-TIME SIMULATION FUNCTIONS (ported from smart_wave_dashboard.html)
+# =============================================================================
+def generate_demo_episode():
+    """Generate a realistic sample episode for real-time simulation demo."""
+    steps = []
+    waves = []
+    current_wave_orders = 0
+    current_wave_volume = 0
+    total_dist = 0
+    total_cost = 0
+    current_wave_zones = set()
+    current_wave_temps = set()
+    wave_count = 0
+    sim_time = 0
+
+    temps_weighted = [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3]
+    zones = [0, 1, 2, 3, 4, 5, 6, 7]
+    order_volumes = [15, 20, 25, 30, 35, 40, 45, 50]
+
+    np.random.seed(42)
+    for step_idx in range(400):
+        sim_time += 1
+
+        force_small_wave = np.random.random() < 0.05 and current_wave_orders > 0 and current_wave_orders < 5
+        force_full_wave = np.random.random() < 0.08 and current_wave_orders >= 10
+        should_close = (not force_full_wave and
+                       (current_wave_orders >= 15 or
+                        current_wave_volume >= 280 or
+                        (current_wave_orders >= 8 and np.random.random() < 0.15) or
+                        force_small_wave))
+        no_room = current_wave_orders >= 19 or current_wave_volume >= 300
+
+        if no_room or (should_close and current_wave_orders > 0):
+            wave_dist = 20 + current_wave_orders * 8 + np.random.random() * 30
+            total_dist += wave_dist
+
+            temp_violation_cost = 0
+            if len(current_wave_temps) > 1:
+                temps_arr = list(current_wave_temps)
+                has_ambient = 0 in temps_arr
+                has_cool = 1 in temps_arr
+                has_cold = 2 in temps_arr
+                has_frozen = 3 in temps_arr
+                if (has_ambient or has_cool) and (has_cold or has_frozen):
+                    temp_violation_cost = 80 + np.random.random() * 40
+                elif len(temps_arr) >= 3:
+                    temp_violation_cost = 40 + np.random.random() * 20
+                else:
+                    temp_violation_cost = 15 + np.random.random() * 10
+
+            # Cost semantics: positive values only
+            step_cost = wave_dist * 0.25 + temp_violation_cost
+            action = 10
+            action_type = 'close'
+
+            waves.append({
+                'orders': current_wave_orders,
+                'distance': wave_dist,
+                'temps': list(current_wave_temps),
+                'zones': list(current_wave_zones),
+                'time': sim_time,
+                'cost': step_cost
+            })
+
+            current_wave_orders = 0
+            current_wave_volume = 0
+            current_wave_zones = set()
+            current_wave_temps = set()
+            wave_count += 1
+        else:
+            vol = order_volumes[np.random.randint(len(order_volumes))]
+            temp = temps_weighted[np.random.randint(len(temps_weighted))]
+            zone = zones[np.random.randint(len(zones))]
+
+            current_wave_orders += 1
+            current_wave_volume += vol
+            current_wave_zones.add(zone)
+            current_wave_temps.add(temp)
+
+            # Small processing cost for each order added
+            step_cost = 0.5
+            action = np.random.randint(7)
+            action_type = 'add'
+
+        total_cost += step_cost
+
+        steps.append({
+            'time': sim_time,
+            'action': action,
+            'action_type': action_type,
+            'cost': step_cost,
+            'wave_orders': current_wave_orders,
+            'wave_volume': current_wave_volume,
+            'total_dist': total_dist,
+            'total_cost': total_cost,
+            'wave_count': wave_count,
+            'zones': list(current_wave_zones),
+            'temps': list(current_wave_temps)
+        })
+
+    if current_wave_orders > 0:
+        wave_dist = 20 + current_wave_orders * 8 + np.random.random() * 30
+        total_dist += wave_dist
+        # Calculate cost for final wave
+        temp_violation_cost = 0
+        if len(current_wave_temps) > 1:
+            temps_arr = list(current_wave_temps)
+            has_ambient = 0 in temps_arr
+            has_cool = 1 in temps_arr
+            has_cold = 2 in temps_arr
+            has_frozen = 3 in temps_arr
+            if (has_ambient or has_cool) and (has_cold or has_frozen):
+                temp_violation_cost = 80 + np.random.random() * 40
+            elif len(temps_arr) >= 3:
+                temp_violation_cost = 40 + np.random.random() * 20
+            else:
+                temp_violation_cost = 15 + np.random.random() * 10
+        final_cost = wave_dist * 0.25 + temp_violation_cost
+        waves.append({
+            'orders': current_wave_orders,
+            'distance': wave_dist,
+            'temps': list(current_wave_temps),
+            'zones': list(current_wave_zones),
+            'time': sim_time,
+            'cost': final_cost
+        })
+
+    return {'steps': steps, 'waves': waves}
+
+
+TEMP_COLORS = {0: '#4ade80', 1: '#60a5fa', 2: '#818cf8', 3: '#c084fc'}
+TEMP_NAMES = {0: 'Ambient', 1: 'Cool', 2: 'Cold', 3: 'Frozen'}
+
+
+def render_zone_map(zones_list, wave_orders):
+    """Render a 2x4 warehouse zone grid."""
+    zone_counts = {}
+    for z in zones_list:
+        zone_counts[z] = zone_counts.get(z, 0) + 1
+
+    cols = st.columns(4)
+    for i in range(8):
+        with cols[i % 4]:
+            count = zone_counts.get(i, 0)
+            if count > 0:
+                bg_color = f'rgba(0, 212, 255, {0.15 + count * 0.1})'
+                border_color = 'rgba(0, 212, 255, 0.4)'
+                text_color = '#fff'
+            else:
+                bg_color = 'rgba(255,255,255,0.05)'
+                border_color = 'rgba(148, 163, 184, 0.15)'
+                text_color = '#64748b'
+
+            st.markdown(f"""
+            <div style="
+                aspect-ratio: 1;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+                font-weight: 700;
+                border: 1px solid {border_color};
+                background: {bg_color};
+                color: {text_color};
+                transition: all 0.3s ease;
+            ">
+                <span style="font-size: 9px; opacity: 0.6; margin-bottom: 2px;">Z{i}</span>
+                <span style="font-size: 16px;">{count}</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+
+# =============================================================================
+# PAGE: REAL-TIME SIMULATION
+# =============================================================================
+if page == "⚡ Real-time Simulation":
+    st.markdown('<div class="main-header">⚡ Real-time Simulation</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Live warehouse sorting & dispatch visualization</div>', unsafe_allow_html=True)
+
+    st.info("The real-time simulation runs in the original HTML dashboard below. Use the controls inside the panel to start/pause/reset the simulation.")
+
+    # Embed the original HTML dashboard via iframe (English version)
+    html_path = Path(__file__).parent / "smart_wave_dashboard_en.html"
+    if html_path.exists():
+        # Read and embed the HTML file directly
+        with open(html_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+        components.html(html_content, height=900, scrolling=True)
+    else:
+        st.error("smart_wave_dashboard_en.html not found. Please ensure the file is in the same directory as streamlit_app.py")
