@@ -1292,3 +1292,194 @@ AI据此调整计划结构，将关键路径集中在Day 2-4，Day 5-7为展示�
 | 仿真页面高度固定为 900px，可能需要根据屏幕调整 | 低 | 后续迭代 | 使用 JavaScript 动态高度或 Streamlit 自适应 |
 | HTML 文件与 Streamlit 主题不统一（深色 vs 浅色） | 低 | 后续迭代 | 为 HTML 添加主题切换或保持独立风格 |
 | Method Comparison 的 "Reward" 标签 vs 课程要求的 "Cost" 表述 | 中 | 与导师确认 | 若导师要求 Cost 语义，需重新设计数据转换逻辑 |
+
+---
+
+## 十一、工业级供应链指挥中心看板开发（2026/06/04）
+
+### 11.1 开发背景
+
+在完成课程版 Streamlit 看板（`streamlit_app.py`）后，团队收到新的需求：将课程版升级为面向国际高管的工业级医药智能供应链指挥中心看板。该需求由商业化阶段提出，要求：
+
+1. **全英文界面**：所有标签、标题、描述必须为英文（面向国际高管）
+2. **四大业务视图**：
+   - Admin: Omni-Channel Orders（全渠道订单管理）
+   - Admin: Warehouse & Temperature Zones（仓库温区管理）
+   - Admin: Customer SLA Analytics（客户 SLA 分析）
+   - Worker: Task Workstation（工人任务工作站）
+3. **工业级 UI**：深蓝色主题、专业级卡片、实时数据同步
+4. **模拟实时数据**：指标每 3 秒波动，模拟真实运营场景
+5. **保留原有功能**：`streamlit_app.py` 作为备份，新建 `streamlit_app_v2.py`
+
+### 11.2 架构设计
+
+**文件结构：**
+```
+streamlit_app.py          # 课程版（保留备份，不变）
+streamlit_app_v2.py       # 工业级新版（新建，~600 行）
+```
+
+**技术栈：**
+- Streamlit 原生组件 + 自定义 CSS 注入
+- Altair 图表（与课程版一致，减少依赖）
+- `st.session_state` + `st.rerun()` 实现 3 秒实时刷新
+- 纯模拟数据生成器（不依赖后端）
+
+### 11.3 四大视图功能详情
+
+#### VIEW 1: Omni-Channel Orders
+- **顶部指标**：Total Daily Orders（~90,000，动态波动）、Bulk Orders、Fragmented Small Orders
+- **过滤器**：Client Category（4 种）、Time Window（3 个时段）、Temperature Attribute（5 个温区）
+- **左侧**：实时订单日志表（Order ID, Client Type, SKU Count, Temperature, Timestamp, Status, Priority）
+- **中央**：4 个工单状态卡片（Pending Dispatch, Picking in Progress, Completed, Stagnant Exception），含进度条
+- **右侧**：
+  - 柱状图：按时段的订单分布
+  - 饼图：Bulk vs Small 订单比例
+  - 饼图：5 个温区订单占比
+
+#### VIEW 2: Warehouse & Temperature Zones
+- **顶部**：5 个温区卡片（Ambient, Cool, Cold, Frozen, Deep Frozen），显示容量、利用率、进度条
+- **中部**：Near-Expiry FIFO 控制表，按风险等级颜色编码：
+  - Critical（≤30 天，红色）
+  - Warning（≤60 天，琥珀色）
+  - Notice（≤90 天，蓝色）
+  - Normal（>90 天，默认）
+- **底部**：
+  - 环形图：各温区容量利用率
+  - 柱状图：按药品类型的近效期库存量
+
+#### VIEW 3: Customer SLA Analytics
+- **顶部**：折线图——过去 12 个月 4 个客户类型的月度订单量趋势
+- **中部左**：柱状图——各客户类型平均 SKU 多样性
+- **中部右**：多线折线图——SLA 履行效率历史趋势 + 14 天 AI 预测（虚线）
+- **底部**：数据表——按客户类型细化的履行合规率（On-Time Rate, Next-Day Rate, Temp Compliance, Exception Rate）
+
+#### VIEW 4: Worker Task Workstation
+- **顶部左**：柱状图——全职 vs 临时工人数，含 2.5x 峰值上限红线
+- **顶部右**：表格——各区域拣货效率（SKUs/Hour/Person）
+- **中部**：`st.tabs` 分 4 个状态（Pending, Active Picking, Completed, Exceptions）
+  - 每个任务可展开查看：Source Zone → Target Client, SKU Checklist
+  - **关键功能**：Active Picking 任务展示 DRL 优化的拣货路径，如：
+    `"Path: Zone A → Cool Zone B → Pick [Insulin x3] → Transit Zone C → Pack → Dispatch"`
+- **底部**："My Dispatched Tasks" 面板，显示当前工人的任务队列
+
+### 11.4 AI 辅助的开发过程
+
+| 开发阶段 | AI 贡献 | 人类决策 |
+|---------|--------|---------|
+| 需求分析 | 将用户自然语言需求分解为 4 个视图、每个视图的组件清单 | 确认视图优先级和布局比例 |
+| CSS 主题设计 | 生成深蓝色 executive 主题的完整 CSS 样式表 | 调整颜色饱和度和对比度 |
+| 数据生成器 | 编写 5 个模拟数据生成函数（订单、库存、SLA、任务、劳动力） | 校准数据范围符合企业案例书指标 |
+| 视图实现 | 逐视图编写 Streamlit 代码（每个视图 ~100-150 行） | 审核布局逻辑和图表选择 |
+| 实时刷新 | 实现 `st.session_state.live_mode` + `st.rerun()` 机制 | 测试并确认 3 秒刷新频率合理 |
+| 整合测试 | 语法检查、运行测试、修复兼容性问题 | 验证所有 4 个视图可正常切换 |
+
+### 11.5 关键设计决策
+
+**决策 1：新建文件 vs 覆盖原文件**
+- 选择：新建 `streamlit_app_v2.py`，保留 `streamlit_app.py` 不变
+- 原因：课程版和工业版面向不同受众，需要并行维护
+
+**决策 2：Altair vs Plotly vs ECharts**
+- 选择：继续使用 Altair（与课程版一致）
+- 原因：减少依赖、样式统一、Hugging Face Spaces 兼容性更好
+
+**决策 3：实时刷新机制**
+- 选择：`st.session_state.live_mode` 全局开关 + `time.sleep(3) + st.rerun()`
+- 原因：简单可靠，用户可随时开关，避免持续刷新造成干扰
+
+**决策 4：DRL 路径展示**
+- 选择：在 Worker 视图中使用 monospace 代码块展示模拟的优化路径
+- 原因：直观展示 PPO/BvN 算法的输出价值，增强工人端的算法信任度
+
+### 11.6 文件清单
+
+| 文件 | 作用 | 状态 |
+|------|------|------|
+| `streamlit_app_v2.py` | 工业级供应链指挥中心看板 | 已创建，可运行 |
+| `streamlit_app.py` | 课程版看板（备份） | 保留，未修改 |
+| `smart_wave_dashboard_en.html` | 英文版实时仿真面板 | 嵌入在 streamlit_app.py 中 |
+| `data/*.json` | PPO 训练/评估数据 | 复用，未修改 |
+
+### 11.7 运行方式
+
+```bash
+# 工业级新版
+streamlit run streamlit_app_v2.py
+
+# 课程版（备份）
+streamlit run streamlit_app.py
+```
+
+访问地址：`http://localhost:8501`
+
+### 11.8 遗留问题
+
+| 问题 | 优先级 | 计划解决时间 | 方案 |
+|------|--------|-------------|------|
+| 模拟数据与真实企业数据差异 | 高 | 商业化 M2 | 接入真实 ERP/WMS API |
+| 实时刷新导致页面轻微闪烁 | 中 | 后续迭代 | 改用 `st.empty()` 局部更新替代 `st.rerun()` |
+| 缺少用户认证和权限控制 | 中 | 商业化 M3 | 添加 Streamlit-Auth 或 OAuth |
+| Worker 视图未连接真实 WMS | 高 | 商业化 M2 | 开发 FastAPI 后端对接 `pharma_wave_allocation.py` |
+
+---
+
+## 十二、Streamlit v3 整合版本（2026/06/04）
+
+### 12.1 开发背景
+
+在 v2（工业级 4 视图）完成后，团队需要将 v1（课程版）中的经典功能整合进新版本，形成 v3 作为商业化迭代的统一基础。
+
+**整合目标：**
+- 保留 v2 的 4 个工业级视图（Omni-Channel Orders, Warehouse & Zones, SLA Analytics, Task Workstation）
+- 整合 v1 的 Real-time Simulation（实时仿真面板）
+- 整合 v1 的 Order Analytics（订单分析：温度分布 + 订单时间线）
+- 形成 **6 视图统一版本**，作为商业化迭代的基础
+
+### 12.2 文件结构
+
+| 文件 | 版本 | 视图数 | 定位 |
+|------|------|--------|------|
+| `streamlit_app.py` | v1 | 11 页 | 课程版（备份） |
+| `streamlit_app_v2.py` | v2 | 4 页 | 工业级版（备份） |
+| `streamlit_app_v3.py` | **v3** | **6 页** | **整合版（迭代基础）** |
+
+### 12.3 v3 导航结构
+
+```
+📦 Admin: Omni-Channel Orders      ← v2
+🌡️ Admin: Warehouse & Temperature Zones  ← v2
+📊 Admin: Customer SLA Analytics    ← v2
+👷 Worker: Task Workstation         ← v2
+⚡ Real-time Simulation             ← v1（嵌入 HTML）
+📈 Order Analytics                  ← v1（温度分布 + 时间线）
+```
+
+### 12.4 技术实现
+
+| 功能 | 实现方式 | 来源 |
+|------|---------|------|
+| 工业级 4 视图 | v2 原生代码 | v2 |
+| Real-time Simulation | `components.html()` 嵌入 `smart_wave_dashboard_en.html` | v1 |
+| Order Analytics | `st.dataframe` + `altair_chart` 温度分布饼图 + 订单时间线 | v1 |
+| 实时刷新 | `st.session_state.live_mode` + `st.rerun()` 3 秒刷新 | v2 |
+| 主题 | 深蓝色 executive 主题（自定义 CSS） | v2 |
+
+### 12.5 运行方式
+
+```bash
+# v3 整合版（推荐）
+streamlit run streamlit_app_v3.py
+
+# 访问地址
+http://localhost:8503
+```
+
+### 12.6 组员须知
+
+**v3 是商业化迭代的唯一基础版本。** 后续开发请基于 `streamlit_app_v3.py` 进行：
+- Day 4 的 Streamlit 商业化升级（ROI Calculator、Competitor Radar 等）
+- Day 5 的 Hugging Face 集成
+- Day 6 的商业论证页面
+
+**请勿直接修改 `streamlit_app.py`（v1）或 `streamlit_app_v2.py`（v2）。**

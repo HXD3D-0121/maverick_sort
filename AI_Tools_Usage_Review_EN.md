@@ -1288,3 +1288,194 @@ After course delivery, the team optimized the Streamlit dashboard to address thr
 | Simulation page height fixed at 900px | Low | Future iteration | Dynamic height via JavaScript or Streamlit adaptive sizing |
 | HTML theme mismatch with Streamlit (dark vs light) | Low | Future iteration | Add theme toggle to HTML or maintain independent style |
 | Method Comparison "Reward" label vs course-required "Cost" | Medium | Confirm with instructor | If instructor requires Cost semantics, redesign data transformation logic |
+
+---
+
+## 11. Industrial-Grade Supply Chain Command Center Development (2026/06/04)
+
+### 11.1 Development Background
+
+After completing the course-version Streamlit dashboard (`streamlit_app.py`), the team received a new requirement: upgrade the course version into an industrial-grade pharmaceutical smart supply chain command center for international executives. Requirements:
+
+1. **All-English interface**: All labels, titles, descriptions in English (targeting international executives)
+2. **Four business views**:
+   - Admin: Omni-Channel Orders
+   - Admin: Warehouse & Temperature Zones
+   - Admin: Customer SLA Analytics
+   - Worker: Task Workstation
+3. **Industrial-grade UI**: Deep navy theme, professional cards, real-time data sync
+4. **Simulated live data**: Metrics fluctuate every 3 seconds, simulating real operations
+5. **Preserve original**: Keep `streamlit_app.py` as backup; create new `streamlit_app_v2.py`
+
+### 11.2 Architecture Design
+
+**File Structure:**
+```
+streamlit_app.py          # Course version (preserved, unchanged)
+streamlit_app_v2.py       # Industrial-grade version (new, ~600 lines)
+```
+
+**Tech Stack:**
+- Streamlit native components + custom CSS injection
+- Altair charts (consistent with course version, minimal dependencies)
+- `st.session_state` + `st.rerun()` for 3-second real-time refresh
+- Pure simulated data generators (no backend dependency)
+
+### 11.3 Four-View Feature Details
+
+#### VIEW 1: Omni-Channel Orders
+- **Top metrics**: Total Daily Orders (~90,000, dynamic fluctuation), Bulk Orders, Fragmented Small Orders
+- **Filters**: Client Category (4 types), Time Window (3 periods), Temperature Attribute (5 zones)
+- **Left**: Real-time order log table (Order ID, Client Type, SKU Count, Temperature, Timestamp, Status, Priority)
+- **Center**: 4 work-order status cards (Pending Dispatch, Picking in Progress, Completed, Stagnant Exception) with progress bars
+- **Right**:
+  - Bar chart: Order distribution by time window
+  - Pie chart: Bulk vs Small order ratio
+  - Pie chart: 5 temperature zone proportions
+
+#### VIEW 2: Warehouse & Temperature Zones
+- **Top**: 5 temperature zone cards (Ambient, Cool, Cold, Frozen, Deep Frozen) showing capacity, utilization, progress bars
+- **Middle**: Near-Expiry FIFO control table, color-coded by risk:
+  - Critical (≤30 days, red)
+  - Warning (≤60 days, amber)
+  - Notice (≤90 days, blue)
+  - Normal (>90 days, default)
+- **Bottom**:
+  - Donut chart: Capacity utilization by zone
+  - Bar chart: Near-expiry stock volume by medicine type
+
+#### VIEW 3: Customer SLA Analytics
+- **Top**: Line chart — 12-month monthly order volume trend for 4 customer types
+- **Middle left**: Bar chart — Average SKU variety per order by customer type
+- **Middle right**: Multi-line chart — SLA fulfillment history + 14-day AI forecast (dashed)
+- **Bottom**: Data table — Fulfillment compliance by client category (On-Time Rate, Next-Day Rate, Temp Compliance, Exception Rate)
+
+#### VIEW 4: Worker Task Workstation
+- **Top left**: Bar chart — Full-time vs temporary headcount, with 2.5x peak cap line
+- **Top right**: Table — Picking efficiency by zone (SKUs/Hour/Person)
+- **Main**: `st.tabs` with 4 states (Pending, Active Picking, Completed, Exceptions)
+  - Each task expandable to show: Source Zone → Target Client, SKU Checklist
+  - **Key feature**: Active Picking tasks display DRL-optimized picking path, e.g.:
+    `"Path: Zone A → Cool Zone B → Pick [Insulin x3] → Transit Zone C → Pack → Dispatch"`
+- **Bottom**: "My Dispatched Tasks" panel showing current worker's task queue
+
+### 11.4 AI-Assisted Development Process
+
+| Development Phase | AI Contribution | Human Decision |
+|------------------|----------------|----------------|
+| Requirement analysis | Decomposed natural language requirements into 4 views with component lists | Confirmed view priorities and layout ratios |
+| CSS theme design | Generated complete deep-navy executive CSS stylesheet | Adjusted color saturation and contrast |
+| Data generators | Wrote 5 simulated data generator functions (orders, inventory, SLA, tasks, labor) | Calibrated data ranges to match enterprise casebook metrics |
+| View implementation | Wrote Streamlit code view by view (~100-150 lines each) | Reviewed layout logic and chart selection |
+| Real-time refresh | Implemented `st.session_state.live_mode` + `st.rerun()` mechanism | Tested and confirmed 3-second refresh frequency |
+| Integration testing | Syntax check, run test, fix compatibility issues | Verified all 4 views switch correctly |
+
+### 11.5 Key Design Decisions
+
+**Decision 1: New file vs overwrite**
+- Choice: Create `streamlit_app_v2.py`, keep `streamlit_app.py` unchanged
+- Reason: Course version and industrial version target different audiences, need parallel maintenance
+
+**Decision 2: Altair vs Plotly vs ECharts**
+- Choice: Continue using Altair (consistent with course version)
+- Reason: Fewer dependencies, unified styling, better Hugging Face Spaces compatibility
+
+**Decision 3: Real-time refresh mechanism**
+- Choice: `st.session_state.live_mode` global toggle + `time.sleep(3) + st.rerun()`
+- Reason: Simple and reliable, user can toggle on/off, avoids persistent refresh interference
+
+**Decision 4: DRL path display**
+- Choice: Use monospace code block in Worker view to display simulated optimized path
+- Reason: Intuitively demonstrates PPO/BvN algorithm output value, enhances worker-side algorithm trust
+
+### 11.6 File Inventory
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `streamlit_app_v2.py` | Industrial supply chain command center dashboard | Created, runnable |
+| `streamlit_app.py` | Course version dashboard (backup) | Preserved, unmodified |
+| `smart_wave_dashboard_en.html` | English real-time simulation panel | Embedded in streamlit_app.py |
+| `data/*.json` | PPO training/evaluation data | Reused, unmodified |
+
+### 11.7 How to Run
+
+```bash
+# Industrial-grade version
+streamlit run streamlit_app_v2.py
+
+# Course version (backup)
+streamlit run streamlit_app.py
+```
+
+Access: `http://localhost:8501`
+
+### 11.8 Outstanding Issues
+
+| Issue | Priority | Planned Resolution | Approach |
+|------|----------|-------------------|----------|
+| Simulated data differs from real enterprise data | High | Commercialization M2 | Connect real ERP/WMS APIs |
+| Real-time refresh causes slight page flicker | Medium | Future iteration | Use `st.empty()` partial update instead of `st.rerun()` |
+| Missing user authentication and access control | Medium | Commercialization M3 | Add Streamlit-Auth or OAuth |
+| Worker view not connected to real WMS | High | Commercialization M2 | Develop FastAPI backend connecting `pharma_wave_allocation.py` |
+
+---
+
+## 12. Streamlit v3 Consolidated Version (2026/06/04)
+
+### 12.1 Background
+
+After completing v2 (industrial-grade 4-view dashboard), the team consolidated classic features from v1 (course version) into a unified v3, forming the foundation for commercialization iteration.
+
+**Integration Goals:**
+- Preserve v2's 4 industrial views (Omni-Channel Orders, Warehouse & Zones, SLA Analytics, Task Workstation)
+- Integrate v1's Real-time Simulation (live simulation panel)
+- Integrate v1's Order Analytics (temperature distribution + order timeline)
+- Form a **6-view unified version** as the base for iteration
+
+### 12.2 File Structure
+
+| File | Version | Views | Purpose |
+|------|---------|-------|---------|
+| `streamlit_app.py` | v1 | 11 pages | Course version (backup) |
+| `streamlit_app_v2.py` | v2 | 4 pages | Industrial version (backup) |
+| `streamlit_app_v3.py` | **v3** | **6 pages** | **Consolidated (iteration base)** |
+
+### 12.3 v3 Navigation
+
+```
+📦 Admin: Omni-Channel Orders              ← v2
+🌡️ Admin: Warehouse & Temperature Zones   ← v2
+📊 Admin: Customer SLA Analytics           ← v2
+👷 Worker: Task Workstation                ← v2
+⚡ Real-time Simulation                    ← v1 (HTML embed)
+📈 Order Analytics                         ← v1 (temp dist + timeline)
+```
+
+### 12.4 Technical Implementation
+
+| Feature | Implementation | Source |
+|---------|---------------|--------|
+| 4 industrial views | v2 native code | v2 |
+| Real-time Simulation | `components.html()` embedding `smart_wave_dashboard_en.html` | v1 |
+| Order Analytics | `st.dataframe` + `altair_chart` temp pie + timeline | v1 |
+| Live refresh | `st.session_state.live_mode` + `st.rerun()` 3s | v2 |
+| Theme | Deep navy executive theme (custom CSS) | v2 |
+
+### 12.5 How to Run
+
+```bash
+# v3 consolidated (recommended)
+streamlit run streamlit_app_v3.py
+
+# Access
+http://localhost:8503
+```
+
+### 12.6 Team Notice
+
+**v3 is the sole base version for commercialization iteration.** Subsequent development should be based on `streamlit_app_v3.py`:
+- Day 4: Streamlit commercial upgrades (ROI Calculator, Competitor Radar, etc.)
+- Day 5: Hugging Face integration
+- Day 6: Business case pages
+
+**Do NOT directly modify `streamlit_app.py` (v1) or `streamlit_app_v2.py` (v2).**

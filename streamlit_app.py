@@ -22,6 +22,20 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# KaTeX for LaTeX formula rendering (lightweight, no polyfill needed)
+st.markdown("""
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+    });"></script>
+""", unsafe_allow_html=True)
+
 # Custom CSS
 st.markdown("""
 <style>
@@ -320,8 +334,11 @@ if page == "📦 Order Analytics":
     st.markdown("### 🌡️ Temperature Distribution")
 
     temp_dist = stats.get("temp_distribution", {})
-    temp_names = {0: "Ambient", 1: "Cool", 2: "Cold", 3: "Frozen"}
-    temp_colors = {0: "#ff7f0e", 1: "#2ca02c", 2: "#1f77b4", 3: "#9467bd"}
+    # Handle both string keys (from JSON) and integer keys
+    temp_names = {"ambient": "Ambient", "cool": "Cool", "cold": "Cold", "frozen": "Frozen",
+                  0: "Ambient", 1: "Cool", 2: "Cold", 3: "Frozen"}
+    temp_colors = {"ambient": "#ff7f0e", "cool": "#2ca02c", "cold": "#1f77b4", "frozen": "#9467bd",
+                   0: "#ff7f0e", 1: "#2ca02c", 2: "#1f77b4", 3: "#9467bd"}
 
     temp_df = pd.DataFrame([
         {"Category": temp_names.get(k, k), "Count": v, "Percentage": v / stats.get("total_orders", 1) * 100}
@@ -760,45 +777,50 @@ if page == "🧠 KGDRL Framework":
     st.markdown("---")
     st.markdown("### 📐 MDP Formulation")
 
-    st.markdown("""
+    st.markdown(r"""
     The smart wave allocation problem is formulated as a **finite-horizon Markov Decision Process**:
 
-    $$M = (\\mathcal{S}, \\mathcal{A}, \\mathcal{P}, \\mathcal{R}, \\gamma)$$
+    $$M = (S, A, P, R, \gamma)$$
     """)
 
-    st.markdown("#### State Space $\\mathcal{S}$")
-    st.markdown("""
-    $$s_t = \\left( s_t^{\\text{wave}},\\ s_t^{\\text{pool}},\\ s_t^{\\text{time}},\\ s_t^{\\text{history}} \\right)$$
+    st.markdown("#### State Space $S$")
+    st.markdown(r"""
+    The state at time step $t$ is defined as:
+
+    $$s_t = \left( s_t^{wave},\ s_t^{pool},\ s_t^{time},\ s_t^{history} \right)$$
 
     | Component | Dimension | Description |
     |-----------|-----------|-------------|
     | Wave features | 4 | Orders count, volume, age, zone spread |
     | Wave zone mask | 8 | One-hot covered zones |
     | Wave temp mask | 4 | One-hot covered temperatures |
-    | Top-K order features | K × 6 | SKU count, deadline, temp, x, y, urgency |
+    | Top-K order features | K x 6 | SKU count, deadline, temp, x, y, urgency |
     | Global stats | 3 | Urgent ratio, pending ratio, pool size |
     | **Total** | **~79** | (Z=8, K=10) |
     """)
 
-    st.markdown("#### Action Space $\\mathcal{A}$")
-    st.markdown("""
-    $$a_t = \\begin{cases}
-    o^* & \\text{Add order } o^* \\text{ from pool to current wave} \\
-    \\text{CLOSE} & \\text{Close wave, dispatch, start new wave}
-    \\end{cases}$$
+    st.markdown("#### Action Space $A$")
+    st.markdown(r"""
+    The action at time step $t$ takes one of two forms:
+
+    $$a_t = o^* \quad \text{where } o^* \in \text{Pool} \text{ (add order } o^* \text{ to current wave)}$$
+
+    $$a_t = \text{CLOSE} \quad \text{(close wave, dispatch, start new wave)}$$
     """)
 
-    st.markdown("#### Reward Function $\\mathcal{R}$")
-    st.markdown("""
-    $$r(s_t, a_t, s_{t+1}) = r^{\\text{efficiency}} + r^{\\text{compliance}} + r^{\\text{timeliness}} + r^{\\text{setup}}$$
+    st.markdown("#### Reward Function $R$")
+    st.markdown(r"""
+    The total reward is decomposed into four components:
 
-    **Efficiency:** $r^{\\text{efficiency}} = -\\alpha_1 \\cdot \\Delta L$ (negative picking distance)
+    $$r(s_t, a_t, s_{t+1}) = r_{eff} + r_{comp} + r_{time} + r_{setup}$$
 
-    **Compliance:** $r^{\\text{compliance}} = -\\alpha_2 \\cdot \\mathbb{1}_{[\\text{temp mixed}]}$ (temperature penalty)
+    **Efficiency:** $r_{eff} = -\alpha_1 \cdot \Delta L$ (negative picking distance)
 
-    **Timeliness:** $r^{\\text{timeliness}} = -\\alpha_4 \\cdot \\sum \\max(0, t_{\\text{finish}} - d_o)$ (deadline penalty)
+    **Compliance:** $r_{comp} = -\alpha_2 \cdot I_{temp}$ where $I_{temp} = 1$ if temp mixed, else $0$
 
-    **Setup:** $r^{\\text{setup}} = -\\alpha_5 \\cdot \\mathbb{1}_{[a_t = \\text{CLOSE}]}$ (wave closing cost)
+    **Timeliness:** $r_{time} = -\alpha_4 \cdot \sum \max(0, t_{finish} - d_o)$ (deadline penalty)
+
+    **Setup:** $r_{setup} = -\alpha_5 \cdot I_{close}$ where $I_{close} = 1$ if $a_t = \text{CLOSE}$, else $0$
     """)
 
     st.markdown("---")
@@ -808,29 +830,37 @@ if page == "🧠 KGDRL Framework":
     For each episode:
         1. Collect trajectory: (s_t, a_t, r_t, s_{t+1}, log_prob, valid_mask)
         2. Compute advantages using GAE:
-           δ_t = r_t + γ·V(s_{t+1}) - V(s_t)
-           A_t = δ_t + γλ·A_{t+1}
+           delta_t = r_t + gamma * V(s_{t+1}) - V(s_t)
+           A_t = delta_t + gamma * lambda * A_{t+1}
         3. PPO update (K epochs):
-           ratio = π_new(a|s) / π_old(a|s)
-           L^CLIP = -min(ratio·A, clip(ratio, 1-ε, 1+ε)·A)
+           ratio = pi_new(a|s) / pi_old(a|s)
+           L_CLIP = -min(ratio * A, clip(ratio, 1-eps, 1+eps) * A)
         4. Update critic: MSE(V(s), R)
-        5. Clip gradients (norm ≤ 0.5)
+        5. Clip gradients (norm <= 0.5)
     ```
     """)
 
     st.markdown("---")
     st.markdown("### 🧮 TZU Heuristic Score")
-    st.markdown("""
+    st.markdown(r"""
     The **Temperature-Zone-Urgency** heuristic serves as both a standalone baseline and a knowledge prior:
 
-    $$\\text{TZU}(o, w) = \\beta_1 \\cdot \\underbrace{\\mathbb{1}_{[\\tau(o) = \\tau(w)]}}_{\\text{Temperature Match}} + \\beta_2 \\cdot \\underbrace{\\frac{1}{1 + d(o, w)}}_{\\text{Zone Proximity}} + \\beta_3 \\cdot \\underbrace{\\frac{1}{\\bar{d}_o}}_{\\text{Urgency}}$$
+    $$TZU(o, w) = \beta_1 \cdot I_{temp}(o, w) + \beta_2 \cdot \frac{1}{1 + d(o, w)} + \beta_3 \cdot \frac{1}{\bar{d}_o}$$
 
-    where $\\beta_1 = 0.4$, $\\beta_2 = 0.4$, $\\beta_3 = 0.2$
+    where $I_{temp}(o, w) = 1$ if $\tau(o) = \tau(w)$, else $0$
+
+    | Symbol | Meaning |
+    |--------|---------|
+    | $I_{temp}$ | Indicator: 1 if order and wave have same temperature |
+    | $\tau(o)$ | Temperature category of order $o$ |
+    | $d(o, w)$ | Distance between order $o$ and wave centroid $w$ |
+    | $\bar{d}_o$ | Normalized deadline urgency of order $o$ |
+    | $\beta_1, \beta_2, \beta_3$ | Weights: 0.4, 0.4, 0.2 |
     """)
 
     st.markdown("---")
     st.markdown("### 🔮 Extension to Full KGDRL")
-    st.markdown("""
+    st.markdown(r"""
     The current PPO implementation is "vanilla" without knowledge guidance. Full KGDRL extension involves:
 
     1. **Knowledge Graph Construction**
@@ -842,7 +872,7 @@ if page == "🧠 KGDRL Framework":
 
     3. **Heuristic Policy Prior**
        - Initialize actor output with TZU scores
-       - Add KL regularization: $L_{KG} = D_{KL}(\\pi_\\theta \\| \\pi_{TZU})$
+       - Add KL regularization: $L_{KG} = KL(\pi_\theta \| \pi_{TZU})$
 
     4. **Structured Action Sampling**
        - Hierarchical: temperature → zone → specific order
