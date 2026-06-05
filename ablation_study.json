@@ -1,0 +1,500 @@
+{
+  "heuristics": {
+    "FCFS": {
+      "avg_reward": 1786.8818781126724,
+      "std_reward": 365.58035674392596,
+      "avg_distance": 690.8981218873545,
+      "avg_waves": 85.9,
+      "avg_misses": 0.0,
+      "avg_violations": 38.5
+    },
+    "TEMP_FIRST": {
+      "avg_reward": -2958.0874308954963,
+      "std_reward": 116.76850621243915,
+      "avg_distance": 987.3674308955415,
+      "avg_waves": 125.8,
+      "avg_misses": 0.0,
+      "avg_violations": 0.0
+    },
+    "ZONE_NN": {
+      "avg_reward": 1733.7668084295033,
+      "std_reward": 330.3869979997226,
+      "avg_distance": 669.0131915705219,
+      "avg_waves": 82.9,
+      "avg_misses": 0.0,
+      "avg_violations": 37.3
+    },
+    "EDD": {
+      "avg_reward": 1751.9737247200578,
+      "std_reward": 391.8832281357799,
+      "avg_distance": 667.8062752799694,
+      "avg_waves": 83.1,
+      "avg_misses": 0.0,
+      "avg_violations": 37.5
+    },
+    "TZU": {
+      "avg_reward": 144.60482483018222,
+      "std_reward": 242.81404515458348,
+      "avg_distance": 666.6751751698159,
+      "avg_waves": 83.0,
+      "avg_misses": 0.0,
+      "avg_violations": 21.4
+    }
+  },
+  "vanilla_ppo": {
+    "train_metrics": [
+      {
+        "reward": 1573.4475757076866,
+        "n_waves": 164,
+        "distance": 1285.4096725515903,
+        "misses": 2,
+        "violations": 46
+      },
+      {
+        "reward": 1168.3445806082777,
+        "n_waves": 167,
+        "distance": 1305.974641254166,
+        "misses": 2,
+        "violations": 43
+      },
+      {
+        "reward": 523.0396427027388,
+        "n_waves": 156,
+        "distance": 1222.7222101513757,
+        "misses": 2,
+        "violations": 34
+      },
+      {
+        "reward": 216.83214632752208,
+        "n_waves": 176,
+        "distance": 1341.818936303617,
+        "misses": 2,
+        "violations": 36
+      },
+      {
+        "reward": 369.51700523674936,
+        "n_waves": 165,
+        "distance": 1270.0460897730989,
+        "misses": 2,
+        "violations": 35
+      },
+      {
+        "reward": 1103.7777238448284,
+        "n_waves": 182,
+        "distance": 1418.9812139637863,
+        "misses": 2,
+        "violations": 43
+      },
+      {
+        "reward": 296.9185263660333,
+        "n_waves": 172,
+        "distance": 1353.7406098852616,
+        "misses": 2,
+        "violations": 34
+      },
+      {
+        "reward": 1188.4429100498114,
+        "n_waves": 164,
+        "distance": 1282.4298145880275,
+        "misses": 2,
+        "violations": 42
+      },
+      {
+        "reward": 878.2701165183283,
+        "n_waves": 159,
+        "distance": 1246.5871424378502,
+        "misses": 2,
+        "violations": 39
+      },
+      {
+        "reward": 513.6766630545266,
+        "n_waves": 154,
+        "distance": 1219.443940210181,
+        "misses": 2,
+        "violations": 34
+      },
+      {
+        "reward": 604.4579953768427,
+        "n_waves": 171,
+        "distance": 1329.0681497003561,
+        "misses": 2,
+        "violations": 37
+      },
+      {
+        "reward": 722.6810158562786,
+        "n_waves": 167,
+        "distance": 1326.2298278646772,
+        "misses": 2,
+        "violations": 39
+      },
+      {
+        "reward": 726.9053954742311,
+        "n_waves": 169,
+        "distance": 1336.8821892136566,
+        "misses": 2,
+        "violations": 37
+      },
+      {
+        "reward": 1000.2945416356926,
+        "n_waves": 165,
+        "distance": 1278.254462801627,
+        "misses": 2,
+        "violations": 40
+      },
+      {
+        "reward": 718.0754793016886,
+        "n_waves": 171,
+        "distance": 1343.246147789457,
+        "misses": 2,
+        "violations": 39
+      },
+      {
+        "reward": 1976.750119798309,
+        "n_waves": 151,
+        "distance": 1172.821206809009,
+        "misses": 2,
+        "violations": 46
+      },
+      {
+        "reward": 1097.1672036174539,
+        "n_waves": 160,
+        "distance": 1254.83571313823,
+        "misses": 2,
+        "violations": 41
+      },
+      {
+        "reward": 684.4019928090534,
+        "n_waves": 154,
+        "distance": 1200.7627562135424,
+        "misses": 2,
+        "violations": 34
+      },
+      {
+        "reward": 660.4805753243382,
+        "n_waves": 164,
+        "distance": 1288.9412393049713,
+        "misses": 2,
+        "violations": 37
+      },
+      {
+        "reward": 1949.35424705682,
+        "n_waves": 158,
+        "distance": 1234.6784997819257,
+        "misses": 2,
+        "violations": 50
+      }
+    ],
+    "eval": {
+      "avg_reward": 4007.4978973724924,
+      "std_reward": 654.8768278539253,
+      "avg_distance": 695.4737973780818,
+      "avg_waves": 87.3,
+      "avg_misses": 4.4,
+      "avg_violations": 36.7
+    }
+  },
+  "kgdrl_no_kl": {
+    "train_metrics": [
+      {
+        "reward": 2185.610949577449,
+        "n_waves": 88,
+        "distance": 706.3890504225827,
+        "misses": 0,
+        "violations": 43
+      },
+      {
+        "reward": 1788.9185904301994,
+        "n_waves": 88,
+        "distance": 703.9814095698292,
+        "misses": 0,
+        "violations": 39
+      },
+      {
+        "reward": 2177.0847398947953,
+        "n_waves": 88,
+        "distance": 712.3152601052514,
+        "misses": 0,
+        "violations": 43
+      },
+      {
+        "reward": 1744.4131670195075,
+        "n_waves": 77,
+        "distance": 621.4868329805051,
+        "misses": 0,
+        "violations": 36
+      },
+      {
+        "reward": 1953.2235087774995,
+        "n_waves": 81,
+        "distance": 650.5764912225416,
+        "misses": 0,
+        "violations": 39
+      },
+      {
+        "reward": 1957.895081652739,
+        "n_waves": 81,
+        "distance": 647.4049183472877,
+        "misses": 0,
+        "violations": 39
+      },
+      {
+        "reward": 2057.1857864376616,
+        "n_waves": 81,
+        "distance": 645.4142135623731,
+        "misses": 0,
+        "violations": 40
+      },
+      {
+        "reward": 2724.261231117335,
+        "n_waves": 78,
+        "distance": 625.7387688827099,
+        "misses": 0,
+        "violations": 46
+      },
+      {
+        "reward": 2049.4612311173214,
+        "n_waves": 81,
+        "distance": 651.7387688827098,
+        "misses": 0,
+        "violations": 40
+      },
+      {
+        "reward": 1951.3470175549305,
+        "n_waves": 81,
+        "distance": 653.1529824450829,
+        "misses": 0,
+        "violations": 39
+      },
+      {
+        "reward": 1725.5950816527397,
+        "n_waves": 78,
+        "distance": 625.4049183472878,
+        "misses": 0,
+        "violations": 36
+      },
+      {
+        "reward": 2147.18473989478,
+        "n_waves": 81,
+        "distance": 654.3152601052512,
+        "misses": 0,
+        "violations": 41
+      },
+      {
+        "reward": 1581.3328039925532,
+        "n_waves": 84,
+        "distance": 674.5671960074561,
+        "misses": 0,
+        "violations": 36
+      },
+      {
+        "reward": 1572.2470175549263,
+        "n_waves": 80,
+        "distance": 647.152982445083,
+        "misses": 0,
+        "violations": 35
+      },
+      {
+        "reward": 1697.2377223398507,
+        "n_waves": 79,
+        "distance": 637.1622776601685,
+        "misses": 0,
+        "violations": 36
+      },
+      {
+        "reward": 1826.7235087774834,
+        "n_waves": 78,
+        "distance": 624.5764912225414,
+        "misses": 0,
+        "violations": 37
+      },
+      {
+        "reward": 2105.6235087774935,
+        "n_waves": 87,
+        "distance": 700.5764912225416,
+        "misses": 0,
+        "violations": 42
+      },
+      {
+        "reward": 2055.4715728752885,
+        "n_waves": 81,
+        "distance": 646.8284271247462,
+        "misses": 0,
+        "violations": 40
+      },
+      {
+        "reward": 1577.6377223398385,
+        "n_waves": 80,
+        "distance": 643.1622776601685,
+        "misses": 0,
+        "violations": 35
+      },
+      {
+        "reward": 1492.5131670195042,
+        "n_waves": 79,
+        "distance": 641.4868329805051,
+        "misses": 0,
+        "violations": 34
+      }
+    ],
+    "eval": {
+      "avg_reward": 1841.2380934430596,
+      "std_reward": 390.1265186361478,
+      "avg_distance": 677.8919065569696,
+      "avg_waves": 84.4,
+      "avg_misses": 0.0,
+      "avg_violations": 38.7
+    }
+  },
+  "kgdrl_full": {
+    "train_metrics": [
+      {
+        "reward": 1773.1612311173212,
+        "n_waves": 80,
+        "distance": 647.7387688827099,
+        "misses": 0,
+        "violations": 37
+      },
+      {
+        "reward": 1662.5212913353932,
+        "n_waves": 85,
+        "distance": 677.4787086646191,
+        "misses": 0,
+        "violations": 37
+      },
+      {
+        "reward": 1675.298953457135,
+        "n_waves": 84,
+        "distance": 680.9010465428782,
+        "misses": 0,
+        "violations": 37
+      },
+      {
+        "reward": 1694.2131670195158,
+        "n_waves": 83,
+        "distance": 679.4868329805051,
+        "misses": 0,
+        "violations": 37
+      },
+      {
+        "reward": 1654.1092952151046,
+        "n_waves": 81,
+        "distance": 649.9907047849146,
+        "misses": 0,
+        "violations": 36
+      },
+      {
+        "reward": 2182.032803992573,
+        "n_waves": 84,
+        "distance": 674.567196007456,
+        "misses": 0,
+        "violations": 42
+      },
+      {
+        "reward": 2751.070526332423,
+        "n_waves": 85,
+        "distance": 687.7294736676243,
+        "misses": 0,
+        "violations": 48
+      },
+      {
+        "reward": 1277.0377223398527,
+        "n_waves": 80,
+        "distance": 641.1622776601683,
+        "misses": 0,
+        "violations": 32
+      },
+      {
+        "reward": 906.975444679649,
+        "n_waves": 87,
+        "distance": 700.3245553203368,
+        "misses": 0,
+        "violations": 30
+      },
+      {
+        "reward": 1575.4754446796692,
+        "n_waves": 80,
+        "distance": 644.3245553203368,
+        "misses": 0,
+        "violations": 35
+      },
+      {
+        "reward": 1632.3000000000325,
+        "n_waves": 82,
+        "distance": 656.0,
+        "misses": 0,
+        "violations": 36
+      },
+      {
+        "reward": 1352.6950816527108,
+        "n_waves": 81,
+        "distance": 651.4049183472877,
+        "misses": 0,
+        "violations": 33
+      },
+      {
+        "reward": 2264.475444679713,
+        "n_waves": 89,
+        "distance": 714.3245553203368,
+        "misses": 0,
+        "violations": 44
+      },
+      {
+        "reward": 1733.7092952151065,
+        "n_waves": 82,
+        "distance": 653.9907047849147,
+        "misses": 0,
+        "violations": 37
+      },
+      {
+        "reward": 1906.5092952151117,
+        "n_waves": 83,
+        "distance": 665.9907047849146,
+        "misses": 0,
+        "violations": 39
+      },
+      {
+        "reward": 1531.9705263323956,
+        "n_waves": 86,
+        "distance": 693.7294736676245,
+        "misses": 0,
+        "violations": 36
+      },
+      {
+        "reward": 1932.7857864376388,
+        "n_waves": 82,
+        "distance": 655.4142135623731,
+        "misses": 0,
+        "violations": 39
+      },
+      {
+        "reward": 2606.275444679706,
+        "n_waves": 87,
+        "distance": 700.3245553203368,
+        "misses": 0,
+        "violations": 47
+      },
+      {
+        "reward": 1502.300000000021,
+        "n_waves": 79,
+        "distance": 632.0,
+        "misses": 0,
+        "violations": 34
+      },
+      {
+        "reward": 1503.8715728753018,
+        "n_waves": 83,
+        "distance": 666.8284271247462,
+        "misses": 0,
+        "violations": 35
+      }
+    ],
+    "eval": {
+      "avg_reward": 1908.7637855020002,
+      "std_reward": 465.44260410291724,
+      "avg_distance": 665.7362144980241,
+      "avg_waves": 82.8,
+      "avg_misses": 0.0,
+      "avg_violations": 39.0
+    }
+  }
+}
