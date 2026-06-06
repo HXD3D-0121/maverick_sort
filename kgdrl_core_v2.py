@@ -32,6 +32,97 @@ except ImportError:
     TORCH_AVAILABLE = False
     warnings.warn("PyTorch not available. KGDRL requires PyTorch.")
 
+    # Minimal stubs to prevent NameError in class definitions when PyTorch is absent
+    class _StubNN:
+        class Module: pass
+        class Linear:
+            def __init__(self, *a, **k): pass
+            def to(self, *a, **k): return self
+        class Dropout:
+            def __init__(self, *a, **k): pass
+        class Parameter:
+            def __init__(self, *a, **k): pass
+        class init:
+            @staticmethod
+            def xavier_uniform_(x): pass
+    nn = _StubNN()
+
+    class _StubF:
+        @staticmethod
+        def relu(x): return x
+        @staticmethod
+        def elu(x): return x
+        @staticmethod
+        def leaky_relu(x, *a, **k): return x
+        @staticmethod
+        def softmax(x, *a, **k): return x
+        @staticmethod
+        def dropout(x, *a, **k): return x
+    F = _StubF()
+
+    class _StubTensor:
+        device = None
+        def to(self, *a, **k): return self
+        def clone(self): return self
+        def detach(self): return self
+        def requires_grad_(self, *a): return self
+        def sum(self, *a, **k): return self
+        def mean(self, *a, **k): return self
+        def __mul__(self, o): return self
+        def __add__(self, o): return self
+        def __sub__(self, o): return self
+        def __truediv__(self, o): return self
+        def __getitem__(self, k): return self
+        def squeeze(self, *a): return self
+        def unsqueeze(self, *a): return self
+        def view(self, *a): return self
+
+    class _StubTorch:
+        Tensor = _StubTensor
+        @staticmethod
+        def tensor(*a, **k): return _StubTensor()
+        @staticmethod
+        def zeros(*a, **k): return _StubTensor()
+        @staticmethod
+        def zeros_like(x): return _StubTensor()
+        @staticmethod
+        def ones(*a, **k): return _StubTensor()
+        @staticmethod
+        def ones_like(x): return _StubTensor()
+        @staticmethod
+        def cat(*a, **k): return _StubTensor()
+        @staticmethod
+        def stack(*a, **k): return _StubTensor()
+        @staticmethod
+        def no_grad():
+            class C:
+                def __enter__(self): return self
+                def __exit__(self, *a, **k): pass
+            return C()
+        @staticmethod
+        def clamp(x, *a, **k): return x
+        @staticmethod
+        def arange(*a, **k): return []
+        @staticmethod
+        def exp(x): return _StubTensor()
+        @staticmethod
+        def randn(*a, **k): return _StubTensor()
+        @staticmethod
+        def rand(*a, **k): return _StubTensor()
+        @staticmethod
+        def where(c, x, y): return x
+        @staticmethod
+        def log(x): return x
+        @staticmethod
+        def gather(x, *a, **k): return _StubTensor()
+        @staticmethod
+        def multinomial(x, *a, **k): return _StubTensor()
+        @staticmethod
+        def save(*a, **k): pass
+        @staticmethod
+        def load(*a, **k): None
+    torch = _StubTorch()
+
 # Import base components from pharma_wave_allocation.py
 from pharma_wave_allocation import (
     SKU, Order, DataGenerator, PharmaWaveEnv,

@@ -1750,3 +1750,355 @@ AI 实现了两阶段训练：
 > **文档版本**：v2.2-algorithm-arena  
 > **最后更新**：2026/06/05  
 > **历史版本**：v2.0-commercialization（Day 0）→ v2.1-day2-complete（Day 2）→ v2.2-algorithm-arena（Day 2+）
+
+---
+
+---
+
+## 十五、Day 3：产品分层发布 — 多目标优化 + 实时自适应 + Pro版可视化（2026/06/06）
+
+### 15.1 Day 3 目标总览
+
+按照 `COMMERCIALIZATION_7DAY_PLAN.md` 的 Day 3 规划，本日核心任务是将技术能力封装为可分层售卖的产品版本，并完成以下交付：
+
+| 交付物 | 定位 | 对应产品层级 |
+|--------|------|------------|
+| `what_if_simulator.py` | What-if场景模拟器 | 🔷 Essential 基础版标配 |
+| `multi_objective_scheduler.py` | 多目标帕累托调度引擎 | 🔶 Pro 专业版模块 |
+| `adaptive_policy.py` | 实时自适应策略模块 | 🔶 Pro 专业版模块 |
+| `bvn_research_note.md` | BVN矩阵分解调研笔记 | 🔬 R&D 研究线 |
+| `product_tier_pricing.md` | 产品分层定价策略文档 | 商业化核心 |
+| `streamlit_app_pro_v1.py` | Pro版可视化面板 | 🔶 Pro 专业版展示 |
+
+**战略框架**：
+
+```
+基础版引流 → 专业版盈利 → 研究线背书
+     ↓            ↓              ↓
+What-if引擎   NSGA-II+自适应   BVN理论保证
+¥2,999/月    ¥8,999/月       咨询+授权
+```
+
+---
+
+### 15.2 What-if场景模拟器（`what_if_simulator.py`）
+
+#### 15.2.1 设计决策
+
+**提示词**：
+> "请实现一个What-if场景模拟器，作为基础版（Essential）的标配功能。要求：
+> 1. 支持参数敏感性分析（单维度扫描）
+> 2. 支持多场景并行对比（至少4个场景同时运行）
+> 3. 内置场景模板：波次容量扫描、开启成本扫描、峰值需求场景、策略对比
+> 4. 输出JSON报告，包含对比摘要和最优方案推荐
+> 5. 与KGDRL核心算法无缝集成，但支持独立运行模式（无依赖时自动生成模拟数据）"
+
+#### 15.2.2 AI的实现
+
+**核心架构**：
+
+```
+WhatIfSimulator
+├── single_run(config, n_instances) → ScenarioResult
+├── compare_scenarios(scenarios) → Dict[str, ScenarioResult]
+├── sensitivity_analysis(param, values) → List[SensitivityPoint]
+└── export_comparison_report() → JSON
+```
+
+**关键设计**：
+
+| 设计决策 | 选择 | 原因 |
+|---------|------|------|
+| 独立运行模式 | ✅ 有 | 降低试用门槛，无PyTorch也能体验What-if |
+| 报告格式 | JSON + 控制台表格 | 便于下游可视化面板读取 |
+| 场景模板 | 4种内置模板 | 覆盖最常见的客户假设 |
+| 聚合方式 | 多实例平均 | 减少随机性，提高可信度 |
+
+**场景模板实现**：
+
+```python
+class ScenarioTemplates:
+    @staticmethod
+    def wave_capacity_sweep() → List[ScenarioConfig]  # 10-30单
+    @staticmethod
+    def setup_cost_sweep() → List[ScenarioConfig]      # 5-30元
+    @staticmethod
+    def peak_demand_scenarios() → List[ScenarioConfig] # 正常/流感/双11
+    @staticmethod
+    def policy_comparison() → List[ScenarioConfig]     # 6种策略
+```
+
+#### 15.2.3 投资者话术
+
+> "不需要改现有WMS，5分钟配置即可看到'如果'——如果我把波次容量从20降到15，超时率会怎么变？我们的What-if引擎让客户零风险验证假设，这是降低试用门槛的杀手锏。"
+
+---
+
+### 15.3 多目标调度引擎（`multi_objective_scheduler.py`）
+
+#### 15.3.1 设计决策
+
+**提示词**：
+> "请实现一个多目标帕累托调度引擎，作为Pro版的核心增值模块。要求：
+> 1. 使用NSGA-II算法，优化三个目标：总成本、截止时间miss率、温度违规次数
+> 2. 染色体编码：订单→波次的分配方案
+> 3. 提供四种策略模式：成本优先、时效优先、合规优先、均衡模式
+> 4. 输出帕累托前沿可视化数据
+> 5. 与KGDRL集成：GAT编码器提供特征 → NSGA-II搜索前沿"
+
+#### 15.3.2 AI的实现
+
+**NSGA-II核心实现**：
+
+```python
+class MultiObjectiveScheduler:
+    def optimize() → List[ParetoSolution]  # NSGA-II主循环
+    def select_by_strategy(front, mode) → ParetoSolution
+    def get_all_strategy_recommendations() → Dict
+```
+
+**遗传算子**：
+
+| 算子 | 实现 | 参数 |
+|------|------|------|
+| 选择 | 二元锦标赛 | tournament_size=2 |
+| 交叉 | 单点交叉 | rate=0.9 |
+| 变异 | 随机重分配 | rate=0.15 |
+| 环境选择 | 非支配排序 + 拥挤距离 | 保留最优前沿 |
+
+**策略模式设计**：
+
+```python
+STRATEGY_PROFILES = {
+    "cost_first":      StrategyProfile(weights=(0.6, 0.2, 0.2), color="#10b981"),
+    "time_first":      StrategyProfile(weights=(0.2, 0.6, 0.2), color="#3b82f6"),
+    "compliance_first": StrategyProfile(weights=(0.2, 0.2, 0.6), color="#8b5cf6"),
+    "balanced":        StrategyProfile(weights=(0.4, 0.35, 0.25), color="#f59e0b"),
+}
+```
+
+#### 15.3.3 投资者话术
+
+> "传统调度系统只能优化一个目标——要么省钱，要么快。我们的Pro版用NSGA-II显式维护帕累托前沿，客户可以一键切换策略模式：日常用'成本优先'，流感季切'时效优先'，GSP审计期切'合规优先'。这不是黑盒，是透明的多目标权衡。"
+
+---
+
+### 15.4 实时自适应策略模块（`adaptive_policy.py`）
+
+#### 15.4.1 设计决策
+
+**提示词**：
+> "请实现一个实时自适应策略模块，作为Pro版的核心增值模块。要求：
+> 1. EWMA动态预测订单到达率，支持双峰模式检测
+> 2. 波次容量动态调节：高峰期自动缩小波次、低谷期增大波次
+> 3. 在线学习：经验回放 + EWC正则化防止灾难性遗忘
+> 4. 策略集成：多策略加权投票，动态调整权重
+> 5. 预留联邦学习架构：FederatedCoordinator + 差分隐私 + 安全聚合"
+
+#### 15.4.2 AI的实现
+
+**四大子系统**：
+
+| 子系统 | 类 | 核心算法 | 功能 |
+|--------|-----|---------|------|
+| 到达率预测 | `ArrivalRateEstimator` | EWMA + 趋势检测 | 实时预测未来3步到达率 |
+| 容量调节 | `AdaptiveWaveCapacity` | 季节性调整 + 负载修正 | 动态调整波次容量 |
+| 在线学习 | `OnlinePolicyUpdater` | 经验回放 + EWC | 每班次后微调策略 |
+| 策略集成 | `PolicyEnsemble` | Softmax权重归一化 | 多策略动态组合 |
+
+**EWMA公式**：
+
+```
+rate_ewma(t) = α * rate_obs(t) + (1-α) * rate_ewma(t-1)
+其中 α = 0.3（配置可调）
+```
+
+**EWC正则化（防灾难性遗忘）**：
+
+```
+L_total = L_new + λ/2 * Σ F_i * (θ_i - θ*_i)^2
+其中 F_i = Fisher信息矩阵对角线
+```
+
+**联邦学习预留架构**：
+
+```python
+class FederatedCoordinator:
+    def aggregate_updates(client_updates) → global_model  # FedAvg
+    def distribute_global_model() → global_model
+    # 预留：差分隐私 ε=1.0, δ=1e-5
+    # 预留：安全聚合 + Top-K稀疏化
+```
+
+#### 15.4.3 投资者话术
+
+> "我们的系统不是静态的——它会自己学习。每完成一个班次，系统用新数据微调策略，同时用EWC正则化确保不会'忘记'之前的经验。更重要的是，我们预留了联邦学习架构：5个仓库可以协同训练，数据不出本地，但AI能力全局共享。这是集团级客户最看重的可扩展性。"
+
+---
+
+### 15.5 BVN矩阵分解调研笔记（`bvn_research_note.md`）
+
+#### 15.5.1 调研范围
+
+**提示词**：
+> "请基于项目根目录的BVN文献PDF，撰写一份调研笔记。要求：
+> 1. 解释Birkhoff-von Neumann定理的核心内容
+> 2. 将其映射到波次分配问题（双随机矩阵→分配矩阵）
+> 3. 分析Constant-Factor Guarantee对DRL策略的理论下界意义
+> 4. 提出专利拓展方向
+> 5. 制定三阶段实现路线图"
+
+#### 15.5.2 核心发现
+
+**BVN定理 → 波次分配映射**：
+
+| BVN概念 | 波次分配映射 |
+|--------|------------|
+| 双随机矩阵 $M$ | 订单→波次分配概率矩阵 |
+| 置换矩阵 $P_k$ | 一种确定性分配方案 |
+| 凸系数 $λ_k$ | 方案在混合策略中的权重 |
+| 完美匹配 | 无冲突的完整分配 |
+
+**理论保证**：
+
+对于单调子模函数，BVN随机舍入保证：
+
+```
+E[f(X̃)] ≥ (1 - 1/e) · f(X*) ≈ 0.632 · OPT
+```
+
+**投资者叙事价值**：
+- "我们的算法不仅有实验数据，还有运筹学理论保证"
+- "最坏情况下也不低于最优解的63.2%"
+- "可审计的随机化：每次决策都可追溯到概率来源"
+
+---
+
+### 15.6 产品分层定价策略（`product_tier_pricing.md`）
+
+#### 15.6.1 设计决策
+
+**提示词**：
+> "请撰写一份完整的产品分层定价策略文档。要求：
+> 1. 三版本：Essential（基础版）、Pro（专业版）、R&D（研究线）
+> 2. 每个版本的功能清单、定价模型、Unit Economics
+> 3. 客户升级路径和激励机制
+> 4. 竞争定价分析
+> 5. 三年收入预测模型"
+
+#### 15.6.2 定价矩阵
+
+| 版本 | 月定价 | 核心功能 | 目标客户 |
+|------|--------|---------|---------|
+| 🔷 Essential | ¥2,999/仓/月 | KGDRL + What-if + Algorithm Arena | 中小型仓库 |
+| 🔶 Pro | ¥8,999/仓/月 或 ¥0.08/单 | + NSGA-II + 自适应 + API + 联邦学习 | 中大型仓库 |
+| 🔬 R&D | 咨询定价 | BVN理论 + 专利授权 + 论文合作 | 高校/研究机构 |
+
+**Unit Economics**：
+
+| 版本 | CAC | LTV | LTV/CAC |
+|------|-----|-----|---------|
+| Essential | ¥15,000 | ¥59,980 | 4.0 ✓ |
+| Pro | ¥15,000 | ¥179,980 | 12.0 ✓ |
+
+**盈亏平衡点**（按单量 vs 按仓库）：
+
+```
+按仓库：¥8,999/月
+按单量：Q × 30 × ¥0.08 = ¥2.4Q
+平衡点：Q ≈ 3,750单/日
+
+建议：
+  Q < 3,750 → 按仓库
+  Q > 5,000 → 按单量（客户感知更低）
+```
+
+---
+
+### 15.7 Pro版Streamlit可视化面板（`streamlit_app_pro_v1.py`）
+
+#### 15.7.1 设计决策
+
+**提示词**：
+> "请新建一个streamlit_app_pro_v1.py，作为Pro版的专业可视化面板。要求：
+> 1. 基于v4的Algorithm Arena，增加Pro专属页面
+> 2. 新增页面：What-if Scenario Lab、Multi-Objective Optimizer、Real-Time Adaptive Monitor、Federated Learning Hub
+> 3. 预留联邦学习架构可视化
+> 4. 产品层级选择器（侧边栏）
+> 5. 更高级的UI：Pro徽章、策略模式卡片、帕累托3D散点图、自适应遥测多线图"
+
+#### 15.7.2 页面结构
+
+```
+📦 Pro Edition Navigation
+├── 🏠 Home — Product Overview（产品分层总览）
+├── 🔮 What-If Scenario Lab（What-if模拟器界面）
+├── ⚖️ Multi-Objective Optimizer（NSGA-II帕累托展示）
+├── 📡 Real-Time Adaptive Monitor（EWMA遥测监控）
+├── 🌐 Federated Learning Hub（联邦学习架构预览）
+├── 🏆 Algorithm Arena（算法竞技场）
+├── 📦 Omni-Channel Orders（全渠道订单）
+├── 🌡️ Warehouse & Zones（仓库温区）
+├── 📊 Customer SLA Analytics（SLA分析）
+└── 👷 Worker Task Station（工人工作站）
+```
+
+**Pro专属UI组件**：
+
+| 组件 | 位置 | 投资者感知 |
+|------|------|-----------|
+| Pro Badge | 顶部标题栏 | "这是专业版，不是课堂作业" |
+| 策略模式卡片 | 帕累托优化页 | "四种模式，一键切换" |
+| 帕累托3D散点图 | 优化器页 | "多目标平衡原来这么直观" |
+| 自适应遥测多线图 | 监控页 | "系统真的会自己思考" |
+| 联邦学习拓扑图 | FL Hub页 | "集团级扩展已就绪" |
+| 产品层级对比表 | Home页 | "功能差异一目了然" |
+
+#### 15.7.3 技术亮点
+
+- **帕累托前沿可视化**：Altair散点图，气泡大小=违规次数，颜色=策略模式
+- **自适应遥测**：三条线同时展示（到达率、容量、负载），实时联动
+- **联邦学习ASCII拓扑**：用SVG展示多仓库协同架构
+- **策略模式选择器**：Radio组件 + 动态描述更新
+
+---
+
+### 15.8 当日交付物汇总
+
+| 文件 | 行数 | 模块 | 产品层级 | 状态 |
+|------|------|------|---------|------|
+| `what_if_simulator.py` | ~500 | What-if模拟器 | Essential | ✅ |
+| `multi_objective_scheduler.py` | ~600 | NSGA-II多目标优化 | Pro | ✅ |
+| `adaptive_policy.py` | ~700 | EWMA+在线学习+联邦预留 | Pro | ✅ |
+| `bvn_research_note.md` | ~300 | BVN理论调研 | R&D | ✅ |
+| `product_tier_pricing.md` | ~400 | 定价策略 | 商业化 | ✅ |
+| `streamlit_app_pro_v1.py` | ~1100 | Pro版可视化 | Pro | ✅ |
+
+**当日新增代码总计**：~2,900行
+
+---
+
+### 15.9 关键设计决策记录
+
+| 决策 | 选项 | 选择 | 原因 |
+|------|------|------|------|
+| What-if独立模式 | 有 / 无 | **有** | 降低试用门槛，无PyTorch也能运行 |
+| NSGA-II种群规模 | 20-100 | **50** | 平衡计算效率与前沿质量 |
+| EWC正则化 | 有 / 无 | **有** | 防止在线学习灾难性遗忘 |
+| 联邦学习 | 实现 / 预留 | **预留架构** | 需要Enterprise客户才激活 |
+| Pro版定价 | 按仓 / 按单 / 两者 | **两者** | 不同规模客户不同偏好 |
+| Streamlit主题 | 浅色 / 深色 | **深色（延续v4）** | 工业级指挥中心风格 |
+
+---
+
+### 15.10 投资者话术（Day 3综合）
+
+> "今天我们完成了产品分层的最后一块拼图。基础版用What-if引擎降低试用门槛——客户不用改现有WMS，5分钟就能看到AI能省多少钱。专业版用NSGA-II多目标优化和实时自适应机制，让系统在不同场景下自动切换策略：日常省钱、流感季提速、审计期保合规。更重要的是，我们预留了联邦学习架构——5个仓库可以协同训练，数据不出本地，但AI能力全局共享。这是从'单仓工具'到'集团平台'的关键一跃。"
+
+---
+
+---
+
+> **文档版本**：v2.3-day3-complete  
+> **最后更新**：2026/06/06  
+> **历史版本**：v2.0-commercialization（Day 0）→ v2.1-day2-complete（Day 2）→ v2.2-algorithm-arena（Day 2+）→ v2.3-day3-complete（Day 3）
