@@ -2099,6 +2099,83 @@ E[f(X̃)] ≥ (1 - 1/e) · f(X*) ≈ 0.632 · OPT
 
 ---
 
-> **文档版本**：v2.3-day3-complete  
+---
+
+### 15.11 Day 3 后续迭代：Bug修复、功能完善与GitHub提交
+
+#### 15.11.1 新增可视化面板（Essential + Pro双版本）
+
+在Day 3初始交付物基础上，团队继续迭代了两个完整的Streamlit可视化面板：
+
+| 文件 | 定位 | 页数 | 核心功能 |
+|------|------|------|---------|
+| `streamlit_app_v5.py` | 🔷 Essential Edition v5 | 11页 | What-if真实调用 + Algorithm Arena + 标准Dashboard + 订阅ROI |
+| `streamlit_app_pro_v2.py` | 🔶 Professional Edition v2 | 15页 | v5全部 + NSGA-II + 自适应 + 在线学习 + 联邦学习 + 集团定价 |
+
+**v5页面结构**：Dashboard → Omni-Channel Orders → Warehouse & Zones → SLA Analytics → Task Workstation → Real-Time Simulation → Order Analytics → Scenario Simulator → Performance Benchmark → Operations Center → Plans & ROI Calculator
+
+**pro_v2页面结构**：Command Center → Omni-Channel Orders → Warehouse & Zones → SLA Analytics → Task Workstation → Real-Time Simulation → Order Analytics → Scenario Simulator → Strategy Optimizer → Live Adaptive Intelligence → AI Learning Engine → Multi-Warehouse Network → Performance Benchmark → Business Intelligence → Plans & Pricing
+
+**关键整合**：v5和pro_v2均完整继承了v4的6个Admin/Worker看板页面（Omni-Channel Orders、Warehouse & Zones、SLA Analytics、Task Workstation、Real-Time Simulation、Order Analytics），确保"之前测试成功的功能全部保留"。
+
+#### 15.11.2 Bug修复记录
+
+| Bug | 根因 | 修复方案 | 涉及文件 |
+|-----|------|---------|---------|
+| PyTorch导入失败：`name 'nn' is not defined` | PyTorch未安装时`nn`未定义，但类定义中使用了`nn.Module` | 在`except ImportError`块中创建`nn`/`torch`/`F`的最小化stub对象 | `kgdrl_core_v2.py`, `adaptive_policy.py` |
+| Altair嵌套condition报错 | Altair 5.x不支持`alt.condition()`嵌套调用 | 预计算Color列，用`alt.Color("Color:N", scale=None)`替代嵌套condition | `streamlit_app_v5.py`, `streamlit_app_pro_v2.py` |
+| `use_container_width`弃用警告 | Streamlit即将移除该参数（2025-12-31后） | 全局替换`use_container_width=True` → `width='stretch'` | `streamlit_app_v5.py` (12处), `streamlit_app_pro_v2.py` (15处) |
+| What-if缺少KGDRL策略 | 策略下拉框未包含KGDRL | 在Custom和Policy Showdown模板中添加"KGDRL"和"PPO" | `streamlit_app_v5.py`, `streamlit_app_pro_v2.py` |
+| 帕累托策略名称为中文 | `STRATEGY_PROFILES`中策略名称为中文 | 翻译为英文：Cost-First/Time-First/Compliance-First/Balanced Mode | `multi_objective_scheduler.py` |
+| pandas `freq="M"` FutureWarning | pandas弃用'M'频率标识符 | 替换为"ME"（Month End） | `streamlit_app_pro_v2.py` |
+
+#### 15.11.3 产品分层策略调整
+
+初始Day 3计划将`streamlit_app_pro_v1.py`作为Pro版展示面板。经测试后调整为双版本策略：
+
+- **Essential版**：`streamlit_app_v5.py` — 面向试用客户，蓝色主题，功能精简
+- **Pro版**：`streamlit_app_pro_v2.py` — 面向付费客户，琥珀色主题，功能完整
+
+**设计决策**：两个版本并行维护而非覆盖，便于A/B测试和差异化演示。
+
+#### 15.11.4 GitHub提交
+
+```bash
+# 提交信息
+Day 3 Delivery: Pro Edition modules + What-if + Pareto + Adaptive + BVN Research + Pricing + Streamlit v5/pro_v2
+
+# 提交统计
+14 files changed, 8603 insertions(+)
+
+# 提交文件
+新文件：what_if_simulator.py, multi_objective_scheduler.py, adaptive_policy.py,
+       bvn_research_note.md, product_tier_pricing.md, streamlit_app_pro_v1.py,
+       streamlit_app_v5.py, streamlit_app_pro_v2.py, streamlit_app_v2.py
+修改文件：AI_Tools_Usage_Review.md, kgdrl_core_v2.py
+其他：Commercial Analysis/, Notebook for Coding.ipynb/md
+
+# 排除文件
+.env（敏感环境变量，未提交）
+```
+
+#### 15.11.5 关键设计决策记录（后续迭代）
+
+| 决策 | 选项 | 选择 | 原因 |
+|------|------|------|------|
+| PyTorch stub | 最小stub / 完全移除PyTorch依赖 | **最小stub** | 保持代码结构完整，PyTorch安装后立即生效 |
+| Altair颜色逻辑 | 嵌套condition / 预计算Color列 | **预计算Color列** | Altair 5.x不支持嵌套condition，预计算更稳健 |
+| v4页面整合 | 复制代码 / 引用v4模块 | **复制代码到v5/pro_v2** | 避免运行时依赖，确保单文件可运行 |
+| 双版本主题 | 统一主题 / 差异化主题 | **差异化主题** | Essential蓝色（信任感）vs Pro琥珀色（价值感） |
+| GitHub提交范围 | 仅Day 3文件 / 包含所有未跟踪文件 | **包含所有未跟踪文件** | 清理工作区，确保仓库完整 |
+
+#### 15.11.6 投资者话术（Day 3完整版）
+
+> "今天我们从'单文件演示'升级为'双版本产品矩阵'。Essential版让客户零门槛试用What-if引擎——5分钟就能看到AI能省多少钱。Pro版则展示企业级韧性：NSGA-II多目标优化、实时自适应机制、在线学习防遗忘、联邦学习多仓协同。更重要的是，两个版本都保留了v4测试成功的全部功能——从管理者看板到工人工作站，从全渠道订单到实时仿真，一个不落。这不是课堂作业，这是投资者就绪的商业产品。"
+
+---
+
+---
+
+> **文档版本**：v2.4-day3-final  
 > **最后更新**：2026/06/06  
-> **历史版本**：v2.0-commercialization（Day 0）→ v2.1-day2-complete（Day 2）→ v2.2-algorithm-arena（Day 2+）→ v2.3-day3-complete（Day 3）
+> **历史版本**：v2.0-commercialization（Day 0）→ v2.1-day2-complete（Day 2）→ v2.2-algorithm-arena（Day 2+）→ v2.3-day3-complete（Day 3初始交付）→ v2.4-day3-final（Day 3后续迭代+Bug修复+GitHub提交）
