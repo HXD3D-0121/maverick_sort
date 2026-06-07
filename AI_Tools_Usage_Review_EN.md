@@ -1907,6 +1907,328 @@ Others: Commercial Analysis/, Notebook for Coding.ipynb/md
 
 ---
 
-> **Document Version**: v2.4-day3-final  
-> **Last Updated**: 2026/06/06  
-> **Historical Versions**: v1.0-course-delivery (through 2026/06/02) → v2.0-commercialization (Day 0, 2026/06/04) → v2.1-day2-complete → v2.2-algorithm-arena → v2.3-day3-complete → v2.4-day3-final (Day 3 follow-up iterations + bug fixes + GitHub submission)
+## 14. Day 4: Modular Architecture Refactor, Data Upload Feasibility Analysis, and 3D Dashboard Optimization
+
+### 14.1 Day 4 Core Objectives
+
+Day 4 work centered on three fundamental problems:
+
+1. **Maintainability Crisis**: `streamlit_app_pro_v2.py` (69,751 bytes) approached the single-file limit; any modification carried full regression risk.
+2. **Generalization Bottleneck**: All data was mock-generated, preventing prospects from "plugging in their own numbers" to validate system value.
+3. **3D Visualization Semantic Gap**: Existing 3D charts (Warehouse Zone Cube, Order Flow Galaxy) displayed operational data but did not answer strategic questions from CFOs or investors.
+
+**Day 4 Deliverables**:
+- Split the Pro monolith into a modular architecture (`page_modules/`)
+- Complete a data upload feasibility analysis with technical design documents
+- Propose a strategic 3D dashboard optimization plan
+- Deliver Essential slim v6, modular Pro v3/v4
+
+---
+
+### 14.2 Modular Architecture Refactor
+
+#### 14.2.1 Refactor Motivation
+
+`streamlit_app_pro_v2.py` reached approximately 70 KB (~1,700 lines) by the end of Day 3, containing rendering logic, CSS, data generators, and algorithm wrappers for all 22 pages. As page count grew, the file faced the following issues:
+
+| Issue | Impact |
+|-------|--------|
+| Any page change required retesting all 22 pages | High regression cost |
+| New developers must read 1,700 lines to understand structure | High onboarding barrier |
+| CSS, data generation, and page logic tightly coupled | Cannot swap themes or data sources independently |
+| Git diffs hard to attribute to specific pages | Code review friction |
+| Streamlit Cloud single-file deployment limits | Hot reload slows beyond a threshold |
+
+**Refactor Decision**: Split `streamlit_app_pro_v2.py` into "entry file + 7 independent page modules."
+
+#### 14.2.2 Module Partitioning and Responsibilities
+
+```
+page_modules/
+├── __init__.py           (package marker, 3 lines)
+├── shared.py             (shared layer: CSS, data generators, session state, upload routers, validators — 638 lines)
+├── orders_inventory.py   (orders & inventory: omni-channel orders, order analytics, warehouse zones — 342 lines)
+├── operations.py         (operations monitoring: ops dashboard, SLA analytics, task workstation, alert center — 314 lines)
+├── scheduling.py         (smart scheduling: scenario simulator, strategy optimizer, live adaptive — 383 lines)
+├── tech_showcase.py      (tech deep dive: KGDRL framework, AI learning engine, multi-warehouse network, patent wall — 353 lines)
+├── business.py           (business value: ROI calculator, TCO analysis, competitor radar, pricing plans — 417 lines)
+└── demo.py               (demo & simulation: real-time simulation, demo mode — 150 lines)
+```
+
+**Total Code Volume**: 2,600 lines (modules) + 402 lines (v3 entry) + 936 lines (v4 entry) + 349 lines (v6 entry) = **4,227 lines**
+
+**Design Principles**:
+- **Independently removable**: Each module's import can be commented out in the entry file without affecting other modules.
+- **Zero cross-module dependencies**: All modules depend only on `shared.py`; no inter-module imports.
+- **Unified CSS entry**: `shared.PRO_CSS` injects global styles once; new pages automatically inherit them.
+- **English UI**: All module UI text is in English for international deployment.
+
+#### 14.2.3 Entry File Evolution
+
+| File | Positioning | Lines | Pages | New Features |
+|------|-------------|-------|-------|--------------|
+| `streamlit_app_pro_v3.py` | Modular Pro v3 | 402 | 22 | First modular split; pure refactor, no new features |
+| `streamlit_app_pro_v4.py` | Data-aware Pro v4 | 936 | 23 | +Data Hub upload center + Data Center page + Live Data indicator |
+| `streamlit_app_v6.py` | Slim Essential v6 | 349 | 17 | Hides Pro-exclusive modules; keeps core ops pages |
+
+#### 14.2.4 Key Decisions During Refactoring
+
+**Decision 1: Keep v2 as backup?**
+- Option A: Delete v2; modular is the sole baseline.
+- Option B: Keep v2 alongside the modular version.
+- **Choice: B** — v2 remains as a "single-file backup" for rapid fallback if the modular version encounters issues.
+
+**Decision 2: Module granularity**
+- Option A: One file per page (22 files).
+- Option B: Aggregate by functional domain (7 files).
+- **Choice: B** — 7 files strike a balance between maintainability and file count; each file is 300–600 lines, keeping reading burden manageable.
+
+**Decision 3: Where to place CSS?**
+- Option A: Each module carries its own CSS.
+- Option B: Unified in `shared.py`.
+- **Choice: B** — Avoid style fragmentation; theme switching requires changing only one place.
+
+---
+
+### 14.3 Data Upload Feasibility Analysis
+
+#### 14.3.1 Core Question
+
+> "Does adding upload interfaces materially improve the project's commercial viability and generalizability?"
+
+**Answer: Yes — with tiered prioritization.**
+
+#### 14.3.2 Current Data Architecture Audit
+
+Prior to Day 4, all 20+ pages drew from four source categories:
+
+| Source Type | Representative Function/File | Affected Pages |
+|-------------|------------------------------|----------------|
+| Deterministic mock generators | `generate_orders_basic()` etc. | Omni-Channel Orders, Warehouse & Zones, SLA Analytics, etc. |
+| Pre-computed JSON assets | `load_all_json_data()` | Order Analytics |
+| Hard-coded static data | `arena_df`, competitor matrix | Algorithm Arena, Competitor Radar |
+| Real algorithm modules + synthetic input | `what_if_simulator.py` | Scenario Simulator, Strategy Optimizer |
+
+#### 14.3.3 P0/P1/P2 Page Tiers
+
+| Priority | Page Count | Representative Pages | Real Data Needed? |
+|----------|------------|----------------------|-------------------|
+| **P0** — Core operations (pilot must-have) | 6 | Omni-Channel Orders, Warehouse & Zones, Operations Dashboard, SLA Analytics, Task Workstation, Order Analytics | **Required** |
+| **P1** — Algorithm input (strongly enhances value) | 4 | Scenario Simulator, Strategy Optimizer, Live Adaptive Intelligence, Alert Center | **Strongly recommended** |
+| **P2** — Static/showcase (low return) | 14 | Algorithm Arena, ROI Calculator, Patent Wall, Plans & Pricing, etc. | Not needed |
+
+**Key Insight**: Only 10 pages (P0+P1) need upload capability, yet they cover 80% of commercial value.
+
+#### 14.3.4 Recommended Data Schema Design
+
+The document defines 6 core schemas following the principles of "CSV-first, minimal required columns, auto-inference, local-only processing":
+
+| Schema | Required Columns | Purpose | Example Scenario |
+|--------|-----------------|---------|-----------------|
+| `orders.csv` | 6 | Order master data | Client type, temperature zone, SKU count, deadline |
+| `inventory.csv` | 4 | SKU stock levels | Near-expiry alerts, zone distribution |
+| `tasks.csv` | 5 | Picking tasks | Task assignment, path optimization |
+| `workers.csv` | 2 | Labor roster | Zone staffing configuration |
+| `sla_history.csv` | 7 | Fulfillment history | Baseline performance comparison |
+| `alerts.csv` | 5 | Exception alerts | Temperature deviation, timeout warnings |
+
+**Validation Engine Example**:
+```python
+def validate_orders(df: pd.DataFrame) -> dict:
+    errors = []
+    required = ["order_id", "client_type", "sku_count", "temperature", "deadline_hours"]
+    missing = [c for c in required if c not in df.columns]
+    if missing:
+        errors.append(f"Missing required columns: {', '.join(missing)}")
+    invalid_temps = set(df["temperature"].unique()) - set(TEMP_ZONES)
+    if invalid_temps:
+        errors.append(f"Invalid temperature values: {invalid_temps}")
+    return {"valid": len(errors) == 0, "errors": errors, "warnings": warnings}
+```
+
+#### 14.3.5 Upload Interface Architecture
+
+```
+Sidebar (global toggle)
+├── Data Source: [● Demo Data  ○ Upload My Data]
+│   └── If Upload selected:
+│       ├── Upload orders.csv
+│       ├── Upload inventory.csv
+│       ├── Upload tasks.csv (optional)
+│       └── Upload sla_history.csv
+│       └── [Validate Data] → Validation Report
+│
+Session State
+├── data_source: "mock" | "upload"
+├── uploaded_orders: DataFrame | None
+├── uploaded_inventory: DataFrame | None
+└── validation_report: dict
+│
+Page Renderers (conditional routing)
+IF data_source == "upload" AND uploaded_orders is not None:
+    render_with_uploaded_data()
+ELSE:
+    render_with_mock_data()
+```
+
+**Privacy & Compliance Design**:
+- Data stored only in `st.session_state`; disappears when browser tab closes.
+- No upload to any cloud service (Streamlit Cloud, Hugging Face, etc.).
+- Files are not written to disk.
+- Validation logs record row numbers only, not order contents.
+
+#### 14.3.6 Implementation Roadmap (4 Days)
+
+| Phase | Time | Content |
+|-------|------|---------|
+| Phase 1: Foundation | Day 1 | Sidebar upload panel + `shared.py` router functions + validation engine + P0 page integration |
+| Phase 2: Core Pages | Day 2 | Remaining P0 pages + Live Data indicator + CSV template downloads |
+| Phase 3: Algorithm Integration | Day 3 | Connect What-if / NSGA-II / adaptive policy to uploaded data |
+| Phase 4: Polish | Day 4 | Per-page fallback banners + Data Provenance panel + enriched CSV download |
+
+---
+
+### 14.4 3D Dashboard Optimization Plan
+
+#### 14.4.1 Current Problem Diagnosis
+
+| Symptom | Root Cause | Impact |
+|---------|------------|--------|
+| Warehouse Zone Cube rotates correctly | `setInterval` on `plotly-graph-div[0]` works | — |
+| Order Flow Galaxy remains static | `setInterval` on `plotly-graph-div[1]` may fail due to iframe isolation | Inconsistent visual experience |
+| No user control | Animation starts on page load | Interrupts reading of metric cards below |
+| Y-axis = "Warehouse" (constant) | Wastes a dimension | 3D advantage underutilized |
+| 150 scatter points overlap in Y:1–5, Z:2–24 corridor | Data distribution too dense | Patterns indistinguishable |
+
+#### 14.4.2 Optimization Strategy
+
+> **"Every 3D axis must answer an investor or operations director question."**
+
+| Stakeholder | What They Ask | 3D Axis Mapping |
+|-------------|---------------|-----------------|
+| CFO | "Where do we make/lose money? When do we break even?" | Z-axis = Cash Flow / Cumulative ROI |
+| COO | "Which shift/zone is most efficient? Where are bottlenecks?" | X/Y axes = Time × Zone |
+| Investor | "What's the downside? What's the upside?" | Y-axis = Scenario (Conservative → Optimistic) |
+| Warehouse Manager | "When should I allocate more pickers?" | Z-axis = Workload Density |
+
+#### 14.4.3 Proposed New 3D Charts
+
+**Chart 1: Operational Profit Mountain**
+- **Replaces**: Warehouse Zone Cube
+- **Concept**: 3D surface showing "where and when profit is generated"
+- **X-axis**: Time of Day (0h–24h, 4-hour bins)
+- **Y-axis**: Temperature Zone (Ambient → Deep Frozen)
+- **Z-axis**: Net Operational Value (CNY/hour) = (Orders Processed × Avg Margin) − (Labor Cost) − (Temp Violation Penalties) − (Expired Inventory Write-off)
+- **Color scale**: Deep red (loss) → yellow (break-even) → green (profit)
+
+**Chart 2: Investment Trajectory Ribbon**
+- **Replaces**: Order Flow Galaxy
+- **Concept**: 3D ribbon showing "cumulative cash flow over 5 years under 4 scenarios"
+- **X-axis**: Time (Months 0–60)
+- **Y-axis**: Scenario (1=Baseline without Sunergy, 2=Conservative 15%, 3=Neutral 25%, 4=Optimistic 35%)
+- **Z-axis**: Cumulative Cash Flow (CNY)
+- **Key annotations**: Break-even plane (Z=0) + first positive-crossing marker
+
+#### 14.4.4 Animation Control Design
+
+| State | Behavior |
+|-------|----------|
+| Initial Load | Static (camera fixed at optimal angle) |
+| Hover | Standard Plotly tooltip |
+| Click Play | Smooth 360° orbit rotation (15 sec/revolution) |
+| Click Pause | Freeze at current angle |
+| Drag | Manual orbit overrides auto-rotation |
+
+**Implementation Approach**: Use Plotly native `updatemenus` with pre-computed frame sequences, replacing fragile JS `setInterval` injection.
+
+```python
+fig.update_layout(
+    updatemenus=[dict(
+        type="buttons",
+        buttons=[
+            dict(label="▶ Play", method="animate",
+                 args=[None, {"frame": {"duration": 50, "redraw": False}}]),
+            dict(label="⏸ Pause", method="animate",
+                 args=[[None], {"frame": {"duration": 0, "redraw": False}}]),
+        ]
+    )]
+)
+```
+
+#### 14.4.5 Implementation Phases
+
+| Phase | Effort | Content |
+|-------|--------|---------|
+| Phase A | Low | Remove fragile JS injection; add Play/Pause buttons; static default |
+| Phase B | Medium | Operational Profit Mountain (Surface plot) |
+| Phase C | Medium | Investment Trajectory Ribbon (Scatter3d lines) |
+| Phase D | Low | Responsive height, loading spinner, reset-view button |
+
+**Estimated Total Effort: 1 day**
+
+---
+
+### 14.5 Day 4 Deliverable Inventory
+
+| File | Type | Scale | Description |
+|------|------|-------|-------------|
+| `page_modules/shared.py` | Module | 638 lines | CSS, data generators, session state, upload routers, validators |
+| `page_modules/orders_inventory.py` | Module | 342 lines | Omni-channel orders, order analytics, warehouse zones |
+| `page_modules/operations.py` | Module | 314 lines | Operations dashboard, SLA analytics, task workstation, alert center |
+| `page_modules/scheduling.py` | Module | 383 lines | Scenario simulator, strategy optimizer, live adaptive |
+| `page_modules/tech_showcase.py` | Module | 353 lines | KGDRL framework, AI learning engine, multi-warehouse network, patent wall |
+| `page_modules/business.py` | Module | 417 lines | ROI calculator, TCO analysis, competitor radar, pricing plans |
+| `page_modules/demo.py` | Module | 150 lines | Real-time simulation, demo mode |
+| `streamlit_app_pro_v3.py` | Entry | 402 lines | Modular Pro v3 (first split, no new features) |
+| `streamlit_app_pro_v4.py` | Entry | 936 lines | Data-aware Pro v4 (+Data Hub + Data Center + Live Data) |
+| `streamlit_app_v6.py` | Entry | 349 lines | Slim Essential v6 (hides Pro-exclusive pages; keeps 17 pages) |
+| `DATA_UPLOAD_FEASIBILITY_REPORT.md` | Document | 467 lines | Data upload feasibility analysis report |
+| `3D_DASHBOARD_OPTIMIZATION_PLAN.md` | Document | 242 lines | 3D dashboard optimization plan |
+
+**New code volume**: ~4,227 lines (Python) + 709 lines (Markdown) = **4,936 lines**
+
+---
+
+### 14.6 Day 4 Key Design Decision Records
+
+| Decision | Options | Choice | Rationale |
+|----------|---------|--------|-----------|
+| Single file vs. modular | Keep v2 monolith / Full modular | **Dual-track** | v2 as backup; modular as long-term maintenance baseline |
+| Module granularity | One file per page / Aggregate by domain | **7 functional domains** | 300–600 lines/file; reading and maintenance burden balanced |
+| CSS placement | Per-module / Unified in shared.py | **Unified shared.py** | Avoid fragmentation; theme switching needs one change |
+| Data upload scope | All 22 pages / Only P0+P1 (10 pages) | **P0+P1** | 80% commercial value at 40% implementation cost |
+| Upload format | JSON / Excel / CSV | **CSV-first** | Pharma IT comfortable with Excel exports; Pandas native support |
+| 3D animation approach | Custom JS injection / Plotly native updatemenus | **Plotly native** | Reliable across iframes; no JS injection needed |
+| Essential v6 positioning | New build / Trim from Pro | **Trim from Pro** | Reuses page_modules; only hides Pro-exclusive entries |
+
+---
+
+### 14.7 GitHub Submission (Day 4)
+
+```bash
+# Commit message
+Day 4: Modular refactor + Data Upload Feasibility + 3D Optimization Plan + Pro v3/v4 + Essential v6
+
+# Commit statistics
+New files: page_modules/__init__.py, page_modules/shared.py, page_modules/orders_inventory.py,
+           page_modules/operations.py, page_modules/scheduling.py, page_modules/tech_showcase.py,
+           page_modules/business.py, page_modules/demo.py,
+           streamlit_app_pro_v3.py, streamlit_app_pro_v4.py, streamlit_app_v6.py,
+           DATA_UPLOAD_FEASIBILITY_REPORT.md, 3D_DASHBOARD_OPTIMIZATION_PLAN.md
+Modified: Notebook for coding.md (added Streamlit Cloud deployment links)
+
+# Excluded
+.env (sensitive environment variables)
+```
+
+---
+
+### 14.8 Investor Narrative (Full Day 4 Version)
+
+> "Today we upgraded from 'one giant Python file' to 'a modular product you can disassemble.' The `page_modules/` directory lets every developer work on their own page module independently, without stepping on each other. The Data Upload Feasibility Report proves we can do more than demos — we've mapped out the complete path for clients to plug in their own data, from CSV templates to validation engines to privacy compliance, all covered. The 3D Optimization Plan elevates the Command Center from 'operational data display' to 'strategic decision support' — the CFO sees a profit mountain, investors see a payback trajectory. Pro v4 is a data-aware enterprise-grade platform; Essential v6 is the lightweight entry point where every customer can try before they buy. This isn't incremental improvement; this is a step change in product engineering maturity."
+
+---
+
+> **Document Version**: v2.5-day4-final  
+> **Last Updated**: 2026/06/07  
+> **Historical Versions**: v1.0-course-delivery (through 2026/06/02) → v2.0-commercialization (Day 0, 2026/06/04) → v2.1-day2-complete → v2.2-algorithm-arena → v2.3-day3-complete → v2.4-day3-final (Day 3 follow-up iterations + bug fixes + GitHub submission) → **v2.5-day4-final (Day 4 modular refactor + data upload feasibility + 3D optimization plan)**
