@@ -481,38 +481,115 @@ def set_data_source(mode: str):
 
 # --- Data routers: each returns DataFrame (or compatible structure) ---
 
+def _standardize_df_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Convert snake_case CSV column names to Title Case with spaces."""
+    if df is None or df.empty:
+        return df
+    rename_map = {}
+    for col in df.columns:
+        new_col = col.replace('_', ' ').title()
+        special = {
+            'Sku': 'SKU',
+            'Order Id': 'Order ID',
+            'Task Id': 'Task ID',
+            'Alert Id': 'Alert ID',
+            'Est Duration Min': 'Est. Duration (min)',
+        }
+        new_col = special.get(new_col, new_col)
+        rename_map[col] = new_col
+    return df.rename(columns=rename_map)
+
+
+def _map_time_window(val):
+    """Map full time-window labels to shortened filter values."""
+    val_str = str(val)
+    if 'Morning' in val_str or 'Early' in val_str:
+        return 'Morning Peak'
+    elif 'Afternoon' in val_str:
+        return 'Afternoon'
+    else:
+        return 'Night Peak'
+
+
 def get_orders_data(n: int = 100, seed=None) -> pd.DataFrame:
     """Route to uploaded orders or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_orders") is not None:
-        return st.session_state.uploaded_orders
+        df = st.session_state.uploaded_orders.copy()
+        df = _standardize_df_columns(df)
+        if 'Time Window' in df.columns:
+            df['Time Window'] = df['Time Window'].apply(_map_time_window)
+        return df
     return generate_order_log(n=n, seed=seed)
 
 
 def get_inventory_data(seed=None) -> pd.DataFrame:
     """Route to uploaded inventory or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_inventory") is not None:
-        return st.session_state.uploaded_inventory
+        df = st.session_state.uploaded_inventory.copy()
+        df = _standardize_df_columns(df)
+        # Derive Days Left and Risk Level from Expiry Date
+        if 'Expiry Date' in df.columns:
+            df['Expiry Date'] = pd.to_datetime(df['Expiry Date'], errors='coerce')
+            today = pd.Timestamp.now().normalize()
+            df['Days Left'] = (df['Expiry Date'] - today).dt.days
+            df['Days Left'] = df['Days Left'].fillna(0).astype(int)
+            def _risk(days):
+                if days <= 30:
+                    return 'Critical'
+                elif days <= 60:
+                    return 'Warning'
+                elif days <= 90:
+                    return 'Notice'
+                return 'Normal'
+            df['Risk Level'] = df['Days Left'].apply(_risk)
+        # Rename Name to SKU if needed
+        if 'Name' in df.columns and 'SKU' not in df.columns:
+            df = df.rename(columns={'Name': 'SKU'})
+        return df
     return generate_inventory_data(seed=seed)
 
 
 def get_tasks_data(n: int = 30) -> pd.DataFrame:
     """Route to uploaded tasks or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_tasks") is not None:
-        return st.session_state.uploaded_tasks
+        df = st.session_state.uploaded_tasks.copy()
+        df = _standardize_df_columns(df)
+        # Derive Optimized Path if missing
+        if 'Optimized Path' not in df.columns:
+            def _make_path(row):
+                zone = row.get('Source Zone', '')
+                checklist = str(row.get('SKU Checklist', ''))
+                items = checklist.replace(';', ', ')
+                return f"Path: {zone} → Pick [{items}] → Pack → Dispatch"
+            df['Optimized Path'] = df.apply(_make_path, axis=1)
+        return df
     return generate_picking_tasks(n=n)
 
 
 def get_labor_data() -> pd.DataFrame:
     """Route to uploaded workers or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_workers") is not None:
-        return st.session_state.uploaded_workers
+        df = st.session_state.uploaded_workers.copy()
+        df = _standardize_df_columns(df)
+        # If workers list uploaded, aggregate to labor stats by zone
+        if 'Worker ID' in df.columns:
+            agg = df.groupby('Zone').size().reset_index(name='Total Headcount')
+            agg['Full-Time Staff'] = agg['Total Headcount']
+            agg['Temporary Staff'] = 0
+            agg['Peak Season Cap'] = (agg['Total Headcount'] * 2.5).astype(int)
+            agg['SKUs/Hour/Person'] = round(np.random.uniform(45, 75), 1)
+            agg['Shift'] = 'Morning'
+            return agg
+        return df
     return generate_labor_data()
 
 
 def get_alert_data(n: int = 12) -> pd.DataFrame:
     """Route to uploaded alerts or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_alerts") is not None:
-        return st.session_state.uploaded_alerts
+        df = st.session_state.uploaded_alerts.copy()
+        df = _standardize_df_columns(df)
+        return df
     return generate_alert_feed(n=n)
 
 
