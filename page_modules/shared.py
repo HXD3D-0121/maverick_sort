@@ -490,6 +490,8 @@ def _standardize_df_columns(df: pd.DataFrame) -> pd.DataFrame:
         new_col = col.replace('_', ' ').title()
         special = {
             'Sku': 'SKU',
+            'Sku Count': 'SKU Count',
+            'Sku Checklist': 'SKU Checklist',
             'Order Id': 'Order ID',
             'Task Id': 'Task ID',
             'Alert Id': 'Alert ID',
