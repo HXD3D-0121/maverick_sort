@@ -416,9 +416,8 @@ with st.sidebar:
                 if st.button(q, key=f"cq_pro5_{i}", width='stretch'):
                     st.session_state.copilot_history.append(("user", q))
                     if copilot_ready:
-                        _page_key = locals().get("selected_page_key", "Unknown")
-                        page_ctx = f"Current page: {_page_key}"
-                        ans = hf["copilot"].ask_with_context(q, page_name=_page_key, page_context=page_ctx, lang="en")
+                        # Quick questions should use FAQ cache, not context-aware LLM
+                        ans = hf["copilot"].ask_faq(q, lang="en")
                     else:
                         ans = f"🤖 Copilot is offline.\n\n**Reason:** {hf.get('msg', 'Unknown')}\n\nPlease install dependencies (`pip install -r requirements.txt`) and configure HF_TOKEN."
                     st.session_state.copilot_history.append(("ai", ans))

@@ -44,12 +44,50 @@ FAQ_DATABASE_EN = {
 
 
 def _fuzzy_match(question: str, lang: str) -> Optional[str]:
-    """Simple fuzzy match against FAQ database."""
+    """Fuzzy match against FAQ database with keyword fallback."""
     db = FAQ_DATABASE_ZH if lang == "zh" else FAQ_DATABASE_EN
-    q_lower = question.lower().strip()
+    q_clean = question.lower().strip().rstrip("?").strip()
+
+    # 1. Direct substring match (relaxed: ignore trailing ?)
     for key, answer in db.items():
-        if key.lower() in q_lower or q_lower in key.lower():
+        k_clean = key.lower().rstrip("?").strip()
+        if k_clean in q_clean or q_clean in k_clean:
             return answer
+
+    # 2. Keyword trigger map — handles short/variant inputs like "Explain NSGA-II" or "Adaptive policy?"
+    keyword_map = {
+        "zh": {
+            "nsga": "什么是NSGA-II",
+            "kgdrl": "什么是KGDRL",
+            "ppo": "KGDRL和PPO有什么区别",
+            "tzu": "TZU和FCFS有什么区别",
+            "fcfs": "TZU和FCFS有什么区别",
+            "波次": "什么是波次分配",
+            "wave": "什么是波次分配",
+            "温度": "系统支持哪些温度区",
+            "temperature": "系统支持哪些温度区",
+            "上传": "如何上传自己的数据",
+            "upload": "如何上传自己的数据",
+            "自适应": "什么是自适应策略",
+            "adaptive": "什么是自适应策略",
+        },
+        "en": {
+            "nsga": "What is NSGA-II",
+            "kgdrl": "What is KGDRL",
+            "ppo": "What is the difference between KGDRL and PPO",
+            "tzu": "What is the difference between TZU and FCFS",
+            "fcfs": "What is the difference between TZU and FCFS",
+            "wave": "What is wave allocation",
+            "temperature": "What temperature zones are supported",
+            "upload": "How do I upload my own data",
+            "adaptive": "What is adaptive policy",
+        },
+    }
+    kw_map = keyword_map.get(lang, keyword_map["en"])
+    for kw, db_key in kw_map.items():
+        if kw in q_clean and db_key in db:
+            return db[db_key]
+
     return None
 
 
