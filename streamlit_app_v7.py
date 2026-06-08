@@ -53,12 +53,10 @@ from page_modules.operations import (
     render_alert_center,
 )
 from page_modules.scheduling import (
-    render_algorithm_arena,
     render_scenario_lab,
 )
 from page_modules.tech_showcase import (
     render_kgdrl_framework,
-    render_patent_wall,
     render_hf_copilot,
 )
 from page_modules.business import (
@@ -95,7 +93,6 @@ NAV_STRUCTURE = {
         ("Warehouse & Zones", "warehouse_zones"),
     ],
     "⚙️ Smart Scheduling": [
-        ("Algorithm Arena", "algo_arena"),
         ("Scenario Simulator", "scenario_sim"),
     ],
     "📊 Operations": [
@@ -107,7 +104,6 @@ NAV_STRUCTURE = {
     "🔬 Tech Deep Dive": [
         ("KGDRL Framework", "kgdrl_framework"),
         ("🤖 AI Copilot", "hf_copilot"),
-        ("Patent & Research Wall", "patent_wall"),
     ],
     "💼 Business Value": [
         ("ROI Calculator", "roi_calc"),
@@ -391,8 +387,6 @@ elif selected_page_key == "warehouse_zones":
     render_warehouse_zones()
 
 # --- Smart Scheduling ---
-elif selected_page_key == "algo_arena":
-    render_algorithm_arena()
 elif selected_page_key == "scenario_sim":
     render_scenario_lab()
 
@@ -411,8 +405,6 @@ elif selected_page_key == "kgdrl_framework":
     render_kgdrl_framework()
 elif selected_page_key == "hf_copilot":
     render_hf_copilot()
-elif selected_page_key == "patent_wall":
-    render_patent_wall()
 
 # --- Business Value ---
 elif selected_page_key == "roi_calc":
