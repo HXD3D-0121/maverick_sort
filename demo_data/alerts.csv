@@ -1,0 +1,16 @@
+alert_id,type,severity,message,timestamp,zone,acknowledged
+ALT-001,Temperature Deviation,critical,Cold chain threshold exceeded in Zone C,14:30:00,Zone C,False
+ALT-002,Capacity Overload,warning,Wave #42 exceeded capacity limit by 15%,10:15:00,Zone B,False
+ALT-003,Deadline Risk,critical,12 urgent orders at risk of missing 14:00 deadline,13:45:00,Zone A,False
+ALT-004,Inefficient Batch,warning,Wave #38 contains only 3 orders - recommend merge,09:20:00,Zone D,True
+ALT-005,Too Many Zones,info,Wave #45 mixes 5 temperature zones - GSP risk,11:30:00,Zone E,False
+ALT-006,Low Stock,warning,Insulin Glargine stock below safety threshold (120 units),08:00:00,Zone B,False
+ALT-007,Temperature Deviation,critical,Frozen zone temperature rose above -18C for 3 minutes,16:20:00,Zone E,False
+ALT-008,Capacity Overload,warning,Picking queue backlog reached 89 tasks,15:10:00,Zone C,True
+ALT-009,Deadline Risk,critical,Hospital batch delivery window closing in 45 minutes,17:30:00,Zone A,False
+ALT-010,Inefficient Batch,info,Zone D batch covers 7 regions - high dispatch cost,12:00:00,Zone D,True
+ALT-011,Too Many Zones,warning,Cross-zone picking path exceeds 800 meters,14:45:00,Zone B,False
+ALT-012,Low Stock,warning,Amoxicillin reorder point triggered,07:15:00,Zone A,False
+ALT-013,Temperature Deviation,critical,Cool zone compressor failure detected in Zone B,18:00:00,Zone B,False
+ALT-014,Capacity Overload,info,Evening peak wave capacity at 95% utilization,19:30:00,Zone C,True
+ALT-015,Deadline Risk,warning,3 chain pharmacy orders delayed by traffic conditions,20:45:00,Zone D,False

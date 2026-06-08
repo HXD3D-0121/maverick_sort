@@ -1,0 +1,11 @@
+worker_id,zone,shift,employment_type
+Worker-01,Zone A,Morning (6-14h),Full-Time
+Worker-02,Zone B,Morning (6-14h),Full-Time
+Worker-03,Zone C,Afternoon (14-22h),Full-Time
+Worker-04,Zone D,Afternoon (14-22h),Temporary
+Worker-05,Zone E,Night (22-6h),Full-Time
+Worker-06,Zone A,Morning (6-14h),Temporary
+Worker-07,Zone B,Afternoon (14-22h),Full-Time
+Worker-08,Zone C,Morning (6-14h),Peak Season
+Worker-09,Zone D,Afternoon (14-22h),Temporary
+Worker-10,Zone E,Night (22-6h),Full-Time
