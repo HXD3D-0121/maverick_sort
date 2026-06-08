@@ -424,12 +424,7 @@ with st.sidebar:
                     st.session_state.copilot_history.append(("ai", ans))
                     st.rerun()
 
-        for role, msg in st.session_state.copilot_history[-6:]:
-            if role == "user":
-                st.markdown(f'<div style="text-align:right; font-size:0.8rem; color:#3b82f6; margin:0.3rem 0;">💬 {msg}</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<div style="background:#111827; border-radius:6px; padding:0.5rem; font-size:0.8rem; color:#e2e8f0; line-height:1.5; margin:0.3rem 0;">🤖 {msg}</div>', unsafe_allow_html=True)
-
+        # Input box placed ABOVE chat history so replies grow downward
         user_q = st.text_input("Ask anything...", key="copilot_input_pro5", label_visibility="collapsed")
         if user_q:
             st.session_state.copilot_history.append(("user", user_q))
@@ -440,7 +435,17 @@ with st.sidebar:
             else:
                 ans = f"🤖 Copilot is offline.\n\n**Reason:** {hf.get('msg', 'Unknown')}\n\nPlease install dependencies (`pip install -r requirements.txt`) and configure HF_TOKEN."
             st.session_state.copilot_history.append(("ai", ans))
+            # Clear input to prevent rerun loop / duplicate replies
+            if "copilot_input_pro5" in st.session_state:
+                del st.session_state["copilot_input_pro5"]
             st.rerun()
+
+        # Chat history rendered BELOW input so new replies appear underneath
+        for role, msg in st.session_state.copilot_history[-6:]:
+            if role == "user":
+                st.markdown(f'<div style="text-align:right; font-size:0.8rem; color:#3b82f6; margin:0.3rem 0;">💬 {msg}</div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div style="background:#111827; border-radius:6px; padding:0.5rem; font-size:0.8rem; color:#e2e8f0; line-height:1.5; margin:0.3rem 0;">🤖 {msg}</div>', unsafe_allow_html=True)
 
         if st.button("Clear Chat", key="copilot_clear_pro5", width='stretch'):
             st.session_state.copilot_history = []
