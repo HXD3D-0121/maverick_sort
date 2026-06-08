@@ -1,0 +1,26 @@
+sku,name,category,temperature_zone,stock_qty,expiry_date
+INS-001,Insulin Glargine,Cold Chain Insulin,Cold,3904,2026-08-27
+INS-002,Insulin Aspart,Cold Chain Insulin,Cold,4229,2027-10-06
+INS-003,Insulin Lispro,Cold Chain Insulin,Cold,2511,2026-11-04
+VAC-001,Influenza Vaccine,Vaccine,Frozen,4467,2026-07-23
+VAC-002,HPV Vaccine,Vaccine,Frozen,3319,2026-07-23
+VAC-003,COVID-19 Vaccine,Vaccine,Frozen,3924,2027-03-10
+ANT-001,Amoxicillin Capsules,Antibiotic,Ambient,3401,2026-12-23
+ANT-002,Azithromycin Tablets,Antibiotic,Ambient,4767,2027-06-04
+ANT-003,Cefixime Capsules,Antibiotic,Ambient,3642,2026-07-21
+HBP-001,Amlodipine Tablets,Hypertension,Ambient,4358,2026-12-20
+HBP-002,Valsartan Capsules,Hypertension,Ambient,2611,2026-07-02
+HBP-003,Losartan Tablets,Hypertension,Ambient,4456,2027-11-04
+DM-001,Metformin Tablets,Diabetes,Ambient,1139,2027-08-25
+DM-002,Dapagliflozin Tablets,Diabetes,Ambient,4067,2027-09-25
+DM-003,Sitagliptin Tablets,Diabetes,Ambient,4683,2028-01-05
+COOL-001,Interferon Alfa,Biologic,Cool,4027,2026-11-09
+COOL-002,Erythropoietin,Biologic,Cool,4288,2026-10-09
+COOL-003,Monoclonal Antibody,Biologic,Cool,2890,2027-03-10
+DF-001,mRNA Vaccine,Vaccine,Deep Frozen,431,2027-01-09
+DF-002,CAR-T Cell Therapy,Biologic,Deep Frozen,4670,2026-10-08
+COLD-003,Growth Hormone,Hormone,Cold,1688,2027-08-18
+AMB-003,Paracetamol Tablets,OTC,Ambient,3147,2028-01-03
+AMB-004,Ibuprofen Capsules,OTC,Ambient,3332,2026-06-15
+AMB-005,Aspirin Tablets,OTC,Ambient,209,2026-10-18
+FRZ-003,Pneumococcal Vaccine,Vaccine,Frozen,3303,2027-03-15

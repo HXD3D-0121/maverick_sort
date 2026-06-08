@@ -1,0 +1,13 @@
+worker_id,zone,shift,employment_type
+Worker-01,Zone E,Night (22-6h),Full-Time
+Worker-02,Zone D,Morning (6-14h),Temporary
+Worker-03,Zone A,Night (22-6h),Full-Time
+Worker-04,Zone C,Afternoon (14-22h),Temporary
+Worker-05,Zone D,Afternoon (14-22h),Temporary
+Worker-06,Zone C,Morning (6-14h),Full-Time
+Worker-07,Zone E,Morning (6-14h),Full-Time
+Worker-08,Zone A,Afternoon (14-22h),Temporary
+Worker-09,Zone C,Morning (6-14h),Full-Time
+Worker-10,Zone E,Morning (6-14h),Full-Time
+Worker-11,Zone D,Afternoon (14-22h),Full-Time
+Worker-12,Zone D,Afternoon (14-22h),Temporary

@@ -1,0 +1,21 @@
+alert_id,type,severity,message,timestamp,zone,acknowledged
+ALT-001,Deadline Risk,critical,Emergency stock request pending,14:26:00,Zone B,True
+ALT-002,Inefficient Batch,warning,Single-SKU wave detected,18:22:00,Zone E,True
+ALT-003,Inefficient Batch,info,Batch covers 8 regions - high cost,20:25:00,Zone C,True
+ALT-004,Inefficient Batch,info,Batch covers 8 regions - high cost,12:11:00,Zone C,False
+ALT-005,Too Many Zones,warning,GSP compliance risk in mixed batch,15:11:00,Zone B,True
+ALT-006,Capacity Overload,info,Wave capacity exceeded by 20%,02:00:00,Zone C,True
+ALT-007,Deadline Risk,warning,Hospital delivery window closing in 30 min,05:47:00,Zone A,True
+ALT-008,Low Stock,warning,Critical stock below 50 units,07:27:00,Zone B,True
+ALT-009,Inefficient Batch,critical,Batch covers 8 regions - high cost,02:38:00,Zone D,True
+ALT-010,Too Many Zones,critical,Wave mixes 6 temperature zones,04:48:00,Zone B,False
+ALT-011,Capacity Overload,warning,Loading dock at full capacity,22:18:00,Zone A,False
+ALT-012,Temperature Deviation,info,Cold chain threshold exceeded in Zone C,07:00:00,Zone A,True
+ALT-013,Too Many Zones,critical,Wave mixes 6 temperature zones,00:14:00,Zone B,True
+ALT-014,Temperature Deviation,critical,Cool zone fluctuation detected,01:43:00,Zone B,False
+ALT-015,Capacity Overload,info,Wave capacity exceeded by 20%,18:06:00,Zone B,False
+ALT-016,Low Stock,warning,Reorder point triggered for 3 SKUs,10:27:00,Zone E,False
+ALT-017,Inefficient Batch,warning,Wave contains only 2 orders,20:28:00,Zone A,False
+ALT-018,Too Many Zones,info,Wave mixes 6 temperature zones,19:43:00,Zone D,True
+ALT-019,Low Stock,critical,Critical stock below 50 units,06:43:00,Zone E,True
+ALT-020,Temperature Deviation,critical,Cool zone fluctuation detected,05:20:00,Zone C,True
