@@ -2232,3 +2232,140 @@ Modified: Notebook for coding.md (added Streamlit Cloud deployment links)
 > **Document Version**: v2.5-day4-final  
 > **Last Updated**: 2026/06/07  
 > **Historical Versions**: v1.0-course-delivery (through 2026/06/02) → v2.0-commercialization (Day 0, 2026/06/04) → v2.1-day2-complete → v2.2-algorithm-arena → v2.3-day3-complete → v2.4-day3-final (Day 3 follow-up iterations + bug fixes + GitHub submission) → **v2.5-day4-final (Day 4 modular refactor + data upload feasibility + 3D optimization plan)**
+
+---
+
+## 15. Day 5: Hugging Face AI Integration
+
+### 15.1 Goals & Deliverables
+
+**Design Goals**:
+- Differentiated LLM features: Essential lightweight, Pro deep & closed-loop
+- Globally accessible: Collapsible AI Copilot at top of sidebar, callable from any page
+- Graceful degradation: API → local model → rule-based, three-tier fallback
+- Visual aesthetics: Gradient card design blending with existing dark theme
+
+**Deliverables**:
+
+| Deliverable | Count | Description |
+|-------------|-------|-------------|
+| New core modules | 9 files | `hf_integration/` complete LLM client wrapper |
+| Modified shared modules | 4 files | `shared.py`, `scheduling.py`, `operations.py`, `tech_showcase.py` |
+| New entry files | 2 files | `streamlit_app_v7.py` + `streamlit_app_pro_v5.py` |
+| Dependency update | 1 file | `requirements.txt` +5 packages |
+
+### 15.2 Architecture
+
+**Three-tier fallback chain**:
+```
+Tier 1: HF Inference API (Qwen2.5-7B-Instruct) — online, best quality
+    ↓ (network failure / API rate limit)
+Tier 2: Local transformers (Qwen2.5-1.5B-Instruct) — offline, CPU-friendly
+    ↓ (dependencies missing)
+Tier 3: Rule-based fallback — pre-built template text, always available
+```
+
+**Module structure**:
+```
+hf_integration/
+├── __init__.py              # Package entry
+├── config.py                # Model configs, API keys, availability detection
+├── client.py                # Unified LLM call wrapper
+├── prompts.py               # 10 bilingual (CN/EN) prompt templates
+├── insight_engine.py        # Natural-language decision explanations
+├── report_generator.py      # Auto-report summarization
+├── copilot.py               # AI assistant (FAQ + context-aware)
+├── alert_analyzer.py        # RAG-based root-cause analysis
+└── demand_forecaster.py     # Time-series forecasting
+```
+
+### 15.3 Feature Differentiation Matrix
+
+**Essential v7.0 (18 pages)**:
+
+| Feature | Location | Implementation |
+|---------|----------|----------------|
+| AI Insight Engine | Algorithm Arena | Generate NL strategy conclusions from benchmark |
+| AI Report Generator | What-If Scenario Lab | Auto-generate executive summary from comparison |
+| AI Insight Engine | SLA Analytics | AI interpretation of historical trend data |
+| 🤖 Sunergy Copilot | Global Sidebar | FAQ mode (8 pre-loaded questions) |
+
+**Professional v5.0 (23 pages)**:
+
+| Feature | Location | Implementation |
+|---------|----------|----------------|
+| AI Insight Engine | Algorithm Arena + Strategy Optimizer + Live Adaptive | Covers all scheduling scenarios |
+| AI Report Generator | What-If Lab + Business Analysis | One-click investor-grade report |
+| AI Root Cause Analysis (RAG) | Alert Center | Lightweight vector KB from uploaded data |
+| AI Demand Forecasting | Data Center | Time-series prediction on uploaded orders.csv |
+| 🤖 Sunergy Copilot | Global Sidebar | Context-aware (reads current page data) |
+
+### 15.4 Key Design Decisions
+
+**Decision 1: Model Selection**
+- Online primary: `Qwen/Qwen2.5-7B-Instruct` (HF Inference API)
+- Local fallback: `Qwen/Qwen2.5-1.5B-Instruct` (CPU-runnable)
+- Time-series reserved: `google/timesfm-1.0-200m`
+
+**Decision 2: Copilot Interaction Design**
+- Position: Top of sidebar (below brand info), visible without scrolling
+- Visual: Blue-purple-pink tri-gradient card + purple glow shadow + hover zoom
+- Status: Green "Online" / yellow "Offline" capsule badge
+- Interaction: Toggle button + 4 quick questions + free input + last 6 turns
+
+**Decision 3: Version Strategy**
+- Keep `streamlit_app_v6.py` and `streamlit_app_pro_v4.py` untouched
+- New `streamlit_app_v7.py` and `streamlit_app_pro_v5.py` as AI-enhanced editions
+
+### 15.5 Bug Fix Log
+
+| Time | Issue | Cause | Fix |
+|------|-------|-------|-----|
+| 11:25 | huggingface_hub not installed | Missing dependencies | `pip install` all packages |
+| 11:26 | `is_llm_ready` import error | Wrong module in `__init__.py` | Fixed to `config.py` |
+| 11:36 | Gradient card garbled text | Bash script `>` escape residue `>t;` | Global replace `>t;` → `>` |
+| 11:37 | pro_v5 IndentationError | Old Copilot block not fully removed | Cleaned residual code |
+| 11:39 | `use_container_width` deprecation | Streamlit 1.58 spec change | Batch replace with `width='stretch'` |
+
+### 15.6 How to Run
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Essential v7.0
+streamlit run streamlit_app_v7.py
+
+# Professional v5.0
+streamlit run streamlit_app_pro_v5.py
+```
+
+### 15.7 GitHub Submission (Day 5)
+
+```bash
+# Commit message
+Day 5: Hugging Face AI Integration — v7/v5 + hf_integration modules + Copilot sidebar
+
+# Commit statistics
+New files: hf_integration/__init__.py, hf_integration/config.py, hf_integration/client.py,
+           hf_integration/prompts.py, hf_integration/insight_engine.py,
+           hf_integration/report_generator.py, hf_integration/copilot.py,
+           hf_integration/alert_analyzer.py, hf_integration/demand_forecaster.py,
+           streamlit_app_v7.py, streamlit_app_pro_v5.py
+Modified:  page_modules/shared.py, page_modules/scheduling.py,
+           page_modules/operations.py, page_modules/tech_showcase.py,
+           requirements.txt
+
+# Excluded
+.env (sensitive environment variables)
+```
+
+### 15.8 Investor Narrative (Full Day 5 Version)
+
+> "Today we turned AI from a 'label decoration' into 'real productivity.' Those random noise lines labeled 'AI Forecast' are now replaced by genuine Hugging Face LLMs — Qwen2.5 reads our scheduling data and tells clients in natural language why KGDRL outperforms TZU by 23%. Copilot isn't just another chatbot; it's a decision assistant embedded in every page: explaining algorithms in the Algorithm Arena, performing root-cause analysis in the Alert Center, and forecasting next week's demand in the Data Center. Essential users get FAQ mode for quick onboarding; Pro users enjoy context-aware deep Q&A. The three-tier degradation architecture ensures the system remains usable even without internet. This is the leap from 'demo-grade AI' to 'function-grade AI.'"
+
+---
+
+> **Document Version**: v2.6-day5-final  
+> **Last Updated**: 2026/06/08  
+> **Historical Versions**: v1.0-course-delivery (through 2026/06/02) → v2.0-commercialization (Day 0, 2026/06/04) → v2.1-day2-complete → v2.2-algorithm-arena → v2.3-day3-complete → v2.4-day3-final (Day 3 follow-up iterations + bug fixes + GitHub submission) → v2.5-day4-final (Day 4 modular refactor + data upload feasibility + 3D optimization plan) → **v2.6-day5-final (Day 5 Hugging Face AI integration)**

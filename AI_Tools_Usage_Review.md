@@ -2507,3 +2507,140 @@ Day 4: Modular refactor + Data Upload Feasibility + 3D Optimization Plan + Pro v
 > **文档版本**：v2.5-day4-final  
 > **最后更新**：2026/06/07  
 > **历史版本**：v2.0-commercialization（Day 0）→ v2.1-day2-complete（Day 2）→ v2.2-algorithm-arena（Day 2+）→ v2.3-day3-complete（Day 3初始交付）→ v2.4-day3-final（Day 3后续迭代+Bug修复+GitHub提交）→ **v2.5-day4-final（Day 4模块化重构+数据上传可行性+3D优化计划）**
+
+---
+
+## 十七、Day 5：Hugging Face 大模型集成
+
+### 17.1 目标与成果概览
+
+**设计目标**：
+- 差异化大模型功能：标准版轻量够用，专业版深度闭环
+- 全局可访问：sidebar 顶部放置可折叠 AI Copilot，任何页面都能直接调用
+- 优雅降级：API 不可用 → 本地模型 → 规则回退，三级容错
+- 视觉美观：渐变色卡片设计，与现有暗色主题融合
+
+**交付成果**：
+
+| 交付项 | 数量 | 说明 |
+|--------|------|------|
+| 新建核心模块 | 9 个文件 | `hf_integration/` 完整 LLM 调用封装 |
+| 修改共享模块 | 4 个文件 | `shared.py`, `scheduling.py`, `operations.py`, `tech_showcase.py` |
+| 新建入口文件 | 2 个文件 | `streamlit_app_v7.py` + `streamlit_app_pro_v5.py` |
+| 依赖更新 | 1 个文件 | `requirements.txt` 新增 5 个包 |
+
+### 17.2 架构设计
+
+**三级降级链**：
+```
+Tier 1: HF Inference API (Qwen2.5-7B-Instruct) — 在线，效果最好
+    ↓ (网络故障/API限流)
+Tier 2: Local transformers (Qwen2.5-1.5B-Instruct) — 离线，CPU可运行
+    ↓ (依赖未安装)
+Tier 3: Rule-based fallback — 预置模板文本，始终可用
+```
+
+**模块结构**：
+```
+hf_integration/
+├── __init__.py              # 包入口
+├── config.py                # 模型配置、API密钥、可用性检测
+├── client.py                # 统一LLM调用
+├── prompts.py               # 10组中英双语Prompt模板
+├── insight_engine.py        # 决策自然语言解释
+├── report_generator.py      # 自动报告摘要
+├── copilot.py               # 智能助手（FAQ + 上下文感知）
+├── alert_analyzer.py        # RAG根因分析
+└── demand_forecaster.py     # 时序预测
+```
+
+### 17.3 功能差异化矩阵
+
+**标准版 v7.0（18页）**：
+
+| 功能 | 位置 | 实现方式 |
+|------|------|---------|
+| AI Insight Engine | Algorithm Arena | benchmark结果生成中文策略结论 |
+| AI Report Generator | What-If Scenario Lab | 对比结果自动生成执行摘要 |
+| AI Insight Engine | SLA Analytics | 历史趋势数据AI解读 |
+| 🤖 Sunergy Copilot | 全局Sidebar | FAQ问答模式（预置8个问题） |
+
+**专业版 v5.0（23页）**：
+
+| 功能 | 位置 | 实现方式 |
+|------|------|---------|
+| AI Insight Engine | Algorithm Arena + Strategy Optimizer + Live Adaptive | 覆盖全部调度场景 |
+| AI Report Generator | What-If Lab + Business Analysis | 一键生成投资者级报告 |
+| AI Root Cause Analysis (RAG) | Alert Center | 基于上传数据构建轻量向量知识库 |
+| AI Demand Forecasting | Data Center | 对上传orders.csv进行时序预测 |
+| 🤖 Sunergy Copilot | 全局Sidebar | 上下文感知（结合当前页面数据） |
+
+### 17.4 关键设计决策
+
+**决策1：模型选型**
+- 在线主模型：`Qwen/Qwen2.5-7B-Instruct`（HF Inference API）
+- 本地降级：`Qwen/Qwen2.5-1.5B-Instruct`（CPU可运行）
+- 时序预留：`google/timesfm-1.0-200m`
+
+**决策2：Copilot 交互设计**
+- 位置：sidebar 顶部（品牌信息下方），无需滚动即可见
+- 视觉：蓝紫粉三色拉渐变卡片 + 紫色发光阴影 + 悬停放大效果
+- 状态：绿色"Online"/黄色"Offline"胶囊标签
+- 交互：折叠/展开按钮 + 4个快捷问题 + 自由输入 + 最近6轮历史
+
+**决策3：版本策略**
+- 保留 `streamlit_app_v6.py` 和 `streamlit_app_pro_v4.py` 不变
+- 新建 `streamlit_app_v7.py` 和 `streamlit_app_pro_v5.py` 作为 AI 增强版
+
+### 17.5 Bug 修复记录
+
+| 时间 | 问题 | 原因 | 修复 |
+|------|------|------|------|
+| 11:25 | huggingface_hub 未安装 | 环境缺少依赖 | `pip install` 安装全部包 |
+| 11:26 | `is_llm_ready` 导入错误 | `__init__.py` 从错误模块导入 | 修正到 `config.py` |
+| 11:36 | 渐变色框乱码 | Bash脚本 `>` 转义残留为 `>t;` | 全局替换 `>t;` → `>` |
+| 11:37 | pro_v5 IndentationError | 旧Copilot块未完全删除 | 清理残留代码 |
+| 11:39 | `use_container_width` 弃用警告 | Streamlit 1.58 规范变更 | 批量替换为 `width='stretch'` |
+
+### 17.6 运行方式
+
+```bash
+# 安装依赖
+pip install -r requirements.txt
+
+# 标准版 v7.0
+streamlit run streamlit_app_v7.py
+
+# 专业版 v5.0
+streamlit run streamlit_app_pro_v5.py
+```
+
+### 17.7 GitHub 提交（Day 5）
+
+```bash
+# 提交信息
+Day 5: Hugging Face AI Integration — v7/v5 + hf_integration modules + Copilot sidebar
+
+# 提交统计
+新增文件：hf_integration/__init__.py, hf_integration/config.py, hf_integration/client.py,
+         hf_integration/prompts.py, hf_integration/insight_engine.py,
+         hf_integration/report_generator.py, hf_integration/copilot.py,
+         hf_integration/alert_analyzer.py, hf_integration/demand_forecaster.py,
+         streamlit_app_v7.py, streamlit_app_pro_v5.py
+修改文件：page_modules/shared.py, page_modules/scheduling.py,
+         page_modules/operations.py, page_modules/tech_showcase.py,
+         requirements.txt
+
+# 排除文件
+.env（敏感环境变量）
+```
+
+### 17.8 投资者话术（Day 5 完整版）
+
+> "今天我们把AI从'标签装饰'变成了'真实生产力'。过去那些标着'AI Forecast'的随机噪声线，现在被真正的Hugging Face大模型替代——Qwen2.5能读懂我们的调度数据，用自然语言告诉客户'为什么KGDRL比TZU好23%'。Copilot不是又一个聊天机器人，它是嵌入在每个页面里的决策助手：在Algorithm Arena解释算法，在Alert Center做根因分析，在Data Center预测未来7天需求。标准版的用户用FAQ模式快速上手，专业版用户享受上下文感知的深度问答。三级降级架构确保即使没有网络，系统依然可用。这是从'演示级AI'到'功能级AI'的跨越。"
+
+---
+
+> **文档版本**：v2.6-day5-final  
+> **最后更新**：2026/06/08  
+> **历史版本**：v2.0-commercialization（Day 0）→ v2.1-day2-complete（Day 2）→ v2.2-algorithm-arena（Day 2+）→ v2.3-day3-complete（Day 3初始交付）→ v2.4-day3-final（Day 3后续迭代+Bug修复+GitHub提交）→ v2.5-day4-final（Day 4模块化重构+数据上传可行性+3D优化计划）→ **v2.6-day5-final（Day 5 Hugging Face大模型集成）**
