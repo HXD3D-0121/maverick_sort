@@ -88,7 +88,10 @@ def render_kgdrl_framework():
         index=[f"Z{i}" for i in range(8)],
         columns=[f"O{i}" for i in range(8)]
     )
-    st.dataframe(attn_df.style.background_gradient(cmap="YlOrRd", axis=None), height=300)
+    try:
+        st.dataframe(attn_df.style.background_gradient(cmap="YlOrRd", axis=None), height=300)
+    except Exception:
+        st.dataframe(attn_df, height=300)
     st.caption("Darker = stronger attention. Shows which orders the GAT focuses on per zone.")
 
 
