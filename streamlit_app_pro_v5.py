@@ -416,10 +416,11 @@ with st.sidebar:
                 if st.button(q, key=f"cq_pro5_{i}", width='stretch'):
                     st.session_state.copilot_history.append(("user", q))
                     if copilot_ready:
-                        page_ctx = f"Current page: {selected_page_key}"
-                        ans = hf["copilot"].ask_with_context(q, page_name=selected_page_key, page_context=page_ctx, lang="en")
+                        _page_key = locals().get("selected_page_key", "Unknown")
+                        page_ctx = f"Current page: {_page_key}"
+                        ans = hf["copilot"].ask_with_context(q, page_name=_page_key, page_context=page_ctx, lang="en")
                     else:
-                        ans = "Copilot is offline. Please install dependencies and configure HF_TOKEN."
+                        ans = f"🤖 Copilot is offline.\n\n**Reason:** {hf.get('msg', 'Unknown')}\n\nPlease install dependencies (`pip install -r requirements.txt`) and configure HF_TOKEN."
                     st.session_state.copilot_history.append(("ai", ans))
                     st.rerun()
 
@@ -433,10 +434,11 @@ with st.sidebar:
         if user_q:
             st.session_state.copilot_history.append(("user", user_q))
             if copilot_ready:
-                page_ctx = f"Current page: {selected_page_key}"
-                ans = hf["copilot"].ask_with_context(user_q, page_name=selected_page_key, page_context=page_ctx, lang="en")
+                _page_key = locals().get("selected_page_key", "Unknown")
+                page_ctx = f"Current page: {_page_key}"
+                ans = hf["copilot"].ask_with_context(user_q, page_name=_page_key, page_context=page_ctx, lang="en")
             else:
-                ans = "Copilot is offline. Please install dependencies and configure HF_TOKEN."
+                ans = f"🤖 Copilot is offline.\n\n**Reason:** {hf.get('msg', 'Unknown')}\n\nPlease install dependencies (`pip install -r requirements.txt`) and configure HF_TOKEN."
             st.session_state.copilot_history.append(("ai", ans))
             st.rerun()
 

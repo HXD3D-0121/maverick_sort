@@ -422,6 +422,7 @@ def try_import_hf():
     Import Hugging Face integration modules with graceful degradation.
     Returns a dict of available modules and an is_ready flag.
     """
+    import traceback
     result = {
         "insight_engine": None,
         "report_generator": None,
@@ -443,8 +444,8 @@ def try_import_hf():
         result["demand_forecaster"] = demand_forecaster
         result["is_ready"] = is_llm_ready()
         result["msg"] = "HF integration ready" if is_llm_ready() else "HF modules loaded but no LLM backend available"
-    except Exception as e:
-        result["msg"] = f"HF integration error: {e}"
+    except Exception:
+        result["msg"] = f"HF integration error: {traceback.format_exc()}"
     return result
 
 
