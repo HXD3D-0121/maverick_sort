@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 import altair as alt
 import streamlit as st
-from .shared import get_patent_timeline
+from .shared import get_patent_timeline, try_import_hf
 
 
 # =============================================================================
@@ -351,3 +351,95 @@ def render_patent_wall():
 
     st.markdown("---")
     st.info("All research outputs are available upon request for due diligence.")
+
+
+# =============================================================================
+# PAGE: HF AI Copilot (NEW — Hugging Face Powered)
+# =============================================================================
+
+def render_hf_copilot():
+    """Sunergy Copilot FAQ page powered by Hugging Face LLMs."""
+    st.markdown('<div class="main-header">🤖 Sunergy Copilot</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">AI-powered assistant for system understanding and decision support</div>', unsafe_allow_html=True)
+
+    hf = try_import_hf()
+    copilot_available = hf["is_ready"] and hf["copilot"]
+
+    # --- Status banner ---
+    if copilot_available:
+        st.success("✅ AI Copilot is online — powered by Hugging Face Qwen2.5")
+    else:
+        st.warning(f"⚠️ {hf.get('msg', 'Copilot unavailable')}")
+
+    # --- Pre-loaded FAQ quick buttons ---
+    st.markdown('<div class="section-header">Quick Questions</div>', unsafe_allow_html=True)
+
+    faq_questions = [
+        "What is KGDRL?",
+        "What is the difference between KGDRL and PPO?",
+        "What is wave allocation?",
+        "What temperature zones are supported?",
+        "What is NSGA-II?",
+        "How do I upload my own data?",
+        "What is adaptive policy?",
+    ]
+
+    cols = st.columns(4)
+    selected_question = None
+    for i, q in enumerate(faq_questions):
+        with cols[i % 4]:
+            if st.button(q, key=f"faq_btn_{i}", use_container_width=True):
+                selected_question = q
+
+    # --- Free-text input ---
+    st.markdown("---")
+    user_question = st.text_input("Or type your own question:", placeholder="e.g. Why is KGDRL better than FCFS?")
+    if user_question:
+        selected_question = user_question
+
+    # --- Answer display ---
+    if selected_question:
+        st.markdown("---")
+        with st.spinner("🤖 Thinking..."):
+            if copilot_available:
+                answer = hf["copilot"].ask_faq(selected_question, lang="en")
+            else:
+                answer = (
+                    "Copilot is currently offline. Please ensure `hf_integration` is installed and "
+                    "HF_TOKEN is configured. Meanwhile, you can browse the KGDRL Framework or User Guide pages."
+                )
+        st.markdown(f"""
+        <div style="background:#111827; border-radius:10px; padding:1.2rem; border-left:4px solid #8b5cf6;">
+            <div style="font-weight:700; color:#8b5cf6; margin-bottom:0.5rem;">💬 {selected_question}</div>
+            <div style="font-size:0.9rem; color:#e2e8f0; line-height:1.6;">{answer}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # --- Feature cards ---
+    st.markdown("---")
+    st.markdown('<div class="section-header">Copilot Capabilities</div>', unsafe_allow_html=True)
+    cap_cols = st.columns(3)
+    with cap_cols[0]:
+        st.markdown("""
+        <div style="background:#111827; border-radius:10px; padding:1rem; text-align:center;">
+            <div style="font-size:1.5rem; margin-bottom:0.5rem;">📚</div>
+            <div style="font-weight:700; color:#f8fafc; font-size:0.9rem;">FAQ Knowledge Base</div>
+            <div style="font-size:0.8rem; color:#94a3b8; margin-top:0.3rem;">Pre-loaded answers for 20+ common questions about KGDRL, scheduling, and compliance.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with cap_cols[1]:
+        st.markdown("""
+        <div style="background:#111827; border-radius:10px; padding:1rem; text-align:center;">
+            <div style="font-size:1.5rem; margin-bottom:0.5rem;">🔍</div>
+            <div style="font-weight:700; color:#f8fafc; font-size:0.9rem;">Context-Aware (Pro)</div>
+            <div style="font-size:0.8rem; color:#94a3b8; margin-top:0.3rem;">In Professional Edition, Copilot reads current page data to give personalized advice.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with cap_cols[2]:
+        st.markdown("""
+        <div style="background:#111827; border-radius:10px; padding:1rem; text-align:center;">
+            <div style="font-size:1.5rem; margin-bottom:0.5rem;">🌐</div>
+            <div style="font-weight:700; color:#f8fafc; font-size:0.9rem;">Bilingual Support</div>
+            <div style="font-size:0.8rem; color:#94a3b8; margin-top:0.3rem;">Powered by Qwen2.5 — fluent in both Chinese and English with domain terminology.</div>
+        </div>
+        """, unsafe_allow_html=True)

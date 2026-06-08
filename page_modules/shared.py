@@ -417,6 +417,37 @@ def try_import_adaptive():
         return None, None, False
 
 
+def try_import_hf():
+    """
+    Import Hugging Face integration modules with graceful degradation.
+    Returns a dict of available modules and an is_ready flag.
+    """
+    result = {
+        "insight_engine": None,
+        "report_generator": None,
+        "copilot": None,
+        "alert_analyzer": None,
+        "demand_forecaster": None,
+        "is_ready": False,
+        "msg": "HF integration unavailable",
+    }
+    try:
+        from hf_integration import (
+            insight_engine, report_generator, copilot,
+            alert_analyzer, demand_forecaster, is_llm_ready,
+        )
+        result["insight_engine"] = insight_engine
+        result["report_generator"] = report_generator
+        result["copilot"] = copilot
+        result["alert_analyzer"] = alert_analyzer
+        result["demand_forecaster"] = demand_forecaster
+        result["is_ready"] = is_llm_ready()
+        result["msg"] = "HF integration ready" if is_llm_ready() else "HF modules loaded but no LLM backend available"
+    except Exception as e:
+        result["msg"] = f"HF integration error: {e}"
+    return result
+
+
 # =============================================================================
 # SECTION: Data Upload Router Layer (NEW for Pro v4.0)
 # Centralized data source switching: mock <-> uploaded.

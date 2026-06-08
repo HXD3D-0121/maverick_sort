@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 import altair as alt
 import streamlit as st
-from .shared import try_import_what_if, try_import_mos, try_import_adaptive
+from .shared import try_import_what_if, try_import_mos, try_import_adaptive, try_import_hf
 
 
 # =============================================================================
@@ -82,6 +82,32 @@ def render_algorithm_arena():
             color=alt.Color("Color:N", scale=None)
         ).properties(height=260)
         st.altair_chart(dchart, width='stretch')
+
+    # --- AI Insight Engine (HF-powered) ---
+    st.markdown("---")
+    hf = try_import_hf()
+    if hf["is_ready"] and hf["insight_engine"]:
+        with st.expander("🤖 AI Insight — Algorithm Benchmark Interpretation", expanded=True):
+            ie = hf["insight_engine"]
+            insight_text = ie.explain_benchmark(
+                scenario="General warehouse scheduling",
+                best_algo="KGDRL-Full",
+                best_metric="Distance",
+                best_value=665.7,
+                baseline_algo="TZU",
+                baseline_metric="Distance",
+                baseline_value=666.7,
+                improvement="Shortest total distance with zero SLA misses",
+                lang="zh",
+            )
+            st.markdown(f"""
+            <div style="background:#111827; border-radius:10px; padding:1rem; border-left:4px solid #8b5cf6;">
+                <div style="font-size:0.85rem; color:#e2e8f0; line-height:1.6;">{insight_text}</div>
+            </div>
+            """, unsafe_allow_html=True)
+    else:
+        with st.expander("🤖 AI Insight", expanded=False):
+            st.info(hf.get("msg", "AI analysis requires Hugging Face integration."))
 
 
 # =============================================================================
@@ -181,6 +207,32 @@ def render_scenario_lab():
                 color=alt.condition(alt.datum.Scenario == best["Scenario"], alt.value("#10b981"), alt.value("#3b82f6"))
             ).properties(height=260)
             st.altair_chart(c1, width='stretch')
+
+            # --- AI Report Generator (HF-powered) ---
+            hf = try_import_hf()
+            if hf["is_ready"] and hf["report_generator"] and len(df) >= 2:
+                st.markdown("---")
+                with st.spinner("🤖 Generating AI executive summary..."):
+                    rg = hf["report_generator"]
+                    baseline_row = df.iloc[0]
+                    best_row = df.loc[best_idx]
+                    summary = rg.summarize_what_if(
+                        baseline_name=baseline_row["Scenario"],
+                        baseline_cost=float(baseline_row["Cost"]),
+                        baseline_time=float(baseline_row["Distance"]),
+                        baseline_compliance=float(baseline_row["OnTime%"]),
+                        scenario_name=best_row["Scenario"],
+                        scenario_cost=float(best_row["Cost"]),
+                        scenario_time=float(best_row["Distance"]),
+                        scenario_compliance=float(best_row["OnTime%"]),
+                        lang="zh",
+                    )
+                st.markdown(f"""
+                <div style="background:#111827; border-radius:10px; padding:1rem; border-left:4px solid #06b6d4; margin-top:1rem;">
+                    <div style="font-weight:700; color:#06b6d4; font-size:0.9rem; margin-bottom:0.5rem;">🤖 AI Executive Summary</div>
+                    <div style="font-size:0.85rem; color:#e2e8f0; line-height:1.6;">{summary}</div>
+                </div>
+                """, unsafe_allow_html=True)
         else:
             st.info("Configure parameters and click Run to see results")
 

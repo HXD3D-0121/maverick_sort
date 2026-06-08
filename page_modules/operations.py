@@ -17,7 +17,8 @@ import streamlit as st
 from datetime import datetime
 from .shared import (
     get_orders_basic, get_sla_history_tuple, get_tasks_data,
-    get_labor_data, get_alert_data, get_data_source, ZONE_LETTERS, CLIENT_TYPES
+    get_labor_data, get_alert_data, get_data_source, ZONE_LETTERS, CLIENT_TYPES,
+    try_import_hf,
 )
 
 
@@ -143,6 +144,31 @@ def render_sla_analytics():
     df_comp = pd.DataFrame(compliance)
     df_comp["Fulfillment Score"] = (df_comp["On-Time Rate (%)"] * 0.4 + df_comp["Next-Day Rate (%)"] * 0.4 + df_comp["Temp Compliance (%)"] * 0.2).round(1)
     st.dataframe(df_comp.sort_values("Fulfillment Score", ascending=False), hide_index=True)
+
+    # --- AI Insight Engine (HF-powered) ---
+    st.markdown("---")
+    hf = try_import_hf()
+    if hf["is_ready"] and hf["insight_engine"]:
+        with st.expander("🤖 AI Insight — SLA Trend Analysis", expanded=True):
+            ie = hf["insight_engine"]
+            best_client = df_comp.sort_values("Fulfillment Score", ascending=False).iloc[0]
+            worst_client = df_comp.sort_values("Fulfillment Score", ascending=True).iloc[0]
+            insight_text = ie.explain_sla_trend(
+                period="Last 30 days",
+                avg_otd=df_comp["On-Time Rate (%)"].mean() / 100.0,
+                delta_otd=np.random.uniform(-0.03, 0.03),
+                worst_zone=worst_client["Client Category"],
+                top_delay_reason="Peak season volume surge" if worst_client["On-Time Rate (%)"] < 92 else "Cold-chain equipment maintenance",
+                lang="zh",
+            )
+            st.markdown(f"""
+            <div style="background:#111827; border-radius:10px; padding:1rem; border-left:4px solid #f59e0b;">
+                <div style="font-size:0.85rem; color:#e2e8f0; line-height:1.6;">{insight_text}</div>
+            </div>
+            """, unsafe_allow_html=True)
+    else:
+        with st.expander("🤖 AI Insight", expanded=False):
+            st.info(hf.get("msg", "AI analysis requires Hugging Face integration."))
 
 
 # =============================================================================
@@ -291,24 +317,63 @@ def render_alert_center():
 
     st.markdown("---")
 
-    # --- Root Cause & Recommendation Panel ---
-    st.markdown('<div class="section-header">Root Cause Analysis & Recommended Actions</div>', unsafe_allow_html=True)
+    # --- AI-Powered Root Cause Analysis (HF-enhanced) ---
+    st.markdown('<div class="section-header">🤖 AI Root Cause Analysis & Recommended Actions</div>', unsafe_allow_html=True)
+
+    hf = try_import_hf()
+    rag = None
+    if hf["is_ready"] and hf["alert_analyzer"]:
+        try:
+            sla_df = st.session_state.get("uploaded_sla")
+            tasks_df = st.session_state.get("uploaded_tasks")
+            alerts_df = st.session_state.get("uploaded_alerts")
+            rag = hf["alert_analyzer"].AlertRAG()
+            rag.index_historical(sla_df, tasks_df, alerts_df)
+        except Exception:
+            pass
 
     actions = [
         ("Temperature Deviation in Zone C", "HVAC unit #3 showing 0.8 degC drift above threshold. Correlated with afternoon peak load.",
-         ["Dispatch maintenance to HVAC #3", "Temporarily reroute cold-chain orders to Zone D", "Activate backup cooling unit"]),
+         ["Dispatch maintenance to HVAC #3", "Temporarily reroute cold-chain orders to Zone D", "Activate backup cooling unit"],
+         "temperature", "Zone C", "warning"),
         ("Wave #42 Release Delay", "Order surge at 14:30 exceeded picker capacity by 23%. EDD heuristic caused batch fragmentation.",
-         ["Switch to KGDRL policy for next wave", "Allocate 3 temporary pickers from Zone F", "Split wave into 2 sub-waves"]),
+         ["Switch to KGDRL policy for next wave", "Allocate 3 temporary pickers from Zone F", "Split wave into 2 sub-waves"],
+         "delay", "Zone F", "critical"),
         ("Insulin Glargine Low Stock", "Consumption rate 18% above forecast due to flu-season demand spike.",
-         ["Trigger emergency replenishment from supplier", "Reserve remaining stock for urgent orders only", "Update demand forecast model"]),
+         ["Trigger emergency replenishment from supplier", "Reserve remaining stock for urgent orders only", "Update demand forecast model"],
+         "inventory", "Zone A", "warning"),
     ]
 
-    for title, cause, recs in actions:
+    for title, cause, recs, alert_type, zone, severity in actions:
         with st.expander(title):
-            st.markdown(f"**Root Cause:** {cause}")
-            st.markdown("**Recommended Actions:**")
-            for i, rec in enumerate(recs, 1):
-                st.markdown(f"{i}. {rec}")
+            col_text, col_ai = st.columns([1, 1])
+            with col_text:
+                st.markdown(f"**Root Cause:** {cause}")
+                st.markdown("**Recommended Actions:**")
+                for i, rec in enumerate(recs, 1):
+                    st.markdown(f"{i}. {rec}")
+
+            with col_ai:
+                if hf["is_ready"] and hf["alert_analyzer"]:
+                    with st.spinner("AI analyzing..."):
+                        analysis = hf["alert_analyzer"].analyze_alert(
+                            alert_id=title[:20].replace(" ", "_"),
+                            alert_type=alert_type,
+                            severity=severity,
+                            alert_time=datetime.now().strftime("%Y-%m-%d %H:%M"),
+                            zone=zone,
+                            description=cause,
+                            rag=rag,
+                            lang="en",
+                        )
+                    st.markdown(f"""
+                    <div style="background:#111827; border-radius:8px; padding:0.8rem; border-left:3px solid #8b5cf6;">
+                        <div style="font-weight:700; color:#8b5cf6; font-size:0.8rem; margin-bottom:0.3rem;">🤖 AI Analysis</div>
+                        <div style="font-size:0.8rem; color:#e2e8f0; line-height:1.5;">{analysis}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    st.info(hf.get("msg", "AI analysis unavailable"))
 
     st.markdown("---")
     st.info("Alerts are auto-prioritized by severity, potential revenue impact, and GSP compliance risk.")
