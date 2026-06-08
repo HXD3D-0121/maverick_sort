@@ -424,14 +424,3 @@ elif selected_page_key == "plans_pricing":
 elif selected_page_key == "rt_sim":
     render_realtime_simulation()
 
-# =============================================================================
-# FOOTER
-# =============================================================================
-st.markdown("---")
-st.markdown("""
-<div style="text-align:center; font-size:0.7rem; color:#475569; padding:1rem 0;">
-    Sunergy Pharma Essential Edition v7.0 | Day 4 Commercialization Build | 2026/06/08<br>
-    Modular Architecture: page_modules/ | Built with Streamlit<br>
-    <span style="color:#3b82f6;">🔷 Essential Edition</span>
-</div>
-""", unsafe_allow_html=True)

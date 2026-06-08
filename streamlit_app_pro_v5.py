@@ -488,13 +488,6 @@ with st.sidebar:
 
 
 
-    st.markdown("""
-    <div style="font-size:0.7rem; color:#475569; text-align:center;">
-        Sunergy Pharma Pro v5.0<br>
-        Day 4 Commercialization Build<br>
-        2026/06/08
-    </div>
-    """)
 
 # =============================================================================
 # HELPER: Data source banner for operational pages

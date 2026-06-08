@@ -28,3 +28,8 @@ https://appappv5py-tanbtie6pgsulkbtbah77w.streamlit.app/
 
 可视化终端专业版Ver.02:
 https://appappprov2py-6pxeufewm6nqnh2jduncpa.streamlit.app/
+
+接入LLM后的访问链接 Link for Streamlit with LLM Tools：
+
+- 标准版 (Standard)：https://appappv7py-8pbgzhy5fjmswmefmz5jfz.streamlit.app/
+- 专业版 (Premium)：https://appappprov5py-uxccwitlyufth7n4nyg6nv.streamlit.app/
