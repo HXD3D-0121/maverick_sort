@@ -61,13 +61,15 @@ pip install -r requirements.txt
 
 ### Run Streamlit Dashboard
 
-**Standard Edition (v7.0)** — 18 pages, core operational features:
+**Standard Edition (v7.0)** — 18 pages, core operational features (lightweight, no AI dependencies):
 ```bash
+pip install -r requirements-v7.txt
 streamlit run streamlit_app_v7.py
 ```
 
 **Professional Edition (v5.0)** — 23 pages, full AI + prediction + strategy features:
 ```bash
+pip install -r requirements.txt        # includes torch, transformers, HF Copilot
 streamlit run streamlit_app_pro_v5.py
 ```
 

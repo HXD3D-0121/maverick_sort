@@ -23,7 +23,7 @@ import streamlit as st
 # PAGE CONFIG
 # =============================================================================
 st.set_page_config(
-    page_title="Maverick-SORT | Essential Edition v6",
+    page_title="Maverick-SORT | Essential Edition v7",
     page_icon="🔷",
     layout="wide",
     initial_sidebar_state="expanded",

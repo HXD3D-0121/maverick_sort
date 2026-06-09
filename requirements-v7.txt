@@ -1,0 +1,14 @@
+# Maverick-SORT v7 (Essential Edition) — Lightweight Dependencies
+# Use this for Streamlit Cloud deployment of the standard dashboard.
+# AI Copilot features will gracefully degrade to offline mode.
+# Recommended Python: 3.12
+
+streamlit==1.58.0
+numpy==2.4.6
+pandas==3.0.3
+altair==6.1.0
+plotly==6.8.0
+streamlit-autorefresh==1.0.1
+scipy==1.17.1
+scikit-learn==1.8.0
+pillow==12.2.0
