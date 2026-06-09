@@ -251,7 +251,7 @@ This is a **course project + commercialization prototype** developed with AI ass
 
 ## 📜 License
 
-© 2026 JamieAnnSeckinger. All rights reserved.
+© 2026 JunyuanLuo. All rights reserved.
 
 Patent pending: Knowledge-Guided Deep Reinforcement Learning for Pharmaceutical Wave Allocation.
 
