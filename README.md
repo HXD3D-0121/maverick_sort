@@ -9,19 +9,19 @@
 **Recommended Python version: 3.12+**
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-standard.txt    # Standard Edition (lightweight)
+# or
+pip install -r requirements-pro.txt         # Pro Edition (full AI features)
 ```
 
 **Launch the Essential Edition (v7, AI-enhanced):**
 ```bash
 streamlit run streamlit_app_v7.py
-https://appappv7py-kdim8szhnwpqgcvbi9jr99.streamlit.app/
 ```
 
 **Launch the Professional Edition (v5, full features):**
 ```bash
 streamlit run streamlit_app_pro_v5.py
-https://appappprov5py-jg7vk5hd4wzxbbkystnznw.streamlit.app/
 ```
 
 > Both editions ship with pre-built static data pools (`data/`, `demo_data/`). No algorithm runtime or model training is required for dashboard rendering — all JSON analytics and CSV demos are ready out-of-the-box.
@@ -56,20 +56,20 @@ Hierarchical Action: Temperature → Zone → Order
 ### Prerequisites
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-standard.txt    # or requirements-pro.txt for full AI
 ```
 
 ### Run Streamlit Dashboard
 
 **Standard Edition (v7.0)** — 18 pages, core operational features (lightweight, no AI dependencies):
 ```bash
-pip install -r requirements-v7.txt
+pip install -r requirements-standard.txt
 streamlit run streamlit_app_v7.py
 ```
 
 **Professional Edition (v5.0)** — 23 pages, full AI + prediction + strategy features:
 ```bash
-pip install -r requirements.txt        # includes torch, transformers, HF Copilot
+pip install -r requirements-pro.txt    # includes torch, transformers, HF Copilot
 streamlit run streamlit_app_pro_v5.py
 ```
 
@@ -163,7 +163,8 @@ maverick_sort/
 │   └── 讲稿.md                            # Presentation script
 │
 ├── 🚀 Deployment
-│   ├── requirements.txt                  # All dependencies (HF, torch, plotly)
+│   ├── requirements-standard.txt         # Standard Edition deps (lightweight)
+│   ├── requirements-pro.txt              # Pro Edition deps (HF, torch, plotly)
 │   ├── run_app.bat                       # Windows one-click launcher
 │   └── run_app.ps1                       # PowerShell launcher
 │
@@ -245,7 +246,7 @@ Based on 20-episode training + 10-instance evaluation:
 | `3D_DASHBOARD_OPTIMIZATION_PLAN.md` | Strategic 3D visualization upgrade plan |
 
 ### Launch Checklist for Teammates
-1. `pip install -r requirements.txt` (now includes `huggingface_hub`, `transformers`, `torch`, `plotly`)
+1. `pip install -r requirements-standard.txt` (v7, lightweight) or `pip install -r requirements-pro.txt` (v5, full AI)
 2. Double-click `run_app.bat` (Windows) or run `.venv\Scripts\streamlit.exe run streamlit_app_pro_v5.py`
 3. For Cloud deployment, see `DEPLOYMENT_GUIDE.md` Section 3
 
