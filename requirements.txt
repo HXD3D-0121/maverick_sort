@@ -1,5 +1,5 @@
-# Maverick-SORT v7 (Essential Edition) — Full Dependencies for Streamlit Cloud
-# Now includes HuggingFace AI Copilot support (no more offline-only mode).
+# Maverick-SORT — Default Requirements for Streamlit Cloud
+# This file is auto-synced with requirements-standard.txt.
 # Recommended Python: 3.12
 
 streamlit==1.58.0
