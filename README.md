@@ -26,24 +26,6 @@ pip install -r requirements.txt
 
 ---
 
----
-
-## 🏠 Repository Ownership
-
-**This is the primary development fork.**
-
-| | Original | This Fork |
-|--|---------|-----------|
-| **Owner** | JamieAnnSeckinger | **HXD3D-0121** |
-| **Role** | Upstream | **Active Development (Admin)** |
-| **Purpose** | Course project origin | **Commercialization & Iteration** |
-| **URL** | `github.com/JamieAnnSeckinger/maverick_sort` | **`github.com/HXD3D-0121/maverick_sort`** |
-
-> ⚠️ **All subsequent development, commits, and releases will be pushed to this fork by default.**
-> The original repository remains as the upstream reference for course deliverables.
-
----
-
 ## 📋 Project Overview
 
 Maverick-SORT is an AI-powered smart wave allocation system designed for pharmaceutical distribution centers. It addresses four critical industry pain points:
