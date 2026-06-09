@@ -514,18 +514,29 @@ def _map_time_window(val):
 
 
 def get_orders_data(n: int = 100, seed=None) -> pd.DataFrame:
-    """Route to uploaded orders or mock generator."""
+    """Route to uploaded orders, demo CSV, or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_orders") is not None:
         df = st.session_state.uploaded_orders.copy()
         df = _standardize_df_columns(df)
         if 'Time Window' in df.columns:
             df['Time Window'] = df['Time Window'].apply(_map_time_window)
         return df
+    # Try loading pre-built demo data
+    demo_path = Path(".") / "demo_data" / "orders.csv"
+    if demo_path.exists():
+        try:
+            df = pd.read_csv(demo_path)
+            df = _standardize_df_columns(df)
+            if 'Time Window' in df.columns:
+                df['Time Window'] = df['Time Window'].apply(_map_time_window)
+            return df
+        except Exception:
+            pass
     return generate_order_log(n=n, seed=seed)
 
 
 def get_inventory_data(seed=None) -> pd.DataFrame:
-    """Route to uploaded inventory or mock generator."""
+    """Route to uploaded inventory, demo CSV, or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_inventory") is not None:
         df = st.session_state.uploaded_inventory.copy()
         df = _standardize_df_columns(df)
@@ -548,11 +559,36 @@ def get_inventory_data(seed=None) -> pd.DataFrame:
         if 'Name' in df.columns and 'SKU' not in df.columns:
             df = df.rename(columns={'Name': 'SKU'})
         return df
+    # Try loading pre-built demo data
+    demo_path = Path(".") / "demo_data" / "inventory.csv"
+    if demo_path.exists():
+        try:
+            df = pd.read_csv(demo_path)
+            df = _standardize_df_columns(df)
+            if 'Expiry Date' in df.columns:
+                df['Expiry Date'] = pd.to_datetime(df['Expiry Date'], errors='coerce')
+                today = pd.Timestamp.now().normalize()
+                df['Days Left'] = (df['Expiry Date'] - today).dt.days
+                df['Days Left'] = df['Days Left'].fillna(0).astype(int)
+                def _risk(days):
+                    if days <= 30:
+                        return 'Critical'
+                    elif days <= 60:
+                        return 'Warning'
+                    elif days <= 90:
+                        return 'Notice'
+                    return 'Normal'
+                df['Risk Level'] = df['Days Left'].apply(_risk)
+            if 'Name' in df.columns and 'SKU' not in df.columns:
+                df = df.rename(columns={'Name': 'SKU'})
+            return df
+        except Exception:
+            pass
     return generate_inventory_data(seed=seed)
 
 
 def get_tasks_data(n: int = 30) -> pd.DataFrame:
-    """Route to uploaded tasks or mock generator."""
+    """Route to uploaded tasks, demo CSV, or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_tasks") is not None:
         df = st.session_state.uploaded_tasks.copy()
         df = _standardize_df_columns(df)
@@ -565,11 +601,27 @@ def get_tasks_data(n: int = 30) -> pd.DataFrame:
                 return f"Path: {zone} → Pick [{items}] → Pack → Dispatch"
             df['Optimized Path'] = df.apply(_make_path, axis=1)
         return df
+    # Try loading pre-built demo data
+    demo_path = Path(".") / "demo_data" / "tasks.csv"
+    if demo_path.exists():
+        try:
+            df = pd.read_csv(demo_path)
+            df = _standardize_df_columns(df)
+            if 'Optimized Path' not in df.columns:
+                def _make_path(row):
+                    zone = row.get('Source Zone', '')
+                    checklist = str(row.get('SKU Checklist', ''))
+                    items = checklist.replace(';', ', ')
+                    return f"Path: {zone} → Pick [{items}] → Pack → Dispatch"
+                df['Optimized Path'] = df.apply(_make_path, axis=1)
+            return df
+        except Exception:
+            pass
     return generate_picking_tasks(n=n)
 
 
 def get_labor_data() -> pd.DataFrame:
-    """Route to uploaded workers or mock generator."""
+    """Route to uploaded workers, demo CSV, or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_workers") is not None:
         df = st.session_state.uploaded_workers.copy()
         df = _standardize_df_columns(df)
@@ -583,32 +635,77 @@ def get_labor_data() -> pd.DataFrame:
             agg['Shift'] = 'Morning'
             return agg
         return df
+    # Try loading pre-built demo data
+    demo_path = Path(".") / "demo_data" / "workers.csv"
+    if demo_path.exists():
+        try:
+            df = pd.read_csv(demo_path)
+            df = _standardize_df_columns(df)
+            if 'Worker ID' in df.columns:
+                agg = df.groupby('Zone').size().reset_index(name='Total Headcount')
+                agg['Full-Time Staff'] = agg['Total Headcount']
+                agg['Temporary Staff'] = 0
+                agg['Peak Season Cap'] = (agg['Total Headcount'] * 2.5).astype(int)
+                agg['SKUs/Hour/Person'] = round(np.random.uniform(45, 75), 1)
+                agg['Shift'] = 'Morning'
+                return agg
+            return df
+        except Exception:
+            pass
     return generate_labor_data()
 
 
 def get_alert_data(n: int = 12) -> pd.DataFrame:
-    """Route to uploaded alerts or mock generator."""
+    """Route to uploaded alerts, demo CSV, or mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_alerts") is not None:
         df = st.session_state.uploaded_alerts.copy()
         df = _standardize_df_columns(df)
         return df
+    # Try loading pre-built demo data
+    demo_path = Path(".") / "demo_data" / "alerts.csv"
+    if demo_path.exists():
+        try:
+            df = pd.read_csv(demo_path)
+            df = _standardize_df_columns(df)
+            return df
+        except Exception:
+            pass
     return generate_alert_feed(n=n)
 
 
 def get_orders_basic(n: int = 30, seed: int = 42) -> pd.DataFrame:
-    """Route to uploaded orders (sampled) or basic mock generator."""
+    """Route to uploaded orders (sampled), demo CSV, or basic mock generator."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_orders") is not None:
         df = st.session_state.uploaded_orders
         if len(df) > n:
             return df.sample(n=n, random_state=seed).reset_index(drop=True)
         return df
+    # Try loading pre-built demo data
+    demo_path = Path(".") / "demo_data" / "orders.csv"
+    if demo_path.exists():
+        try:
+            df = pd.read_csv(demo_path)
+            df = _standardize_df_columns(df)
+            if len(df) > n:
+                return df.sample(n=n, random_state=seed).reset_index(drop=True)
+            return df
+        except Exception:
+            pass
     return generate_orders_basic(n=n, seed=seed)
 
 
 def get_sla_dataframe() -> pd.DataFrame:
-    """Return SLA data as DataFrame (for uploaded mode compatibility)."""
+    """Return SLA data as DataFrame (for uploaded/demo mode compatibility)."""
     if get_data_source() == "upload" and st.session_state.get("uploaded_sla") is not None:
         return st.session_state.uploaded_sla
+    # Try loading pre-built demo data
+    demo_path = Path(".") / "demo_data" / "sla_history.csv"
+    if demo_path.exists():
+        try:
+            df = pd.read_csv(demo_path)
+            return df
+        except Exception:
+            pass
     # Build from mock generator and convert to DataFrame
     months, history, forecast_days, forecast = generate_sla_history()
     rows = []

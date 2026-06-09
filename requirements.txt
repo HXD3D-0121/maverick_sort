@@ -1,11 +1,35 @@
-streamlit>=1.58.0
-numpy>=1.23
-pandas>=1.4.0
-altair>=4.0
-plotly>=5.0
-streamlit-autorefresh>=1.0.1
-huggingface_hub>=0.23.0
-transformers>=4.40.0
-torch>=2.0.0
-sentence-transformers>=3.0.0
-faiss-cpu>=1.8.0
+# Maverick-SORT — Dependency Lockfile
+# Generated: 2026-06-09
+# Recommended Python: 3.12+
+
+# ── Core Dashboard ──
+streamlit==1.58.0
+numpy==2.4.6
+pandas==3.0.3
+altair==6.1.0
+plotly==6.8.0
+streamlit-autorefresh==1.0.1
+
+# ── AI / HuggingFace (Maverick Copilot) ──
+huggingface-hub==1.18.0
+transformers==5.10.2
+torch==2.12.0+cpu
+sentence-transformers==5.5.1
+faiss-cpu==1.14.2
+
+# ── Scientific / ML ──
+scipy==1.17.1
+scikit-learn==1.8.0
+pillow==12.2.0
+
+# ── HuggingFace Dependencies ──
+filelock==3.29.0
+hf-xet==1.5.0
+jinja2==3.1.6
+packaging==26.2
+pyyaml==6.0.3
+regex==2026.5.9
+requests==2.34.2
+safetensors==0.7.0
+tokenizers==0.22.2
+tqdm==4.67.3
