@@ -14,12 +14,14 @@ pip install -r requirements.txt
 
 **Launch the Essential Edition (v7, AI-enhanced):**
 ```bash
-**streamlit run streamlit_app_v7.py**
+streamlit run streamlit_app_v7.py
+https://appappv7py-kdim8szhnwpqgcvbi9jr99.streamlit.app/
 ```
 
 **Launch the Professional Edition (v5, full features):**
 ```bash
-**streamlit run streamlit_app_pro_v5.py**
+streamlit run streamlit_app_pro_v5.py
+https://appappprov5py-jg7vk5hd4wzxbbkystnznw.streamlit.app/
 ```
 
 > Both editions ship with pre-built static data pools (`data/`, `demo_data/`). No algorithm runtime or model training is required for dashboard rendering — all JSON analytics and CSV demos are ready out-of-the-box.
