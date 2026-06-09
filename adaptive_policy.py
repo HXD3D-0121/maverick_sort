@@ -1,7 +1,7 @@
 """
 Adaptive Policy Module — Pro Edition
 ====================================
-Sunergy Pharma Smart Wave Allocation System
+Maverick-SORT Smart Wave Allocation System
 
 功能定位：
     - 专业版（Pro）增值模块，面向中大型医药流通企业
@@ -710,7 +710,7 @@ class AdaptivePolicyController:
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("  Sunergy Pharma — Adaptive Policy Module (Pro Edition)")
+    print("  Maverick-SORT — Adaptive Policy Module (Pro Edition)")
     print("  Features: EWMA | Adaptive Capacity | Online Learning | Federated (Reserved)")
     print("=" * 70)
 

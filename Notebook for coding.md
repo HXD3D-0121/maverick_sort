@@ -15,7 +15,7 @@ Ver.03访问地址：
   
 ##  个人Github Fork仓库地址：
 
-https://github.com/HXD3D-0121/sunergy_pharma/tree/Code-for-Deep-Reinforcement-Learning
+https://github.com/HXD3D-0121/maverick_sort/tree/Code-for-Deep-Reinforcement-Learning
 
 
 ## Sreaamlit APP访问链接：

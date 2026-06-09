@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Business Value Module
+Maverick-SORT — Business Value Module
 ========================================
 Pages:
   - ROI Calculator
@@ -105,13 +105,13 @@ def render_roi_calculator():
     breakdown_df = pd.DataFrame({
         "Category": ["Manual Distance", "Picker Labor", "Violation Penalties", "Software Subscription"],
         "Current (CNY)": [manual_cost, picker_cost, violation_cost_annual, 0],
-        "With Sunergy (CNY)": [manual_cost * 0.75, picker_cost * 0.75, violation_cost_annual * 0.4, pro_annual],
+        "With Maverick (CNY)": [manual_cost * 0.75, picker_cost * 0.75, violation_cost_annual * 0.4, pro_annual],
     })
     breakdown_melt = breakdown_df.melt(id_vars=["Category"], var_name="Scenario", value_name="Amount")
     bchart = alt.Chart(breakdown_melt).mark_bar(cornerRadiusEnd=4).encode(
         x=alt.X("Category:N", title="", sort=None),
         y=alt.Y("Amount:Q", title="CNY / Year"),
-        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Current (CNY)", "With Sunergy (CNY)"], range=["#64748b", "#f59e0b"])),
+        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Current (CNY)", "With Maverick (CNY)"], range=["#64748b", "#f59e0b"])),
         xOffset="Scenario:N",
     ).properties(height=300)
     st.altair_chart(bchart, width='stretch')
@@ -123,7 +123,7 @@ def render_roi_calculator():
 
 def render_tco_analysis():
     st.markdown('<div class="main-header">TCO Analysis</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">5-Year Total Cost of Ownership: Manual vs Sunergy Pro</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">5-Year Total Cost of Ownership: Manual vs Maverick Pro</div>', unsafe_allow_html=True)
 
     col_cfg, _ = st.columns([1, 2])
     with col_cfg:
@@ -141,33 +141,33 @@ def render_tco_analysis():
     base_total = base_picker_cost + base_violation + base_distance
 
     manual_costs = []
-    sunergy_costs = []
+    maverick_costs = []
     for y in years:
         manual_y = base_total * ((1 + wage_growth) ** (y - 1))
         sub_y = 8999 * 12 * warehouses * ((1 + 0.05) ** (y - 1))  # 5% annual price increase
         implementation = 50000 if y == 1 else 0
-        sunergy_y = sub_y + implementation + (manual_y * 0.25)  # 25% residual manual cost
+        maverick_y = sub_y + implementation + (manual_y * 0.25)  # 25% residual manual cost
         manual_costs.append(manual_y)
-        sunergy_costs.append(sunergy_y)
+        maverick_costs.append(maverick_y)
 
     tco_df = pd.DataFrame({
         "Year": years,
         "Manual Operations": manual_costs,
-        "Sunergy Pro": sunergy_costs,
+        "Maverick Pro": maverick_costs,
     })
     tco_melt = tco_df.melt(id_vars=["Year"], var_name="Scenario", value_name="Cost")
 
     # Cumulative TCO chart
     tco_df["Cumulative Manual"] = np.cumsum(tco_df["Manual Operations"])
-    tco_df["Cumulative Sunergy"] = np.cumsum(tco_df["Sunergy Pro"])
-    tco_df["Savings"] = tco_df["Cumulative Manual"] - tco_df["Cumulative Sunergy"]
+    tco_df["Cumulative Maverick"] = np.cumsum(tco_df["Maverick Pro"])
+    tco_df["Savings"] = tco_df["Cumulative Manual"] - tco_df["Cumulative Maverick"]
 
     st.markdown("---")
     st.markdown('<div class="section-header">Annual Cost Comparison</div>', unsafe_allow_html=True)
     ann_chart = alt.Chart(tco_melt).mark_bar(cornerRadiusEnd=4).encode(
         x=alt.X("Year:O", title="Year"),
         y=alt.Y("Cost:Q", title="CNY / Year"),
-        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Manual Operations", "Sunergy Pro"], range=["#64748b", "#f59e0b"])),
+        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Manual Operations", "Maverick Pro"], range=["#64748b", "#f59e0b"])),
         xOffset="Scenario:N",
     ).properties(height=300)
     st.altair_chart(ann_chart, width='stretch')
@@ -176,20 +176,20 @@ def render_tco_analysis():
     st.markdown('<div class="section-header">Cumulative TCO & Breakeven</div>', unsafe_allow_html=True)
     cum_df = pd.DataFrame({
         "Year": years * 2,
-        "Scenario": ["Manual"] * 5 + ["Sunergy Pro"] * 5,
-        "Cumulative": list(tco_df["Cumulative Manual"]) + list(tco_df["Cumulative Sunergy"]),
+        "Scenario": ["Manual"] * 5 + ["Maverick Pro"] * 5,
+        "Cumulative": list(tco_df["Cumulative Manual"]) + list(tco_df["Cumulative Maverick"]),
     })
     cum_chart = alt.Chart(cum_df).mark_line(strokeWidth=3, point=True).encode(
         x=alt.X("Year:O", title="Year"),
         y=alt.Y("Cumulative:Q", title="Cumulative CNY"),
-        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Manual", "Sunergy Pro"], range=["#64748b", "#f59e0b"])),
+        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Manual", "Maverick Pro"], range=["#64748b", "#f59e0b"])),
     ).properties(height=320)
     st.altair_chart(cum_chart, width='stretch')
 
     # Breakeven year
     breakeven = None
     for i, row in tco_df.iterrows():
-        if row["Cumulative Sunergy"] < row["Cumulative Manual"]:
+        if row["Cumulative Maverick"] < row["Cumulative Manual"]:
             breakeven = row["Year"]
             break
 
@@ -205,14 +205,14 @@ def render_tco_analysis():
     for wg in wage_scenarios:
         mc = sum([base_total * ((1 + wg) ** (y - 1)) for y in years])
         sc = sum([8999 * 12 * warehouses * ((1 + 0.05) ** (y - 1)) + (base_total * ((1 + wg) ** (y - 1)) * 0.25) for y in years]) + 50000
-        sens_rows.append({"Wage Growth": f"{wg*100:.1f}%", "Manual TCO": mc, "Sunergy TCO": sc, "Net Savings": mc - sc})
+        sens_rows.append({"Wage Growth": f"{wg*100:.1f}%", "Manual TCO": mc, "Maverick TCO": sc, "Net Savings": mc - sc})
     sens_df = pd.DataFrame(sens_rows)
-    sens_melt = sens_df.melt(id_vars=["Wage Growth"], value_vars=["Manual TCO", "Sunergy TCO"], var_name="Scenario", value_name="TCO")
+    sens_melt = sens_df.melt(id_vars=["Wage Growth"], value_vars=["Manual TCO", "Maverick TCO"], var_name="Scenario", value_name="TCO")
 
     sens_chart = alt.Chart(sens_melt).mark_bar(cornerRadiusEnd=4).encode(
         x=alt.X("Wage Growth:N", title="Annual Wage Growth"),
         y=alt.Y("TCO:Q", title="5-Year TCO (CNY)"),
-        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Manual TCO", "Sunergy TCO"], range=["#64748b", "#f59e0b"])),
+        color=alt.Color("Scenario:N", scale=alt.Scale(domain=["Manual TCO", "Maverick TCO"], range=["#64748b", "#f59e0b"])),
         xOffset="Scenario:N",
     ).properties(height=280)
     st.altair_chart(sens_chart, width='stretch')
@@ -226,7 +226,7 @@ def render_tco_analysis():
 
 def render_competitor_radar():
     st.markdown('<div class="main-header">Competitor Radar</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">How Sunergy stacks up against traditional WMS and enterprise suites</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">How Maverick stacks up against traditional WMS and enterprise suites</div>', unsafe_allow_html=True)
 
     comp_df = get_competitor_data()
 
@@ -242,9 +242,9 @@ def render_competitor_radar():
     dim_map = dict(zip(dimensions, dim_labels))
     melted["Dimension"] = melted["Dimension"].map(dim_map)
 
-    # Highlight Sunergy
+    # Highlight Maverick
     melted["Color"] = melted["Vendor"].apply(
-        lambda v: "#f59e0b" if v == "Sunergy (Us)" else "#64748b"
+        lambda v: "#f59e0b" if v == "Maverick (Us)" else "#64748b"
     )
 
     radar_chart = alt.Chart(melted).mark_line(strokeWidth=2.5, opacity=0.8).encode(
@@ -269,7 +269,7 @@ def render_competitor_radar():
     st.markdown('<div class="section-header">Key Differentiators</div>', unsafe_allow_html=True)
 
     diffs = [
-        ("AI-Native vs Rule-Based", "Traditional WMS relies on static rules. Sunergy uses KGDRL that adapts to order patterns in real time.", "#3b82f6"),
+        ("AI-Native vs Rule-Based", "Traditional WMS relies on static rules. Maverick uses KGDRL that adapts to order patterns in real time.", "#3b82f6"),
         ("GSP Compliance Built-In", "Temperature isolation and near-expiry FIFO are enforced at the algorithm level, not as afterthoughts.", "#10b981"),
         ("Explainable Decisions", "Every wave allocation is auditable: why this temperature, why this zone, why this order. GSP inspectors love it.", "#f59e0b"),
         ("Fast Deployment", "Pure Python + Streamlit. No SAP consultants, no 6-month implementation. Live in 2 weeks.", "#8b5cf6"),

@@ -1,4 +1,4 @@
-# Sunergy Pharma Pro v3.0 — Real-Time Data Upload Feasibility Analysis
+# Maverick-SORT Pro v3.0 — Real-Time Data Upload Feasibility Analysis
 
 > **Document Type:** Technical Feasibility Study  
 > **Scope:** Assess the necessity, architecture, and implementation path for enterprise data upload interfaces across all 20+ functional pages.  
@@ -15,7 +15,7 @@
 
 **Answer: Yes — with tiered prioritization.**
 
-Adding data upload capability transforms Sunergy Pharma from a **demo-grade simulation tool** into a **pilot-ready analytics platform**. For pharmaceutical enterprises evaluating the system, the ability to "plug in their own numbers" is often the decisive factor between "interesting prototype" and "viable vendor."
+Adding data upload capability transforms Maverick-SORT from a **demo-grade simulation tool** into a **pilot-ready analytics platform**. For pharmaceutical enterprises evaluating the system, the ability to "plug in their own numbers" is often the decisive factor between "interesting prototype" and "viable vendor."
 
 However, not all 20+ pages require real data. A **tiered approach** (P0/P1/P2) balances development effort with commercial impact.
 
@@ -336,7 +336,7 @@ Place at the **top of the sidebar**, above Categories. This makes the data sourc
 
 ```
 ┌──────────────────────────────┐
-│ 🔶 Sunergy Pharma            │
+│ 🔶 Maverick-SORT            │
 │ Professional Edition v3.0    │
 ├──────────────────────────────┤
 │ Data Source                  │

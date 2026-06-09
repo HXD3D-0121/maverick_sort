@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Orders & Inventory Module
+Maverick-SORT — Orders & Inventory Module
 ============================================
 Pages:
   - Omni-Channel Orders

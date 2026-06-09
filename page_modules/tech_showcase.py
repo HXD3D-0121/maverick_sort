@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Tech Showcase Module
+Maverick-SORT — Tech Showcase Module
 =======================================
 Pages:
   - KGDRL Framework Visualization
@@ -361,8 +361,8 @@ def render_patent_wall():
 # =============================================================================
 
 def render_hf_copilot():
-    """Sunergy Copilot FAQ page powered by Hugging Face LLMs."""
-    st.markdown('<div class="main-header">🤖 Sunergy Copilot</div>', unsafe_allow_html=True)
+    """Maverick Copilot FAQ page powered by Hugging Face LLMs."""
+    st.markdown('<div class="main-header">🤖 Maverick Copilot</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">AI-powered assistant for system understanding and decision support</div>', unsafe_allow_html=True)
 
     hf = try_import_hf()

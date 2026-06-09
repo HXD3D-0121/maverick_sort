@@ -1,4 +1,4 @@
-# Sunergy Pharma — Hugging Face 大模型集成技术路径
+# Maverick-SORT — Hugging Face 大模型集成技术路径
 
 > **集成日期**：2026/06/08（Day 5）  
 > **项目分支**：`Code-for-Deep-Reinforcement-Learning`  
@@ -161,7 +161,7 @@ def predict(orders_df, date_col="order_date", value_col="quantity", horizon=7):
 | AI Report Generator | What-If Lab 摘要 | + Business Analysis 全报告 |
 | AI Root Cause Analysis (RAG) | ❌ | Alert Center 上传数据后可用 |
 | AI Demand Forecasting | ❌ | Data Center 上传 orders.csv 后可用 |
-| Sunergy Copilot | FAQ 模式（预置 8 问） | 上下文感知（结合当前页面数据） |
+| Maverick Copilot | FAQ 模式（预置 8 问） | 上下文感知（结合当前页面数据） |
 
 ---
 

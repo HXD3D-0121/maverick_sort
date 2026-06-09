@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Professional Edition v2.0
+Maverick-SORT — Professional Edition v2.0
 ===========================================
 Pro Tier Streamlit Application
 
@@ -75,7 +75,7 @@ except Exception as e:
 # PAGE CONFIG
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma | Professional Edition v2",
+    page_title="Maverick-SORT | Professional Edition v2",
     page_icon="🔶",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -307,7 +307,7 @@ def generate_labor_data():
 with st.sidebar:
     st.markdown("""
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔶 Sunergy Pharma</div>
+        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔶 Maverick-SORT</div>
         <div style="font-size:0.8rem; color:#94a3b8;">Professional Edition v2.0</div>
         <div style="margin-top:0.5rem;">
             <span style="background:linear-gradient(135deg, #f59e0b, #ec4899); color:white; padding:3px 10px; border-radius:12px; font-size:0.7rem; font-weight:700;">PRO</span>
@@ -1670,7 +1670,7 @@ elif page == "📈 Order Analytics":
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; font-size:0.7rem; color:#475569; padding:1rem 0;">
-    Sunergy Pharma Professional Edition v2.0 | Day 3 Commercialization Build | 2026/06/06<br>
+    Maverick-SORT Professional Edition v2.0 | Day 3 Commercialization Build | 2026/06/06<br>
     Modules: multi_objective_scheduler.py | adaptive_policy.py | what_if_simulator.py | kgdrl_core_v2.py<br>
     <span style="color:#f59e0b;">🔶 Professional Edition</span> | Built with Streamlit + Real Algorithm Engines
 </div>

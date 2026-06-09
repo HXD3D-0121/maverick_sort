@@ -1713,7 +1713,7 @@ AI 实现了两阶段训练：
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│              Sunergy Pharma 产品分层矩阵                      │
+│              Maverick-SORT 产品分层矩阵                      │
 ├──────────────────────────────────────────────────────────────┤
 │  🔷 Essential (基础版)        🔶 Pro (专业版)       🔬 R&D   │
 │  ├── KGDRL + What-if引擎      ├── 多目标帕累托      ├── BVN  │
@@ -2400,7 +2400,7 @@ ELSE:
 - **替代**：Order Flow Galaxy
 - **概念**：3D带状图，展示"5年×4场景累计现金流"
 - **X轴**：时间（0-60月）
-- **Y轴**：场景（1=无Sunergy基线, 2=保守15%效率增益, 3=中性25%, 4=乐观35%）
+- **Y轴**：场景（1=无Maverick基线, 2=保守15%效率增益, 3=中性25%, 4=乐观35%）
 - **Z轴**：累计现金流（CNY）
 - **关键标注**：盈亏平衡线（Z=0平面）+ 首次正交叉点
 
@@ -2563,7 +2563,7 @@ hf_integration/
 | AI Insight Engine | Algorithm Arena | benchmark结果生成中文策略结论 |
 | AI Report Generator | What-If Scenario Lab | 对比结果自动生成执行摘要 |
 | AI Insight Engine | SLA Analytics | 历史趋势数据AI解读 |
-| 🤖 Sunergy Copilot | 全局Sidebar | FAQ问答模式（预置8个问题） |
+| 🤖 Maverick Copilot | 全局Sidebar | FAQ问答模式（预置8个问题） |
 
 **专业版 v5.0（23页）**：
 
@@ -2573,7 +2573,7 @@ hf_integration/
 | AI Report Generator | What-If Lab + Business Analysis | 一键生成投资者级报告 |
 | AI Root Cause Analysis (RAG) | Alert Center | 基于上传数据构建轻量向量知识库 |
 | AI Demand Forecasting | Data Center | 对上传orders.csv进行时序预测 |
-| 🤖 Sunergy Copilot | 全局Sidebar | 上下文感知（结合当前页面数据） |
+| 🤖 Maverick Copilot | 全局Sidebar | 上下文感知（结合当前页面数据） |
 
 ### 17.4 关键设计决策
 

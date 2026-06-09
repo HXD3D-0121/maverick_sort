@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Essential Edition v5.0
+Maverick-SORT — Essential Edition v5.0
 ========================================
 Standard Tier Streamlit Application
 
@@ -63,7 +63,7 @@ except Exception:
 # PAGE CONFIG
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma | Essential Edition v5",
+    page_title="Maverick-SORT | Essential Edition v5",
     page_icon="🔷",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -291,7 +291,7 @@ def generate_labor_data():
 with st.sidebar:
     st.markdown("""
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔷 Sunergy Pharma</div>
+        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔷 Maverick-SORT</div>
         <div style="font-size:0.8rem; color:#94a3b8;">Essential Edition v5.0</div>
         <div style="margin-top:0.5rem;">
             <span style="background:#3b82f6; color:white; padding:3px 10px; border-radius:12px; font-size:0.7rem; font-weight:700;">ESSENTIAL</span>
@@ -727,7 +727,7 @@ elif page == "💳 Plans & ROI Calculator":
                 <div><span class="feature-check">✓</span> Academic Collaboration</div>
                 <div><span class="feature-check">✓</span> Custom Algorithm Design</div>
                 <div><span class="feature-check">✓</span> White-Label Solutions</div>
-                <div style="margin-top:0.5rem; color:#8b5cf6; font-size:0.75rem;">📧 Contact: research@sunergy.pharma</div>
+                <div style="margin-top:0.5rem; color:#8b5cf6; font-size:0.75rem;">📧 Contact: research@maverick.sort</div>
             </div>
             <div style="margin-top:1.5rem;">
                 <div style="background:#8b5cf6; color:white; padding:10px; border-radius:8px; text-align:center; font-weight:700; cursor:pointer;">Contact Sales</div>
@@ -1414,7 +1414,7 @@ elif page == "📈 Order Analytics":
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; font-size:0.7rem; color:#475569; padding:1rem 0;">
-    Sunergy Pharma Essential Edition v5.0 | Day 3 Commercialization Build | 2026/06/06<br>
+    Maverick-SORT Essential Edition v5.0 | Day 3 Commercialization Build | 2026/06/06<br>
     Modules: what_if_simulator.py | pharma_wave_allocation.py | kgdrl_core_v2.py<br>
     <span style="color:#3b82f6;">🔷 Essential Edition</span> | Built with Streamlit
 </div>

@@ -1,10 +1,10 @@
 """
-Sunergy Pharma — Professional Edition v5.0 (HF AI Enhanced)
+Maverick-SORT — Professional Edition v5.0 (HF AI Enhanced)
 ============================================================
 Refactored Pro Tier with Unified Data Upload Hub + Hugging Face AI Integration
 
 New in v5.0:
-  - 🤖 Sunergy Copilot: global sidebar assistant + dedicated FAQ page
+  - 🤖 Maverick Copilot: global sidebar assistant + dedicated FAQ page
   - AI Insight Engine on Algorithm Arena, Strategy Optimizer, Live Adaptive, SLA Analytics
   - AI Report Generator on What-If Lab + Business Analysis
   - AI Root Cause Analysis with lightweight RAG on Alert Center
@@ -45,7 +45,7 @@ except ImportError:
 # PAGE CONFIG
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma | Professional Edition v4",
+    page_title="Maverick-SORT | Professional Edition v4",
     page_icon="🔶",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -367,7 +367,7 @@ def render_data_hub():
 with st.sidebar:
     st.markdown("""
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔶 Sunergy Pharma</div>
+        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔶 Maverick-SORT</div>
         <div style="font-size:0.8rem; color:#94a3b8;">Professional Edition v5.0</div>
         <div style="margin-top:0.5rem;">
             <span style="background:linear-gradient(135deg, #f59e0b, #ec4899); color:white; padding:3px 10px; border-radius:12px; font-size:0.7rem; font-weight:700;">PRO</span>
@@ -375,7 +375,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    # --- Sunergy Copilot (top sidebar, collapsible) ---
+    # --- Maverick Copilot (top sidebar, collapsible) ---
     hf = try_import_hf()
     copilot_ready = hf.get("is_ready") and hf.get("copilot")
     status_color = "#10b981" if copilot_ready else "#f59e0b"
@@ -390,7 +390,7 @@ with st.sidebar:
                 transition: all 0.3s ease;">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.1rem;">🤖</span>
-            <span style="font-weight: 700; color: white; font-size: 0.9rem;">Sunergy Copilot</span>
+            <span style="font-weight: 700; color: white; font-size: 0.9rem;">Maverick Copilot</span>
             <span style="background: rgba(255,255,255,0.25); color: white; padding: 1px 8px;
                        border-radius: 10px; font-size: 0.6rem; font-weight: 600; margin-left: 4px;">
                 {status_text}
@@ -424,7 +424,7 @@ with st.sidebar:
         if user_q:
             st.session_state.copilot_history.append(("user", user_q))
             if copilot_ready:
-                # Free-form input also goes through FAQ first, then LLM fallback with Sunergy system prompt
+                # Free-form input also goes through FAQ first, then LLM fallback with Maverick system prompt
                 ans = hf["copilot"].ask_faq(user_q, lang="en")
             else:
                 ans = f"🤖 Copilot is offline.\n\n**Reason:** {hf.get('msg', 'Unknown')}\n\nPlease install dependencies (`pip install -r requirements.txt`) and configure HF_TOKEN."
@@ -539,7 +539,7 @@ def render_3d_command_center():
     # --- Chart 2: Investment Trajectory Ribbon ---
     months = np.arange(0, 61)
     scenario_params = {
-        "Without Sunergy": {"gain": 0.0, "fee": 0, "impl": 0, "color": "#64748b"},
+        "Without Maverick": {"gain": 0.0, "fee": 0, "impl": 0, "color": "#64748b"},
         "Conservative": {"gain": 0.15, "fee": 8999, "impl": 50000, "color": "#3b82f6"},
         "Neutral": {"gain": 0.25, "fee": 8999, "impl": 50000, "color": "#f59e0b"},
         "Optimistic": {"gain": 0.35, "fee": 8999, "impl": 50000, "color": "#10b981"},
@@ -618,7 +618,7 @@ def render_3d_command_center():
             ))
             # Add breakeven dot
             cross = np.where(vals > 0)[0]
-            if len(cross) > 0 and name != "Without Sunergy":
+            if len(cross) > 0 and name != "Without Maverick":
                 first = cross[0]
                 fig2.add_trace(go.Scatter3d(
                     x=[months[first]], y=[idx], z=[vals[first]],
@@ -886,14 +886,14 @@ elif selected_page_key == "data_center":
 # --- User Guide ---
 elif selected_page_key == "user_guide":
     st.markdown('<div class="main-header">User Guide</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">How to use Sunergy Pharma Pro for operational excellence and profitability</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">How to use Maverick-SORT Pro for operational excellence and profitability</div>', unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("""
     <div style="background:#111827; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
         <div style="font-weight:700; color:#f8fafc; font-size:1.1rem; margin-bottom:0.5rem;">Welcome</div>
         <div style="font-size:0.9rem; color:#94a3b8; line-height:1.6;">
-            Sunergy Pharma Professional Edition is an AI-native warehouse wave allocation system
+            Maverick-SORT Professional Edition is an AI-native warehouse wave allocation system
             designed for pharmaceutical distributors. This guide explains each module from a
             <b>business operations and profitability</b> perspective.
         </div>
@@ -1039,7 +1039,7 @@ hf = try_import_hf()
 if hf["is_ready"] and hf["copilot"]:
     with st.sidebar:
         st.markdown("---")
-        st.markdown('<div style="font-weight:700; color:#8b5cf6; font-size:0.9rem;">🤖 Sunergy Copilot</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-weight:700; color:#8b5cf6; font-size:0.9rem;">🤖 Maverick Copilot</div>', unsafe_allow_html=True)
         copilot_q = st.text_input("Ask anything...", key="global_copilot_q", label_visibility="collapsed")
         if copilot_q:
             with st.spinner("Thinking..."):
@@ -1063,7 +1063,7 @@ if hf["is_ready"] and hf["copilot"]:
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; font-size:0.7rem; color:#475569; padding:1rem 0;">
-    Sunergy Pharma Professional Edition v5.0 | Day 4 Commercialization Build | 2026/06/08<br>
+    Maverick-SORT Professional Edition v5.0 | Day 4 Commercialization Build | 2026/06/08<br>
     Modular Architecture: page_modules/ | Data Upload Hub Enabled | HF AI Powered<br>
     <span style="color:#f59e0b;">Professional Edition</span>
 </div>

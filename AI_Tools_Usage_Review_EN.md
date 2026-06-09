@@ -2125,7 +2125,7 @@ ELSE:
 - **Replaces**: Order Flow Galaxy
 - **Concept**: 3D ribbon showing "cumulative cash flow over 5 years under 4 scenarios"
 - **X-axis**: Time (Months 0–60)
-- **Y-axis**: Scenario (1=Baseline without Sunergy, 2=Conservative 15%, 3=Neutral 25%, 4=Optimistic 35%)
+- **Y-axis**: Scenario (1=Baseline without Maverick, 2=Conservative 15%, 3=Neutral 25%, 4=Optimistic 35%)
 - **Z-axis**: Cumulative Cash Flow (CNY)
 - **Key annotations**: Break-even plane (Z=0) + first positive-crossing marker
 
@@ -2288,7 +2288,7 @@ hf_integration/
 | AI Insight Engine | Algorithm Arena | Generate NL strategy conclusions from benchmark |
 | AI Report Generator | What-If Scenario Lab | Auto-generate executive summary from comparison |
 | AI Insight Engine | SLA Analytics | AI interpretation of historical trend data |
-| 🤖 Sunergy Copilot | Global Sidebar | FAQ mode (8 pre-loaded questions) |
+| 🤖 Maverick Copilot | Global Sidebar | FAQ mode (8 pre-loaded questions) |
 
 **Professional v5.0 (23 pages)**:
 
@@ -2298,7 +2298,7 @@ hf_integration/
 | AI Report Generator | What-If Lab + Business Analysis | One-click investor-grade report |
 | AI Root Cause Analysis (RAG) | Alert Center | Lightweight vector KB from uploaded data |
 | AI Demand Forecasting | Data Center | Time-series prediction on uploaded orders.csv |
-| 🤖 Sunergy Copilot | Global Sidebar | Context-aware (reads current page data) |
+| 🤖 Maverick Copilot | Global Sidebar | Context-aware (reads current page data) |
 
 ### 15.4 Key Design Decisions
 

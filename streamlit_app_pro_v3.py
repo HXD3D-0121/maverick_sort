@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Professional Edition v3.0
+Maverick-SORT — Professional Edition v3.0
 =============================================
 Refactored Pro Tier Streamlit Application
 
@@ -23,7 +23,7 @@ import streamlit as st
 # PAGE CONFIG
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma | Professional Edition v3",
+    page_title="Maverick-SORT | Professional Edition v3",
     page_icon="🔶",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -127,7 +127,7 @@ NAV_STRUCTURE = {
 with st.sidebar:
     st.markdown("""
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔶 Sunergy Pharma</div>
+        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔶 Maverick-SORT</div>
         <div style="font-size:0.8rem; color:#94a3b8;">Professional Edition v3.0</div>
         <div style="margin-top:0.5rem;">
             <span style="background:linear-gradient(135deg, #f59e0b, #ec4899); color:white; padding:3px 10px; border-radius:12px; font-size:0.7rem; font-weight:700;">PRO</span>
@@ -170,7 +170,7 @@ with st.sidebar:
 
     st.markdown("""
     <div style="font-size:0.7rem; color:#475569; text-align:center;">
-        Sunergy Pharma Pro v3.0<br>
+        Maverick-SORT Pro v3.0<br>
         Day 4 Commercialization Build<br>
         2026/06/07
     </div>
@@ -248,14 +248,14 @@ if selected_page_key == "cmd_center":
 # --- User Guide ---
 elif selected_page_key == "user_guide":
     st.markdown('<div class="main-header">User Guide</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">How to use Sunergy Pharma Pro for operational excellence and profitability</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">How to use Maverick-SORT Pro for operational excellence and profitability</div>', unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("""
     <div style="background:#111827; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
         <div style="font-weight:700; color:#f8fafc; font-size:1.1rem; margin-bottom:0.5rem;">Welcome</div>
         <div style="font-size:0.9rem; color:#94a3b8; line-height:1.6;">
-            Sunergy Pharma Professional Edition is an AI-native warehouse wave allocation system
+            Maverick-SORT Professional Edition is an AI-native warehouse wave allocation system
             designed for pharmaceutical distributors. This guide explains each module from a
             <b>business operations and profitability</b> perspective.
         </div>
@@ -395,7 +395,7 @@ elif selected_page_key == "demo_mode":
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; font-size:0.7rem; color:#475569; padding:1rem 0;">
-    Sunergy Pharma Professional Edition v3.0 | Day 4 Commercialization Build | 2026/06/07<br>
+    Maverick-SORT Professional Edition v3.0 | Day 4 Commercialization Build | 2026/06/07<br>
     Modular Architecture: page_modules/ | Built with Streamlit + Real Algorithm Engines<br>
     <span style="color:#f59e0b;">Professional Edition</span>
 </div>

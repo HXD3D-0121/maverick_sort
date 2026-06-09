@@ -1,0 +1,212 @@
+\documentclass{beamer}
+\usepackage{ctex, hyperref}
+\usepackage[T1]{fontenc}
+
+% other packages
+\usepackage{latexsym,amsmath,xcolor,multicol,booktabs,calligra}
+\usepackage{graphicx,pstricks,listings,stackengine}
+\usepackage{UCAS}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+
+% defs
+\def\cmd#1{\texttt{\color{red}\footnotesize $\backslash$#1}}
+\def\env#1{\texttt{\color{blue}\footnotesize #1}}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{halfgray}{gray}{0.55}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\bfseries\color{deepblue},
+    emphstyle=\ttfamily\color{deepred},    % Custom highlighting style
+    stringstyle=\color{deepgreen},
+    numbers=left,
+    numberstyle=\small\color{halfgray},
+    rulesepcolor=\color{red!20!green!20!blue!20},
+    frame=shadowbox,
+}
+
+\author[J. Luo]{Junyuan Luo \and Maverick Team}
+\title[Maverick-SORT: Optimization]{Smart Warehouse Assortment Optimization}
+\subtitle{Bridging Reinforcement Learning with Commercial Viability}
+\institute[SDC]{Sino-Danish College, UCAS}
+\date{8th, June, 2026}
+
+\begin{document}
+
+\kaishu
+\begin{frame}
+    \titlepage
+    \begin{figure}[htpb]
+        \begin{center}
+            % 请确保您的工作目录下有 pic/CAS_Logo.png 文件
+            \includegraphics[width=0.2\linewidth]{pic/CAS_Logo.png}
+        \end{center}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \tableofcontents[sectionstyle=show,subsectionstyle=show/shaded/hide,subsubsectionstyle=show/shaded/hide]
+\end{frame}
+
+%------------------------------------------------
+\section{Operational Bottleneck}
+
+\begin{frame}{The Operational Bottleneck}
+  \framesubtitle{Diagnostic Overview of the Pharmaceutical Supply Chain}
+  
+  The current warehousing paradigm is fundamentally constrained by several critical factors:
+  \vspace{0.5cm}
+  \begin{itemize}
+      \item \textbf{Order Fragmentation:} Managing over 90,000 daily orders with a high degree of SKU complexity (averaging 3-5 SKUs per order).
+      \item \textbf{Inventory Vulnerability:} Urgent requirement for strict First-In-First-Out (FIFO) protocols to mitigate near-expiry pharmaceutical waste.
+      \item \textbf{Labor Scalability:} A disproportionate reliance on temporary labor during seasonal peaks, reaching a 2.5x operational threshold.
+  \end{itemize}
+  \vspace{0.3cm}
+  \textit{Conclusion:} Heuristic scheduling is mathematically insufficient to resolve these concurrent constraints.
+\end{frame}
+
+%------------------------------------------------
+\section{Algorithmic Architecture}
+
+\begin{frame}{Core Algorithmic Architecture}
+  \framesubtitle{Birkhoff-von Neumann \& KGDRL}
+  
+  To solve the multi-objective wave allocation problem, we implemented an advanced mathematical pipeline:
+  \vspace{0.3cm}
+  \begin{itemize}
+      \item \textbf{Birkhoff-von Neumann (BvN) Decomposition:} Utilized to untangle high-density, multi-SKU permutation matrices into executable deterministic routing schedules.
+      \item \textbf{Knowledge Graph-based Deep Reinforcement Learning (KGDRL):} A robust PPO agent trained to dynamically adapt picking routes based on real-time temperature-zone capacities.
+      \item \textbf{Theoretical Defense:} The algorithmic foundations strictly adhere to methodologies validated within recent IEEE journal and conference literature, ensuring academic rigor and systemic stability.
+  \end{itemize}
+\end{frame}
+
+%=================================================
+% Slide 1: Flowchart (Algorithm Iteration Roadmap)
+%=================================================
+\begin{frame}{Algorithm Iteration Roadmap}
+  \framesubtitle{Strategic Decoupling: Commercial Engineering vs. Academic R\&D}
+  
+  \begin{center}
+    \resizebox{0.98\textwidth}{!}{
+    \begin{tikzpicture}[
+      node distance=1cm and 1.2cm,
+      mainbox/.style={rectangle, rounded corners, draw=UBCblue, fill=UBCblue!5, thick, text width=3.8cm, align=center, minimum height=1.3cm},
+      probox/.style={rectangle, rounded corners, draw=deepred, fill=deepred!5, thick, text width=3.8cm, align=center, minimum height=1.3cm},
+      acadbox/.style={rectangle, rounded corners, draw=deepgreen, fill=deepgreen!5, thick, text width=3.8cm, align=center, minimum height=1.3cm},
+      arrow/.style={thick, ->, >=Stealth, draw=UBCblue},
+      dashedarrow/.style={thick, dashed, ->, >=Stealth, draw=deepgreen}
+    ]
+
+      % --- Main Commercial Pipeline (Top Row) ---
+      \node[mainbox] (step1) {\textbf{1. IP Inheritance}\\Adopt existing KGDRL};
+      \node[mainbox, right=of step1] (step2) {\textbf{2. Core Upgrade}\\Vanilla PPO $\rightarrow$ Full KGDRL};
+      \node[mainbox, right=of step2] (step3) {\textbf{3. Baseline Sealing}\\Ablation \& Benchmarks};
+      
+      % --- Commercial Extension (Bottom Right) ---
+      \node[probox, below=1.5cm of step3] (step4) {\textbf{4. Product Differentiation}\\Multi-Obj \& Adaptive};
+
+      % --- Independent Academic Track (Bottom Left) ---
+      \node[acadbox, below=1.5cm of step1] (step5) {\textbf{5. Extended R\&D}\\BvN Decomposition\\(IEEE Standard)};
+
+      % --- Routing / Arrows ---
+      % Main Flow
+      \draw[arrow] (step1) -- (step2);
+      \draw[arrow] (step2) -- (step3);
+      \draw[arrow] (step3) -- node[right, font=\footnotesize, text=deepred, align=left] {Commercial\\Premium Upsell} (step4);
+
+      % Academic Branch
+      \draw[dashedarrow] (step1) -- node[left, font=\footnotesize, text=deepgreen, align=right] {Theoretical\\Expansion} (step5);
+
+      % --- Track Labels (To emphasize independence) ---
+      \node[above=0.3cm of step2, font=\large\bfseries\color{UBCblue}] {Main Commercial Engineering Pipeline};
+      \node[below=0.3cm of step5, font=\large\bfseries\color{deepgreen}] {Independent Academic Research Track};
+
+    \end{tikzpicture}
+    }
+  \end{center}
+  
+  \vspace{0.1cm}
+  \begin{itemize}
+      \item \textbf{Decoupled Architecture:} BvN decomposition is strictly isolated as a parallel theoretical pursuit, ensuring the core product matrix remains robust, lean, and highly scalable for market deployment.
+  \end{itemize}
+\end{frame}
+
+%=================================================
+% Slide 2: Single Column Elaboration (Ultra-Concise)
+%=================================================
+\begin{frame}{Detailed Iteration Logic \& Commercialization}
+  \framesubtitle{Bridging Technical Rigor with Market Scalability}
+  
+  \textbf{\color{UBCblue}Phase I: Foundation \& Validation}
+  \vspace{0.1cm}
+  \begin{enumerate}
+      \setlength{\itemsep}{0.15cm}
+      \item \textbf{IP Inheritance:} Adopted our group's KGDRL framework to ensure scenario alignment and IP security.
+      \item \textbf{Core Upgrade:} Evolved the codebase from a "vanilla PPO" into a complete knowledge-guided DRL engine.
+      \item \textbf{Baseline Sealing:} Validated via ablation studies and formally sealed as the foundational algorithm.
+  \end{enumerate}
+  
+  \vspace{0.4cm}
+  
+  \textbf{\color{UBCblue}Phase II: Expansion \& Advanced R\&D}
+  \vspace{0.1cm}
+  \begin{enumerate}
+      \setcounter{enumi}{3}
+      \setlength{\itemsep}{0.15cm}
+      \item \textbf{Commercial Upsell:} Integrated multi-objective (Pareto) and adaptive mechanisms to broaden market reach.
+      \item \textbf{BvN Extension:} Isolated BvN decomposition as a specialized, IEEE-targeted research track to secure our theoretical moat.
+  \end{enumerate}
+\end{frame}
+
+%------------------------------------------------
+\section{TOE Framework Diagnostic}
+
+\begin{frame}{TOE Framework Diagnostic}
+  \framesubtitle{Evaluating the Path to Adoption}
+  
+  Applying the Technology-Organization-Environment framework reveals our primary binding constraints:
+  \vspace{0.3cm}
+  \begin{itemize}
+      \item \textbf{Technology (Resolved):} The KGDRL model and Streamlit UI have been successfully integrated. Technical viability will no longer be a limiting factor.
+      \item \textbf{Organization (The Binding Constraint):} Front-line workforce (especially temporary staff) resistance. The Technology Acceptance Model (TAM) indicates a steep learning curve for AI-generated picking routes.
+      \item \textbf{Environment (Catalyst):} Stringent GSP regulatory compliance forces the enterprise to adopt our near-expiry (FIFO) management dashboard.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\section{Generative AI Collaboration}
+
+\begin{frame}{Generative AI as a Collaborative Engine}
+  \framesubtitle{Accelerating the Development Pipeline}
+  
+  As documented in our system repository, Generative AI was systematically deployed to augment human capital:
+  \vspace{0.3cm}
+  \begin{itemize}
+      \item \textbf{Algorithmic Translation:} Rapid conversion of theoretical BvN constructs into executable Python pipelines.
+      \item \textbf{Rapid Prototyping:} Supervised execution of our 7-Day Commercialization Plan, synthesizing backend data streams into an industrial-grade frontend dashboard.
+      \item \textbf{Resource Optimization:} Enabled a fundamentally non-technical team to construct a highly complex, full-stack enterprise solution within weeks.
+  \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\section{Strategic Priorities}
+
+\begin{frame}{Conclusion and Strategic Priorities}
+  \framesubtitle{Preparation for Demo Day}
+  
+  \begin{itemize}
+      \item \textbf{The Product is Built:} The Streamlit dashboard actively renders DRL-optimized routes and near-expiry alerts.
+      \item \textbf{Current Objective:} Shift focus from software engineering to organizational change management and commercial feasibility pitching.
+      \item \textbf{Next Steps:} Finalize the business architecture documentation, deploy more relevant functions, optimize current elements and prepare the demonstration sandbox for live evaluation.
+  \end{itemize}
+  % \vspace{0.8cm}
+  % \begin{center}
+  %     \textbf{Thank You.} \\
+  %     \textit{Questions regarding the KGDRL architecture or TOE integration are welcome.}
+  % \end{center}
+\end{frame}
+
+\end{document}

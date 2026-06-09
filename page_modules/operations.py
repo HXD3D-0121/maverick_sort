@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Operations Monitoring Module
+Maverick-SORT — Operations Monitoring Module
 ===============================================
 Pages:
   - Operations Dashboard

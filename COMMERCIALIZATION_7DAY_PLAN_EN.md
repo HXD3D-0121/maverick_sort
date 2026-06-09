@@ -133,7 +133,7 @@ This hierarchical structure naturally corresponds to the physical operation flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    Sunergy Pharma Product Matrix                     │
+│                    Maverick-SORT Product Matrix                     │
 ├─────────────────────────────────────────────────────────────────────┤
 │  🔷 Essential (Basic)      🔶 Pro (Professional)    🔬 R&D (Research)│
 │  ├── KGDRL Core Algorithm  ├── Multi-Objective      ├── BVN Matrix   │

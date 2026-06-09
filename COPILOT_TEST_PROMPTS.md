@@ -47,13 +47,13 @@
 
 | # | 输入 | 期望回答特征 |
 |---|------|-------------|
-| 15 | `What can I do with Sunergy Pharma?` | 介绍系统功能（调度优化、波次分配、What-if 模拟等），不是 "I don't know" |
+| 15 | `What can I do with Maverick-SORT?` | 介绍系统功能（调度优化、波次分配、What-if 模拟等），不是 "I don't know" |
 | 16 | `How does the system save money?` | 提到降低拣货距离、减少人力成本、优化波次 |
 | 17 | `What is the pricing?` | 提到 Essential ¥2,999、Pro ¥8,999（或类似商业信息） |
 | 18 | `Who is the target customer?` | 提到医药流通企业、仓储物流中心 |
 | 19 | `Summarize the project in one sentence` | 一句概括：医药智能波次分配 + KGDRL + 多目标优化 |
 
-**✅ 通过标准**：回答体现 Sunergy Pharma 项目知识，不是通用 Wikipedia 式回答。
+**✅ 通过标准**：回答体现 Maverick-SORT 项目知识，不是通用 Wikipedia 式回答。
 
 ---
 
@@ -63,7 +63,7 @@
 |---|------|---------|
 | 20 | （空输入，直接回车） | 不触发任何回复，输入框保持空 |
 | 21 | `???` | 走 LLM fallback，给出礼貌回应或请求澄清 |
-| 22 | `hello` | 走 LLM fallback，Sunergy Copilot 自我介绍 |
+| 22 | `hello` | 走 LLM fallback，Maverick Copilot 自我介绍 |
 | 23 | `什么是KGDRL`（中文） | 如果系统支持中文，返回中文预设答案；如不支持，走英文 fallback |
 
 ---
@@ -95,7 +95,7 @@
 |---|------|---------|
 | S1 | `What is KGDRL?` | 预设 FAQ 答案，提到知识图谱+GAT+PPO |
 | S2 | `Explain NSGA-II` | 预设 FAQ 答案，提到非支配排序+Pareto前沿 |
-| S3 | `What can I do with Sunergy Pharma?` | LLM fallback，介绍系统核心功能 |
+| S3 | `What can I do with Maverick-SORT?` | LLM fallback，介绍系统核心功能 |
 
 **演示话术**：
 > "无论是标准版还是专业版，Sidebar Copilot 都内置了相同的 AI 问答能力。预设问题秒回，开放问题走千问大模型。"

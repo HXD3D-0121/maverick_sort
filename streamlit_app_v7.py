@@ -1,12 +1,12 @@
 """
-Sunergy Pharma — Essential Edition v7.0 (HF AI Enhanced)
+Maverick-SORT — Essential Edition v7.0 (HF AI Enhanced)
 =========================================================
 Standard Tier Streamlit Application with Hugging Face AI Integration
 
 New in v7.0:
   - AI Insight Engine on Algorithm Arena & SLA Analytics
   - AI Report Generator on What-If Scenario Lab
-  - 🤖 Sunergy Copilot FAQ page powered by HF Qwen2.5
+  - 🤖 Maverick Copilot FAQ page powered by HF Qwen2.5
 
 Pages (18 total, vs 23 in Pro):
   - Orders & Inventory, Smart Scheduling (2 pages), Operations
@@ -23,7 +23,7 @@ import streamlit as st
 # PAGE CONFIG
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma | Essential Edition v6",
+    page_title="Maverick-SORT | Essential Edition v6",
     page_icon="🔷",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -117,7 +117,7 @@ NAV_STRUCTURE = {
 with st.sidebar:
     st.markdown("""
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔷 Sunergy Pharma</div>
+        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔷 Maverick-SORT</div>
         <div style="font-size:0.8rem; color:#94a3b8;">Essential Edition v7.0</div>
         <div style="margin-top:0.5rem;">
             <span style="background:#3b82f6; color:white; padding:3px 10px; border-radius:12px; font-size:0.7rem; font-weight:700;">ESSENTIAL</span>
@@ -126,7 +126,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 
-    # --- Sunergy Copilot (top sidebar, collapsible) ---
+    # --- Maverick Copilot (top sidebar, collapsible) ---
     hf = try_import_hf()
     copilot_ready = hf.get("is_ready") and hf.get("copilot")
     status_color = "#10b981" if copilot_ready else "#f59e0b"
@@ -145,7 +145,7 @@ with st.sidebar:
          onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.1rem;">🤖</span>
-            <span style="font-weight: 700; color: white; font-size: 0.9rem;">Sunergy Copilot</span>
+            <span style="font-weight: 700; color: white; font-size: 0.9rem;">Maverick Copilot</span>
             <span style="background: rgba(255,255,255,0.25); color: white; padding: 1px 8px;
                        border-radius: 10px; font-size: 0.6rem; font-weight: 600; margin-left: 4px;">
                 {status_text}
@@ -317,7 +317,7 @@ if selected_page_key == "dashboard":
 
 elif selected_page_key == "user_guide":
     st.markdown('<div class="main-header">User Guide</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">How to use Sunergy Pharma Essential for operational excellence</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">How to use Maverick-SORT Essential for operational excellence</div>', unsafe_allow_html=True)
 
     guide_sections = [
         (

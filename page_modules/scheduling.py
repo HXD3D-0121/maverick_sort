@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Scheduling Engine Module
+Maverick-SORT — Scheduling Engine Module
 ===========================================
 Pages:
   - Algorithm Arena

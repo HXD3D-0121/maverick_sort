@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Hugging Face Integration Module
+Maverick-SORT — Hugging Face Integration Module
 =================================================
 Unified LLM client with graceful degradation:
   HF Inference API (primary) → Local transformers (fallback) → Rule-based (last resort)

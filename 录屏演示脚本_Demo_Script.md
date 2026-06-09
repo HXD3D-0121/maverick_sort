@@ -1,4 +1,4 @@
-# Sunergy Pharma 录屏演示脚本 / Screen Recording Demo Script
+# Maverick-SORT 录屏演示脚本 / Screen Recording Demo Script
 
 > **版本 / Version**: Pro v5.0 + Essential v7.0
 > **建议时长 / Recommended Duration**: 6–8 分钟
@@ -22,14 +22,14 @@
 
 **【解说词 / Script】**
 
-> "Hello everyone. I'm presenting **Sunergy Pharma** — an intelligent wave allocation system for pharmaceutical distribution, powered by Knowledge-Graph-Guided Deep Reinforcement Learning, or **KGDRL**.
+> "Hello everyone. I'm presenting **Maverick-SORT** — an intelligent wave allocation system for pharmaceutical distribution, powered by Knowledge-Graph-Guided Deep Reinforcement Learning, or **KGDRL**.
 >
 > Every day, pharma warehouses process tens of thousands of orders. They must respect strict cold-chain rules, meet tight delivery deadlines, and balance labor and vehicle costs. Traditional WMS systems rely on static rules that break down under real-world variability.
 >
 > Our solution uses **KGDRL** to automatically optimize wave allocation — grouping orders into waves that minimize total operational cost while guaranteeing drug quality and GSP compliance."
 
 **【要点提示】**
-- 手指向侧边栏顶部的 "Sunergy Pharma Pro v5.0" 标识。
+- 手指向侧边栏顶部的 "Maverick-SORT Pro v5.0" 标识。
 - 强调 "KGDRL" 这个词，这是核心技术关键词。
 
 ---
@@ -42,7 +42,7 @@
 
 > "This is the **3D Command Center**. On the left, you see the **Operational Profit Mountain** — a 3D surface showing net profit across five temperature zones and six time slots. The peak hours are morning and evening rushes, while deep-frozen products yield the highest margin per order.
 >
-> On the right, the **Investment Trajectory Ribbon** compares four scenarios over five years: doing nothing, or adopting Sunergy under conservative, neutral, and optimistic assumptions. Even the conservative case turns profitable within six months. The neutral case shows a **340% ROI** with a **5.8-month payback**.
+> On the right, the **Investment Trajectory Ribbon** compares four scenarios over five years: doing nothing, or adopting Maverick under conservative, neutral, and optimistic assumptions. Even the conservative case turns profitable within six months. The neutral case shows a **340% ROI** with a **5.8-month payback**.
 >
 > These numbers are calibrated against real-world pharma logistics cost structures, not fantasy projections."
 
@@ -167,7 +167,7 @@
 
 **【解说词 / Script】**
 
-> "To summarize: Sunergy Pharma delivers **intelligent wave allocation** for pharmaceutical distribution, combining **KGDRL** for decision optimization, **real-time dashboards** for operational visibility, and **AI Copilot** for human-AI collaboration.
+> "To summarize: Maverick-SORT delivers **intelligent wave allocation** for pharmaceutical distribution, combining **KGDRL** for decision optimization, **real-time dashboards** for operational visibility, and **AI Copilot** for human-AI collaboration.
 >
 > For a mid-size warehouse handling 5,000 orders per day, our simulations project **¥142,000 annual net savings** with a payback period under six months.
 >
@@ -208,7 +208,7 @@ v7 的页面结构与 Pro 版基本一致，但缺少以下页面：
 | **停顿** | 每切换一个页面，停顿 1 秒再开始解说 |
 | **错误处理** | 如果某页面加载失败，直接跳过，不要等 |
 | **时长控制** | 如果超过 8 分钟，压缩 Scenario Simulator 和 Alert Center 段落 |
-| **文件命名** | `Sunergy_Demo_Backup_20260608.mp4` |
+| **文件命名** | `Maverick_Demo_Backup_20260608.mp4` |
 | **上传目标** | 用户提到的 "same address"（请确认具体地址：是邮件、云盘还是 Teams?） |
 
 ---

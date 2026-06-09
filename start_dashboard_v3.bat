@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 echo ==========================================
-echo  Sunergy Pharma Dashboard v3 Launcher
+echo  Maverick-SORT Dashboard v3 Launcher
 echo ==========================================
 echo.
 

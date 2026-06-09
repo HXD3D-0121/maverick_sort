@@ -1,5 +1,5 @@
 """
-HF Integration — Sunergy Copilot
+HF Integration — Maverick Copilot
 ==================================
 AI assistant with two modes:
   1. FAQ mode (Standard): Pre-loaded Q&A for common questions

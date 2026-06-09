@@ -1,4 +1,4 @@
-# Sunergy Pharma — 产品审查与演示指南
+# Maverick-SORT — 产品审查与演示指南
 
 > **文档性质**：LLM 功能差异化审查 + 企业汇报演示脚本  
 > **适用版本**：Essential v7.0（标准版）+ Professional v5.0（专业版）  
@@ -50,7 +50,7 @@
 > "这是 **Essential 标准版**，面向中小仓库。AI 能力覆盖日常运营决策辅助。"
 
 **演示动作**：
-1. 侧边栏点击 **"🤖 Sunergy Copilot"** → 输入 `What is KGDRL?` → 展示秒回预设答案
+1. 侧边栏点击 **"🤖 Maverick Copilot"** → 输入 `What is KGDRL?` → 展示秒回预设答案
 2. 进入 **Algorithm Arena** → 点击任意 benchmark 对比 → 页面底部自动生成 AI 策略结论（绿色高亮）
 3. 进入 **Scenario Simulator** → 运行一个 What-If 场景 → 自动生成 AI 执行摘要
 

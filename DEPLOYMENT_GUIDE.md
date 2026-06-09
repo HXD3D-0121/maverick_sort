@@ -1,4 +1,4 @@
-# Sunergy Pharma — 部署标准化指南
+# Maverick-SORT — 部署标准化指南
 
 > **目标**：无论在本地 Windows 电脑、同学电脑、还是 Streamlit Cloud，上传即用，双击即跑，不依赖手动激活 venv。
 
@@ -94,7 +94,7 @@ HF_TOKEN = "hf_YOUR_TOKEN_HERE"
 ### 3.4 部署后验证
 
 打开 Cloud 链接后，检查 Copilot 状态：
-- 侧边栏 Sunergy Copilot 显示 **🟢 Online** → 部署成功
+- 侧边栏 Maverick Copilot 显示 **🟢 Online** → 部署成功
 - 显示 **🟡 Offline** → 检查 Secrets 中 HF_TOKEN 是否配置正确
 
 ---

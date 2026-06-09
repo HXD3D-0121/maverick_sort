@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Shared Page Utilities
+Maverick-SORT — Shared Page Utilities
 ========================================
 Common CSS, data generators, session-state helpers, and constants
 used across all page modules.
@@ -338,7 +338,7 @@ def generate_alert_feed(n: int = 12) -> pd.DataFrame:
 def get_competitor_data() -> pd.DataFrame:
     """Static competitor benchmark data for radar chart."""
     return pd.DataFrame([
-        {"Vendor": "Sunergy (Us)", "Price": 85, "Intelligence": 95, "GSP_Compliance": 98, "Time_to_Deploy": 90, "Real_Time": 92, "Explainability": 96},
+        {"Vendor": "Maverick (Us)", "Price": 85, "Intelligence": 95, "GSP_Compliance": 98, "Time_to_Deploy": 90, "Real_Time": 92, "Explainability": 96},
         {"Vendor": "SAP EWM", "Price": 20, "Intelligence": 55, "GSP_Compliance": 80, "Time_to_Deploy": 30, "Real_Time": 60, "Explainability": 40},
         {"Vendor": "Manhattan", "Price": 25, "Intelligence": 65, "GSP_Compliance": 75, "Time_to_Deploy": 35, "Real_Time": 70, "Explainability": 45},
         {"Vendor": "Blue Yonder", "Price": 30, "Intelligence": 70, "GSP_Compliance": 70, "Time_to_Deploy": 40, "Real_Time": 75, "Explainability": 50},

@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Essential Edition v6.0
+Maverick-SORT — Essential Edition v6.0
 =========================================
 Standard Tier Streamlit Application
 
@@ -21,7 +21,7 @@ import streamlit as st
 # PAGE CONFIG
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma | Essential Edition v6",
+    page_title="Maverick-SORT | Essential Edition v6",
     page_icon="🔷",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -110,7 +110,7 @@ NAV_STRUCTURE = {
 with st.sidebar:
     st.markdown("""
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔷 Sunergy Pharma</div>
+        <div style="font-size:1.4rem; font-weight:800; color:#f8fafc;">🔷 Maverick-SORT</div>
         <div style="font-size:0.8rem; color:#94a3b8;">Essential Edition v6.0</div>
         <div style="margin-top:0.5rem;">
             <span style="background:#3b82f6; color:white; padding:3px 10px; border-radius:12px; font-size:0.7rem; font-weight:700;">ESSENTIAL</span>
@@ -235,7 +235,7 @@ if selected_page_key == "dashboard":
 
 elif selected_page_key == "user_guide":
     st.markdown('<div class="main-header">User Guide</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">How to use Sunergy Pharma Essential for operational excellence</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">How to use Maverick-SORT Essential for operational excellence</div>', unsafe_allow_html=True)
 
     guide_sections = [
         (
@@ -342,7 +342,7 @@ elif selected_page_key == "rt_sim":
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; font-size:0.7rem; color:#475569; padding:1rem 0;">
-    Sunergy Pharma Essential Edition v6.0 | Day 4 Commercialization Build | 2026/06/07<br>
+    Maverick-SORT Essential Edition v6.0 | Day 4 Commercialization Build | 2026/06/07<br>
     Modular Architecture: page_modules/ | Built with Streamlit<br>
     <span style="color:#3b82f6;">🔷 Essential Edition</span>
 </div>

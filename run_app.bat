@@ -11,7 +11,7 @@ if not exist ".venv\Scripts\streamlit.exe" (
     exit /b 1
 )
 
-echo Starting Sunergy Pharma Pro v5.0 ...
+echo Starting Maverick-SORT Pro v5.0 ...
 echo.
 .venv\Scripts\streamlit.exe run streamlit_app_pro_v5.py
 

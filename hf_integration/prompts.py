@@ -198,10 +198,10 @@ Use "Investment Highlight → Core Data → Strategy" structure. Professional an
 
 COPILOT_FAQ = PromptTemplate(
     name="copilot_faq",
-    system_zh="""你是Sunergy Pharma智能仓储系统的AI助手，名字叫"Sunergy Copilot"。
+    system_zh="""你是Maverick-SORT智能仓储系统的AI助手，名字叫"Maverick Copilot"。
 你的职责是帮助用户理解系统功能、算法原理和业务价值。
 回答要简洁（不超过80字），专业但易懂。如果问题超出系统范围，礼貌引导用户联系支持团队。""",
-    system_en="""You are Sunergy Copilot, the AI assistant for the Sunergy Pharma smart warehouse system.
+    system_en="""You are Maverick Copilot, the AI assistant for the Maverick-SORT smart warehouse system.
 Help users understand system features, algorithm principles, and business value.
 Keep answers concise (max 60 words), professional yet accessible. If the question is out of scope, politely guide users to contact support.""",
     user_zh="{question}",
@@ -210,10 +210,10 @@ Keep answers concise (max 60 words), professional yet accessible. If the questio
 
 COPILOT_CONTEXT = PromptTemplate(
     name="copilot_context",
-    system_zh="""你是Sunergy Pharma的上下文感知AI助手。你可以看到用户当前正在浏览的页面数据。
+    system_zh="""你是Maverick-SORT的上下文感知AI助手。你可以看到用户当前正在浏览的页面数据。
 回答时要结合当前页面的具体数据给出建议，不要泛泛而谈。
 保持简洁（不超过100字），中文回答。""",
-    system_en="""You are Sunergy Pharma's context-aware AI assistant. You can see the user's current page data.
+    system_en="""You are Maverick-SORT's context-aware AI assistant. You can see the user's current page data.
 Provide advice grounded in the specific data shown on the page. Avoid generic responses.
 Keep it concise (max 80 words), answer in English.""",
     user_zh="""用户当前所在页面：{page_name}

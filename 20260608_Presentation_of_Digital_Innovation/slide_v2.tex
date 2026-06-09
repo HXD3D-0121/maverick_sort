@@ -1,0 +1,497 @@
+\documentclass{beamer}
+\usepackage{ctex, hyperref}
+\usepackage[T1]{fontenc}
+
+% other packages
+\usepackage{latexsym,amsmath,xcolor,multicol,booktabs,calligra}
+\usepackage{graphicx,pstricks,listings,stackengine}
+\usepackage{UCAS}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+
+% defs
+\def\cmd#1{\texttt{\color{red}\footnotesize $\backslash$#1}}
+\def\env#1{\texttt{\color{blue}\footnotesize #1}}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{halfgray}{gray}{0.55}
+\definecolor{warnorange}{RGB}{230,126,34}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\bfseries\color{deepblue},
+    emphstyle=\ttfamily\color{deepred},
+    stringstyle=\color{deepgreen},
+    numbers=left,
+    numberstyle=\small\color{halfgray},
+    rulesepcolor=\color{red!20!green!20!blue!20},
+    frame=shadowbox,
+}
+
+\author[J. Luo]{Junyuan Luo \and Maverick Team}
+\title[Maverick-SORT: Final Pitch]{Smart Warehouse Assortment Optimization}
+\subtitle{Answering the Questions That Matter --- Pitch \& Demo Day}
+\institute[SDC]{Sino-Danish College, UCAS}
+\date{10th June, 2026}
+
+% Global font size reduction for content
+\setbeamerfont{frametitle}{size=\normalsize}
+\setbeamerfont{framesubtitle}{size=\small}
+
+\begin{document}
+
+\kaishu
+\begin{frame}
+    \titlepage
+    \begin{figure}[htpb]
+        \begin{center}
+            \includegraphics[width=0.15\linewidth]{pic/CAS_Logo.png}
+        \end{center}
+    \end{figure}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Outline}
+    \small
+    \tableofcontents[sectionstyle=show,subsectionstyle=show/shaded/hide,subsubsectionstyle=show/shaded/hide]
+\end{frame}
+
+%=================================================
+\section{1. Product \& User}
+%=================================================
+
+\begin{frame}{What Problem, and for Whom?}
+  \framesubtitle{Be Specific About the Person, Not the Market}
+  \small
+
+  \textbf{The Person:} Li Wei, Warehouse Operations Manager at a tier-1 pharmaceutical distributor in Jiangsu Province. He oversees 90,000+ orders/day across 128 logistics centres, with 340 pickers (60\% temporary during peak seasons).
+
+  \vspace{0.25cm}
+  \textbf{The Problem:} Every morning at 06:30, Li faces a single decision:
+  \textit{``Which orders go into which wave, in what sequence?''}
+
+  \vspace{0.2cm}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \textbf{Current Reality:}
+      \begin{itemize}
+        \item Rules-of-thumb on whiteboards
+        \item 38\% of SKUs are temperature-sensitive
+        \item 0.35\% error rate = RMB 9M/year in returns
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Cost of Getting It Wrong:}
+      \begin{itemize}
+        \item Cold-chain breach: batch recall, GSP fine
+        \item Missed deadline: hospital penalty
+        \item Over-staffing peaks: 2.5x labour cost surge
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Feature 1: KGDRL Core Scheduler}
+  \framesubtitle{Why We Built This First}
+  \small
+
+  We deliberately built only two things to production depth --- everything else is scaffolding.
+
+  \vspace{0.3cm}
+  \textbf{\color{UBCblue}Feature 1: KGDRL Core Scheduler}
+  \begin{itemize}
+    \item \textbf{What it does:} Dynamically groups orders into waves using Knowledge-Graph-Guided Deep RL (PPO + GAT + KL constraint).
+    \item \textbf{Why this feature:} Without the algorithm, we have nothing to sell. Every other page in the dashboard is decoration if the routing logic is wrong.
+  \end{itemize}
+
+  \vspace{0.2cm}
+  \textbf{Key insight:} The KG encodes pharma-domain rules (e.g., ``frozen products must ship before 10 AM'') directly into the policy via KL-divergence constraints.
+\end{frame}
+
+\begin{frame}{Feature 2: Streamlit Pro Dashboard}
+  \framesubtitle{Built for Trust, Not for Demo}
+  \small
+
+  \textbf{\color{UBCblue}Feature 2: Streamlit Pro Decision Dashboard}
+  \begin{itemize}
+    \item \textbf{What it does:} Real-time Command Center + What-If Simulator + Strategy Optimizer + ROI Calculator.
+    \item \textbf{Why this feature:} Li Wei will not trust a black-box API. He needs to \textit{see} the wave form, test scenarios, and calculate payback before asking his CFO for budget.
+  \end{itemize}
+
+  \vspace{0.2cm}
+  \textbf{Product positioning:}
+  \begin{center}
+    \resizebox{0.75\textwidth}{!}{
+    \begin{tikzpicture}[
+      node distance=0.5cm,
+      box/.style={rectangle, rounded corners, draw=UBCblue, fill=UBCblue!8, thick, text width=3.2cm, align=center, minimum height=0.7cm, font=\small}
+    ]
+      \node[box] (a) {Do the work? \color{red}\textbf{No}};
+      \node[box, below=of a] (b) {Help do it better? \color{warnorange}\textbf{Partially}};
+      \node[box, below=of b] (c) {Reveal the invisible? \color{deepgreen}\textbf{Yes}};
+    \end{tikzpicture}
+    }
+  \end{center}
+
+  \textit{Validation:} Li Wei spent 70\% of interview time complaining about ``not knowing if today's schedule was optimal.'' He spent 0\% asking for full automation.
+\end{frame}
+
+%=================================================
+\section{2. Value \& Stakeholders}
+%=================================================
+
+\begin{frame}{Who Uses, Who Pays, Who Decides?}
+  \framesubtitle{Three Different People, and the Tension Between Them}
+  \small
+
+  \begin{center}
+    \resizebox{0.85\textwidth}{!}{
+    \begin{tikzpicture}[
+      node distance=1cm and 2cm,
+      person/.style={rectangle, rounded corners, draw=UBCblue, fill=UBCblue!5, thick, text width=2.8cm, align=center, minimum height=1.4cm, font=\small},
+      arrow/.style={thick, ->, >=Stealth, draw=halfgray}
+    ]
+      \node[person] (user) {\textbf{User}\\Li Wei\\(Ops Manager)};
+      \node[person, right=of user] (payer) {\textbf{Payer}\\CFO / Procurement\\(RMB 8,999/mo)};
+      \node[person, right=of payer] (decider) {\textbf{Decider}\\VP Operations\\(Adoption sign-off)};
+
+      \draw[arrow] (user) -- node[above, font=\footnotesize] {``Saves me headaches''} (payer);
+      \draw[arrow] (payer) -- node[above, font=\footnotesize] {``Show me ROI''} (decider);
+      \draw[arrow, bend left=20] (user) to node[below, font=\footnotesize] {``I need it''} (decider);
+    \end{tikzpicture}
+    }
+  \end{center}
+
+  \vspace{0.2cm}
+  \textbf{When they disagree, whose view wins?}
+  \begin{itemize}
+    \item The CFO wins on pricing. Two tiers: Essential (RMB 2,999/mo) for trial, Pro (RMB 8,999/mo) for scale.
+    \item \textbf{What this costs the product:} We cannot give Li Wei everything he wants (e.g., full ERP integration) because the CFO will not pay until ROI is proven.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{What Changes in Someone's Day?}
+  \framesubtitle{And Is That Change Worth the Cost?}
+  \small
+
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \textbf{Before Maverick:}
+      \begin{itemize}
+        \item 06:30--07:30: Manual wave planning (1 hour)
+        \item 14:00: Peak surge; calls agency for 50 temp workers (reactive)
+        \item 17:00: No data on whether schedule was optimal
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{With Maverick:}
+      \begin{itemize}
+        \item 06:30--06:35: Review AI plan, adjust if needed (5 min)
+        \item 14:00: System shrank capacity 30 min ago (proactive)
+        \item 17:00: Dashboard shows cost, SLA, compliance vs. benchmark
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.25cm}
+  \textbf{Worth the cost?} At RMB 8,999/mo per warehouse, break-even is \textbf{month 5} under neutral assumptions (15\% efficiency gain). At RMB 9M/year in picking-error losses, a 10\% reduction pays for the software twice over.
+\end{frame}
+
+\begin{frame}{What Is Hard to Copy?}
+  \framesubtitle{Where Does Our Own Judgment Sit?}
+  \small
+
+  \textbf{Anyone can build a rough version:} PPO + Streamlit + simulated data. The tools are open-source; the architecture is textbook.
+
+  \vspace{0.25cm}
+  \textbf{What is hard to copy:}
+  \begin{enumerate}
+    \item \textbf{Pharma-specific knowledge graph:} GSP temperature-segregation rules, FEFO priority logic, bimodal arrival patterns. A general AI company does not have this.
+    \item \textbf{Human-in-the-loop trust design:} The What-If Simulator exists because we judged that Chinese warehouse managers will not accept AI recommendations they cannot challenge. That is a \textit{cultural} insight, not an algorithmic one.
+    \item \textbf{The ablation protocol:} We spent 3 days validating KGDRL vs. vanilla PPO under pharma constraints. That judgment --- what to measure, what ``good enough'' means --- is not in the code.
+  \end{enumerate}
+\end{frame}
+
+%=================================================
+\section{3. Adoption}
+%=================================================
+
+\begin{frame}{The Binding Constraint}
+  \framesubtitle{TOE Framework Applied Honestly}
+  \small
+
+  \begin{center}
+    \resizebox{0.8\textwidth}{!}{
+    \begin{tikzpicture}[
+      node distance=0.8cm and 1.2cm,
+      box/.style={rectangle, rounded corners, thick, text width=2.8cm, align=center, minimum height=1cm, font=\small},
+      tech/.style={box, draw=deepgreen, fill=deepgreen!8},
+      org/.style={box, draw=deepred, fill=deepred!8},
+      env/.style={box, draw=UBCblue, fill=UBCblue!8}
+    ]
+      \node[tech] (t) {\textbf{Technology}\\\color{deepgreen}\textbf{Resolved}};
+      \node[org, right=of t] (o) {\textbf{Organization}\\\color{deepred}\textbf{Binding}};
+      \node[env, right=of o] (e) {\textbf{Environment}\\\color{UBCblue}\textbf{Catalyst}};
+
+      \node[below=0.3cm of t, font=\footnotesize, text width=2.8cm, align=center] {KGDRL + Streamlit runs end-to-end};
+      \node[below=0.3cm of o, font=\footnotesize, text width=2.8cm, align=center] {Temp worker turnover; TAM learning curve};
+      \node[below=0.3cm of e, font=\footnotesize, text width=2.8cm, align=center] {GSP fines force digital adoption};
+    \end{tikzpicture}
+    }
+  \end{center}
+
+  \vspace{0.2cm}
+  \textbf{Would resolving this unlock adoption, or reveal the next constraint?}
+
+  \textit{Honest answer:} Resolving worker resistance would reveal the \textbf{data integration} constraint. Li Wei's WMS is a legacy system from 2014. Even if he trusts the algorithm, someone must build the API bridge. That is why we priced the Pro tier to include API-first integration --- it is not a feature, it is an admission that adoption requires plumbing, not just AI.
+\end{frame}
+
+\begin{frame}{First-Minute Trust \& Realistic Early Adopter}
+  \framesubtitle{Is It Useful Enough, and Easy Enough?}
+  \small
+
+  \textbf{First-minute trust test:}
+  \begin{itemize}
+    \item Li Wei opens the dashboard. He sees a 3D Profit Mountain he can rotate.
+    \item He drags the Wave Capacity slider from 20 to 15. Cost updates in real time.
+    \item \textbf{Within 60 seconds, he understands the system responds to his input.}
+  \end{itemize}
+
+  \vspace{0.2cm}
+  \textbf{Realistic early adopter:}
+  \begin{itemize}
+    \item \textbf{Who:} Regional pharma distributors with 1--3 warehouses, RMB 50--200M revenue, currently on Excel + whiteboard.
+    \item \textbf{Why they try it:} Small enough for CFO sign-off in one meeting; large enough that 90,000 orders/day is aspirational but believable.
+    \item \textbf{What must change before mainstream follows:} \textit{A named customer case study.} Until then, SAP EWM has the reference advantage.
+  \end{itemize}
+\end{frame}
+
+%=================================================
+\section{4. Building with AI}
+%=================================================
+
+\begin{frame}{Handed to AI (Claude Code)}
+  \framesubtitle{What the AI Did}
+  \small
+
+  \textbf{\color{deepgreen}Handed to AI:}
+  \begin{itemize}
+    \item PPO network architecture (1,100 lines)
+    \item Streamlit dashboard CSS and layout
+    \item Multi-objective NSGA-II scaffold
+    \item Translation (ZH $\leftrightarrow$ EN)
+    \item Bug fixes and syntax debugging
+  \end{itemize}
+
+  \vspace{0.2cm}
+  \textit{Time saved: $\sim$13 days $\rightarrow$ 4 days (3.25x)}
+
+  \vspace{0.2cm}
+  \textbf{Pattern:} The AI excelled at implementation and multilingual translation. It generated hundreds of lines of structured code in minutes.
+\end{frame}
+
+\begin{frame}{Human Judgment Did the Real Work}
+  \framesubtitle{What We Decided}
+  \small
+
+  \textbf{\color{deepred}Human judgment:}
+  \begin{itemize}
+    \item Which pain point to solve (wave allocation vs. inventory vs. demand forecasting)
+    \item Reward function weights: $\alpha_{\text{temp}} = 100$ vs. $\alpha_{\text{dist}} = 1$
+    \item What ``good enough'' means: ablation protocol design
+    \item Business model: per-warehouse vs. per-order pricing
+    \item When to stop training (convergence criteria)
+  \end{itemize}
+
+  \vspace{0.3cm}
+  \centering
+  \textit{The AI wrote the code. The human decided what code was worth writing.}
+\end{frame}
+
+\begin{frame}{What We Changed Around the GenAI Model}
+  \framesubtitle{Data, Context, Instructions}
+  \small
+
+  \textbf{We did not build the LLM. We built the context around it:}
+
+  \vspace{0.15cm}
+  \begin{enumerate}
+    \item \textbf{Data:} Calibrated simulated orders against the casebook (55\% ambient, 25\% cool, 15\% cold, 5\% frozen; bimodal arrival at 09:00 and 14:00; peak multiplier 2.8x).
+    \item \textbf{Context:} Pharma-specific knowledge graph with 4 node types and 4 edge types. Not generic RL --- RL constrained by GSP rules.
+    \item \textbf{Instructions:} Prompts that translate DRL actions into natural language (``The system closed the wave at minute 3 because...'').
+  \end{enumerate}
+
+  \vspace{0.2cm}
+  \textbf{How we knew it was good enough:}
+  \begin{itemize}
+    \item Technical: Ablation across 20 random seeds
+    \item Business: Li Wei would understand the dashboard without training
+    \item Academic: Reward curves converge; GAT weights correlate with zone proximity
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Where AI Is Confidently Wrong}
+  \framesubtitle{And What Stops a User from Trusting It There}
+  \small
+
+  \textbf{Highest-risk failure mode:} \textbf{Overfitting to simulated demand patterns.}
+
+  \vspace{0.15cm}
+  Our training assumes bimodal arrival (09:00 and 14:00 peaks). If Li Wei's warehouse sees a \textbf{unimodal} surge at 11:00 due to a hospital contract, the EWMA forecaster will under-predict for 2--3 hours before adapting.
+
+  \vspace{0.2cm}
+  \textbf{Three safeguards:}
+  \begin{enumerate}
+    \item \textbf{Confidence bands:} Forecast chart shows $\pm$1 SD. Li Wei sees when the model is uncertain.
+    \item \textbf{Human override:} Every recommendation has a ``Reject \& Manual'' button. The system does not act autonomously.
+    \item \textbf{Alert escalation:} If observed rate exceeds predicted by $>$50\% for 15 min, the Alert Center triggers a ``Model Drift'' warning.
+  \end{enumerate}
+
+  \vspace{0.15cm}
+  \textit{We would not let it act without human checking --- not because we distrust AI, but because GSP compliance liability rests with the warehouse manager, not the vendor.}
+\end{frame}
+
+%=================================================
+\section{5. Real Results}
+%=================================================
+
+\begin{frame}{Ablation Study: What the Numbers Actually Say}
+  \framesubtitle{20 Random Seeds, 6 Methods, Honest Metrics}
+  \small
+
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{lccccc}
+      \toprule
+      \textbf{Method} & \textbf{Reward} & \textbf{Waves} & \textbf{Dist.} & \textbf{Misses} & \textbf{Viol.} \\
+      \midrule
+      FCFS & 1,787 & 85.9 & 691 & 0.0 & 38.5 \\
+      ZONE\_NN & 1,734 & 82.9 & 669 & 0.0 & 37.3 \\
+      EDD & 1,752 & 83.1 & 668 & 0.0 & 37.5 \\
+      TZU & 145 & 83.0 & 667 & 0.0 & 21.4 \\
+      \midrule
+      \textbf{Vanilla PPO} & \textbf{4,007} & 87.3 & 695 & 4.4 & 36.7 \\
+      KGDRL (no KL) & 1,841 & 84.4 & 678 & \textbf{0.0} & 38.7 \\
+      KGDRL (full) & 1,909 & 82.8 & 666 & \textbf{0.0} & 39.0 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+  \textbf{Honest reading:}
+  \begin{itemize}
+    \item Vanilla PPO achieves the highest reward --- but pays with \textbf{4.4 deadline misses per episode}. In pharma, one miss can mean a drug shortage.
+    \item KGDRL sacrifices raw reward for \textbf{zero deadline misses} and lower variance. That is the trade-off Li Wei cares about.
+    \item The gap between KGDRL and TZU is modest. Our moat is the \textbf{system} (algorithm + dashboard + trust layer).
+  \end{itemize}
+\end{frame}
+
+%=================================================
+\section{6. Honest Reflection}
+%=================================================
+
+\begin{frame}{What We Are Least Sure Of}
+  \framesubtitle{And What We Would Do with One More Week}
+  \small
+
+  \textbf{Assumption we are least sure of:} \textit{``Warehouse managers want to \textbf{see} the algorithm's reasoning more than they want it to be perfect.''}
+
+  \vspace{0.15cm}
+  We invested heavily in the What-If Simulator and AI Copilot because of this belief. But we have not tested it with a real Li Wei. It is possible that what he actually wants is simply a lower price and a SAP integration certificate.
+
+  \vspace{0.25cm}
+  \textbf{With one more week:}
+  \begin{enumerate}
+    \item \textbf{Day 1--2:} Run 3 structured interviews with actual pharma warehouse managers (not the casebook persona).
+    \item \textbf{Day 3--4:} Build the FastAPI backend bridge to ingest real WMS data formats.
+    \item \textbf{Day 5--7:} Conduct a live A/B test: one shift with human scheduling, one with KGDRL recommendations, measuring picking distance and error rate.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{What Building This Taught Us}
+  \framesubtitle{About AI, Innovation, and What We Still Do Not Understand}
+  \small
+
+  \textbf{What we did not know four weeks ago:}
+  \begin{enumerate}
+    \item \textbf{AI accelerates implementation, not validation.} Claude generated 2,900 lines of code in one day. But designing the ablation protocol --- deciding what ``better'' means --- took three days of human debate.
+    \item \textbf{The UI is the moat.} In B2B software, the algorithm that wins is not the one with the highest reward --- it is the one the operations manager trusts enough to defend to the CFO.
+    \item \textbf{Simulated data is a trap.} It lets you demo beautifully, but it hides the integration cost. Every number in our ablation is ``real'' within the simulation. None of it is real in a warehouse.
+  \end{enumerate}
+
+  \vspace{0.2cm}
+  \textbf{What we still do not understand:}
+  \begin{itemize}
+    \item Why the GAT attention weights correlate with zone proximity \textit{most of the time}, but occasionally focus on seemingly irrelevant nodes. Is the model learning something we did not encode, or is it noise?
+  \end{itemize}
+\end{frame}
+
+%=================================================
+\section{7. Closing}
+%=================================================
+
+\begin{frame}{Summary: What Maverick Is, and Is Not}
+  \framesubtitle{A Realistic Closing for Demo Day}
+  \small
+
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \textbf{Maverick \color{deepgreen}is:}
+      \begin{itemize}
+        \item A \textbf{decision-support system}, not a replacement for human judgment.
+        \item Built on \textbf{KGDRL}, with honest ablation data showing trade-offs.
+        \item Packaged in a \textbf{dashboard designed for trust}.
+        \item Priced to \textbf{pay for itself in month 5} under conservative assumptions.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Maverick \color{deepred}is not:}
+      \begin{itemize}
+        \item A \textbf{patented product} (substantive examination pending).
+        \item \textbf{Trained on real warehouse data} (all results are simulation-based).
+        \item \textbf{Autonomous} (human check is mandatory).
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+  \centering
+  \textit{Thank you. We welcome questions --- especially the hard ones.}
+\end{frame}
+
+%=================================================
+\section*{Acknowledgements}
+%=================================================
+
+\begin{frame}{Acknowledgements}
+  \small
+  \centering
+
+  \vspace{0.5cm}
+  {\large \textbf{Thank You}}
+
+  \vspace{0.4cm}
+  \textbf{Maverick Team}
+
+  \vspace{0.3cm}
+  Junyuan Luo
+
+  \vspace{0.4cm}
+  \textit{Sino-Danish College, University of Chinese Academy of Sciences}
+
+  \vspace{0.3cm}
+  Digital Innovation Course --- Pitch \& Demo Day
+
+  \vspace{0.3cm}
+  10th June, 2026
+
+  \vspace{0.5cm}
+  \begin{figure}[htpb]
+    \begin{center}
+      \includegraphics[width=0.12\linewidth]{pic/CAS_Logo.png}
+    \end{center}
+  \end{figure}
+\end{frame}
+
+\end{document}

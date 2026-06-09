@@ -1,4 +1,4 @@
-# Sunergy Pharma Pro v4.0 — 3D Dashboard Optimization Plan
+# Maverick-SORT Pro v4.0 — 3D Dashboard Optimization Plan
 
 > **Status:** Analysis Phase — Awaiting Approval Before Implementation  
 > **Date:** 2026/06/07  
@@ -101,13 +101,13 @@ Z-axis: Net Operational Value (CNY/hour)
 ```
 X-axis: Time (Months 0 – 60)
 Y-axis: Scenario
-        1 = Without Sunergy (status quo, baseline cost growth)
+        1 = Without Maverick (status quo, baseline cost growth)
         2 = Conservative (15% efficiency gain, slow adoption)
         3 = Neutral (25% efficiency gain, expected adoption)
         4 = Optimistic (35% efficiency gain, rapid scaling)
 Z-axis: Cumulative Cash Flow (CNY)
         = Saved Labor + Saved Violations + Saved Write-offs
-          – Sunergy Subscription Fees
+          – Maverick Subscription Fees
           – Implementation Cost (Month 0)
 ```
 

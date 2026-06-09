@@ -1,4 +1,4 @@
-# Sunergy Pharma — Smart Wave Allocation System
+# Maverick-SORT — Smart Wave Allocation System
 
 > **Intelligent pharmaceutical distribution powered by Knowledge-Guided Deep Reinforcement Learning (KGDRL)**
 
@@ -13,7 +13,7 @@
 | **Owner** | JamieAnnSeckinger | **HXD3D-0121** |
 | **Role** | Upstream | **Active Development (Admin)** |
 | **Purpose** | Course project origin | **Commercialization & Iteration** |
-| **URL** | `github.com/JamieAnnSeckinger/sunergy_pharma` | **`github.com/HXD3D-0121/sunergy_pharma`** |
+| **URL** | `github.com/JamieAnnSeckinger/maverick_sort` | **`github.com/HXD3D-0121/maverick_sort`** |
 
 > ⚠️ **All subsequent development, commits, and releases will be pushed to this fork by default.**
 > The original repository remains as the upstream reference for course deliverables.
@@ -22,7 +22,7 @@
 
 ## 📋 Project Overview
 
-Sunergy Pharma is an AI-powered smart wave allocation system designed for pharmaceutical distribution centers. It addresses four critical industry pain points:
+Maverick-SORT is an AI-powered smart wave allocation system designed for pharmaceutical distribution centers. It addresses four critical industry pain points:
 
 1. **Multi-temperature zone mixing** — GSP compliance for ambient/cool/cold/frozen products
 2. **Deadline pressure** — >88% next-day delivery requirements
@@ -81,7 +81,7 @@ python run_ablation_quick.py
 ## 📁 Project Structure
 
 ```
-sunergy_pharma/
+maverick_sort/
 ├── 📄 README.md                          # This file
 ├── 📄 COMMERCIALIZATION_7DAY_PLAN.md     # 7-day commercialization roadmap (CN)
 ├── 📄 COMMERCIALIZATION_7DAY_PLAN_EN.md  # 7-day commercialization roadmap (EN)
@@ -245,13 +245,13 @@ Based on 20-episode training + 10-instance evaluation:
 
 This is a **course project + commercialization prototype** developed with AI assistance (Claude Code by Anthropic). All technical decisions are human-reviewed.
 
-**Default Push Target**: `github.com/HXD3D-0121/sunergy_pharma` (this fork)
+**Default Push Target**: `github.com/HXD3D-0121/maverick_sort` (this fork)
 
 ---
 
 ## 📜 License
 
-© 2026 Sunergy Pharma Team. All rights reserved.
+© 2026 JamieAnnSeckinger. All rights reserved.
 
 Patent pending: Knowledge-Guided Deep Reinforcement Learning for Pharmaceutical Wave Allocation.
 

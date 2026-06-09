@@ -1,7 +1,7 @@
 """
 What-If Scenario Simulator — Essential Edition (Base Tier Standard)
 ====================================================================
-Sunergy Pharma Smart Wave Allocation System
+Maverick-SORT Smart Wave Allocation System
 
 功能定位：
     - 基础版（Essential）标配模块，降低试用门槛
@@ -567,7 +567,7 @@ ScenarioConfig.replace_config = _replace_config
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("  Sunergy Pharma — What-If Scenario Simulator (Essential Edition)")
+    print("  Maverick-SORT — What-If Scenario Simulator (Essential Edition)")
     print("=" * 70)
 
     sim = WhatIfSimulator()

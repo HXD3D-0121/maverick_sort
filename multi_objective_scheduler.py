@@ -1,7 +1,7 @@
 """
 Multi-Objective Scheduler — Pro Edition Module
 ===============================================
-Sunergy Pharma Smart Wave Allocation System
+Maverick-SORT Smart Wave Allocation System
 
 功能定位：
     - 专业版（Pro）增值模块，面向中大型医药流通企业
@@ -610,7 +610,7 @@ class MultiObjectiveScheduler:
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("  Sunergy Pharma — Multi-Objective Scheduler (Pro Edition)")
+    print("  Maverick-SORT — Multi-Objective Scheduler (Pro Edition)")
     print("  Algorithm: NSGA-II | Objectives: Cost × Time × Compliance")
     print("=" * 70)
 

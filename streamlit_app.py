@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Smart Supply Chain Command Center
+Maverick-SORT — Smart Supply Chain Command Center
 Industrial-Grade Pharmaceutical Distribution Dashboard
 Powered by Deep Reinforcement Learning (PPO) + KGDRL
 """
@@ -20,7 +20,7 @@ from collections import Counter
 # PAGE CONFIGURATION
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma | Smart Supply Chain Command Center",
+    page_title="Maverick-SORT | Smart Supply Chain Command Center",
     page_icon="🏥",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -342,7 +342,7 @@ def generate_labor_data():
 # =============================================================================
 # SIDEBAR — Navigation + Global Controls
 # =============================================================================
-st.sidebar.markdown("## 🏥 Sunergy Pharma")
+st.sidebar.markdown("## 🏥 Maverick-SORT")
 st.sidebar.markdown("### Smart Supply Chain Command Center")
 st.sidebar.markdown("---")
 
@@ -374,7 +374,7 @@ else:
     st.sidebar.info("Live sync paused — manual refresh only")
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("**Enterprise:** Sunergy Pharma Distribution")
+st.sidebar.markdown("**Enterprise:** Maverick-SORT Distribution")
 st.sidebar.markdown("**Daily Orders:** 90,000+")
 st.sidebar.markdown("**SKU Lines:** 423,600")
 st.sidebar.markdown("**Next-Day Delivery:** 88%+")

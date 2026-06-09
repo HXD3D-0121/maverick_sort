@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Pro Edition Command Center
+Maverick-SORT — Pro Edition Command Center
 ============================================
 Smart Supply Chain Command Center v5.0
 
@@ -32,7 +32,7 @@ from collections import Counter, deque
 # PAGE CONFIGURATION
 # =============================================================================
 st.set_page_config(
-    page_title="Sunergy Pharma Pro | Enterprise Command Center",
+    page_title="Maverick-SORT Pro | Enterprise Command Center",
     page_icon="🔶",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -320,7 +320,7 @@ with st.sidebar:
     st.markdown("""
     <div style="text-align:center; margin-bottom:1.5rem;">
         <div style="font-size:1.5rem; font-weight:800; color:#f8fafc;">
-            🔶 Sunergy Pharma
+            🔶 Maverick-SORT
         </div>
         <div style="font-size:0.85rem; color:#94a3b8;">
             Pro Edition Command Center
@@ -388,7 +388,7 @@ if page == "🏠 Home — Product Overview":
     col_title, col_badge = st.columns([3, 1])
     with col_title:
         st.markdown('<div class="main-header">Enterprise Command Center</div>', unsafe_allow_html=True)
-        st.markdown('<div class="sub-header">Sunergy Pharma Pro Edition — Multi-Warehouse Smart Wave Allocation</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-header">Maverick-SORT Pro Edition — Multi-Warehouse Smart Wave Allocation</div>', unsafe_allow_html=True)
     with col_badge:
         st.markdown("""
         <div style="text-align:right; margin-top:0.5rem;">
@@ -1189,7 +1189,7 @@ elif page == "👷 Worker Task Station":
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center; font-size:0.75rem; color:#475569; padding:1rem 0;">
-    Sunergy Pharma Pro Edition v5.0.0 | Day 3 Commercialization Build | 2026/06/06<br>
+    Maverick-SORT Pro Edition v5.0.0 | Day 3 Commercialization Build | 2026/06/06<br>
     Modules: what_if_simulator.py | multi_objective_scheduler.py | adaptive_policy.py | kgdrl_core_v2.py<br>
     <span style="color:#f59e0b;">🔶 Professional Edition</span> | Built with Streamlit + Altair + KGDRL
 </div>

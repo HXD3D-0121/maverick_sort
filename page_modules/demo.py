@@ -1,5 +1,5 @@
 """
-Sunergy Pharma — Demo & Simulation Module
+Maverick-SORT — Demo & Simulation Module
 ===========================================
 Pages:
   - Real-Time Simulation (HTML Dashboard Embed)
@@ -79,7 +79,7 @@ def render_demo_mode():
                 ("ROI", "340%", "#10b981"),
                 ("Uptime", "99.7%", "#3b82f6"),
             ],
-            "narrative": "For a mid-size warehouse processing 5,000 orders/day, Sunergy Pro delivers ¥142,000 annual net savings after subscription costs. The system pays for itself before the first renewal."
+            "narrative": "For a mid-size warehouse processing 5,000 orders/day, Maverick Pro delivers ¥142,000 annual net savings after subscription costs. The system pays for itself before the first renewal."
         },
     ]
 

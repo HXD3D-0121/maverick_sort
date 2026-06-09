@@ -1,4 +1,4 @@
-# Sunergy Pharma Pro v5.0 — PowerShell Launcher
+# Maverick-SORT Pro v5.0 — PowerShell Launcher
 # Usage: Right-click → "Run with PowerShell"
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -14,7 +14,7 @@ if (-not (Test-Path $streamlitPath)) {
     exit 1
 }
 
-Write-Host "Starting Sunergy Pharma Pro v5.0 ..." -ForegroundColor Green
+Write-Host "Starting Maverick-SORT Pro v5.0 ..." -ForegroundColor Green
 Write-Host ""
 
 & $streamlitPath "run" "streamlit_app_pro_v5.py"

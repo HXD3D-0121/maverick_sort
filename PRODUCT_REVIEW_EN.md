@@ -1,4 +1,4 @@
-# Sunergy Pharma — Product Review & Demo Guide
+# Maverick-SORT — Product Review & Demo Guide
 
 > **Document Type**: LLM Feature Differentiation Review + Enterprise Presentation Script  
 > **Applicable Versions**: Essential v7.0 (Standard) + Professional v5.0 (Pro)  
@@ -50,7 +50,7 @@ The following fixes were applied to Copilot in this iteration, synchronized acro
 > "This is the **Essential Edition**, designed for small-to-medium warehouses. AI capabilities cover daily operational decision support."
 
 **Demo Actions**:
-1. Click **"🤖 Sunergy Copilot"** in sidebar → Type `What is KGDRL?` → Show instant preset answer
+1. Click **"🤖 Maverick Copilot"** in sidebar → Type `What is KGDRL?` → Show instant preset answer
 2. Go to **Algorithm Arena** → Click any benchmark comparison → AI strategy conclusion auto-generates at bottom (green highlight)
 3. Go to **Scenario Simulator** → Run a What-If scenario → AI executive summary auto-generates
 

@@ -1,4 +1,4 @@
-# Sunergy Pharma 录屏演示脚本 v2（Pro 专业版为主）
+# Maverick-SORT 录屏演示脚本 v2（Pro 专业版为主）
 
 > **版本 / Version**: Pro v5.0（专业版）为主，Essential v7.0（基础版）一笔带过  
 > **建议时长 / Recommended Duration**: 6–8 分钟  
@@ -24,14 +24,14 @@
 
 **【解说词 / Script】**
 
-> "Hello everyone. Today I'm presenting **Sunergy Pharma Pro** — an intelligent wave allocation system for pharmaceutical distribution, powered by Knowledge-Graph-Guided Deep Reinforcement Learning, or **KGDRL**.
+> "Hello everyone. Today I'm presenting **Maverick-SORT Pro** — an intelligent wave allocation system for pharmaceutical distribution, powered by Knowledge-Graph-Guided Deep Reinforcement Learning, or **KGDRL**.
 >
 > We offer two product tiers. The **Essential Edition** is a lightweight entry point with core what-if simulation and ROI visualization — ideal for small warehouses exploring intelligent scheduling. The **Professional Edition**, which I'll focus on today, adds multi-objective optimization, real-time adaptive capacity, and enterprise-grade analytics for mid-to-large pharma distributors.
 >
 > Let's start with the problem we're solving."
 
 **【要点提示】**
-- 手指向侧边栏顶部的 "Sunergy Pharma Pro" 标识和 PRO 徽章。
+- 手指向侧边栏顶部的 "Maverick-SORT Pro" 标识和 PRO 徽章。
 - 开场即建立"Pro 是主角"的叙事，v7 仅一句话带过。
 
 ---
@@ -72,7 +72,7 @@
 
 > "The Command Center gives executives a single-pane view. On the left, the **Operational Profit Mountain** is a 3D surface plot showing net profit across five temperature zones and six time slots. You can drag to rotate it. The peaks are morning and evening rush hours; deep-frozen products yield the highest margin per order but also the highest labor cost.
 >
-> On the right, the **Investment Trajectory Ribbon** tracks cumulative cash flow over five years. We compare four scenarios: doing nothing, or adopting Sunergy under conservative, neutral, and optimistic efficiency assumptions. The neutral scenario shows payback within roughly six months."
+> On the right, the **Investment Trajectory Ribbon** tracks cumulative cash flow over five years. We compare four scenarios: doing nothing, or adopting Maverick under conservative, neutral, and optimistic efficiency assumptions. The neutral scenario shows payback within roughly six months."
 
 **【演示提示词 / Demo Cues】**
 - 🖱️ **拖拽旋转 3D Profit Mountain**，展示交互性。
@@ -236,7 +236,7 @@
 >
 > The sensitivity area chart below shows how net savings change across a range of efficiency improvement rates — from 10% to 35%. Even at the conservative end, the system pays for itself within the first year.
 >
-> In **TCO Analysis**, we extend this to a five-year comparison. Manual operation costs rise with wage inflation; Sunergy Pro subscription rises much more slowly. The cumulative chart shows the breakeven point — typically in month five or six."
+> In **TCO Analysis**, we extend this to a five-year comparison. Manual operation costs rise with wage inflation; Maverick Pro subscription rises much more slowly. The cumulative chart shows the breakeven point — typically in month five or six."
 
 **【演示提示词 / Demo Cues】**
 - 🖱️ **修改 Daily Orders 输入框**（如从 5000 到 8000），观察右侧数字实时更新。
@@ -249,11 +249,11 @@
 
 **【页面】** 💼 Business Value → **Competitor Radar** → **Plans & Pricing**
 
-**【解决的问题】** "客户不清楚 Sunergy 与 SAP EWM、Manhattan Associates 等传统 WMS 的区别，也不知道该选哪个版本。"
+**【解决的问题】** "客户不清楚 Maverick 与 SAP EWM、Manhattan Associates 等传统 WMS 的区别，也不知道该选哪个版本。"
 
 **【解说词 / Script】**
 
-> "The **Competitor Radar** compares six capabilities across vendors: price-to-value, AI intelligence, GSP compliance, deployment speed, real-time adaptability, and explainability. Traditional WMS systems score high on basic compliance but low on AI and real-time features. Sunergy Pro is designed specifically for pharmaceutical cold-chain complexity.
+> "The **Competitor Radar** compares six capabilities across vendors: price-to-value, AI intelligence, GSP compliance, deployment speed, real-time adaptability, and explainability. Traditional WMS systems score high on basic compliance but low on AI and real-time features. Maverick Pro is designed specifically for pharmaceutical cold-chain complexity.
 >
 > **Plans & Pricing** offers three tiers. Essential starts at roughly 3,000 RMB per month per warehouse for small operations. Professional, at roughly 9,000 RMB, adds multi-objective optimization and real-time adaptation. Enterprise is custom-priced for multi-warehouse federated deployments.
 >
@@ -271,7 +271,7 @@
 
 **【解说词 / Script】**
 
-> "To summarize what Sunergy Pharma Pro delivers:
+> "To summarize what Maverick-SORT Pro delivers:
 >
 > - **Command Center** gives executives a 3D financial view.
 > - **Orders and Warehouse** modules unify omni-channel demand and expiry-risk inventory.
@@ -359,7 +359,7 @@
 | **停顿** | 每切换一个页面，停顿 1 秒再开始解说 |
 | **错误处理** | 如果某页面加载失败或报错，直接跳过，不要等 |
 | **时长控制** | 若超过 8 分钟，压缩 TCO / Competitor Radar 段落 |
-| **文件命名** | `Sunergy_Pro_Demo_Backup_20260608.mp4` |
+| **文件命名** | `Maverick_Pro_Demo_Backup_20260608.mp4` |
 
 ---
 
