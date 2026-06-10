@@ -422,7 +422,14 @@ def try_import_hf():
     Import Hugging Face integration modules with graceful degradation.
     Returns a dict of available modules and an is_ready flag.
     """
+    import os
     import traceback
+
+    # Suppress noisy transformers model-registry scan warnings that
+    # flood logs (and can crash Streamlit Cloud) when torchvision is absent.
+    os.environ.setdefault("TRANSFORMERS_NO_ADVISORY_WARNINGS", "1")
+    os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+
     result = {
         "insight_engine": None,
         "report_generator": None,

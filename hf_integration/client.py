@@ -41,6 +41,10 @@ def _load_local_pipeline(model_name: str = DEFAULT_MODEL_LOCAL):
         return _local_pipeline
 
     try:
+        # Lazy-import: only load transformers/torch when local inference is
+        # actually requested. This avoids the heavy model-registry scan at
+        # module-import time (which crashes Streamlit Cloud when torchvision
+        # is missing because image models like mobilenet_v2 import it).
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 

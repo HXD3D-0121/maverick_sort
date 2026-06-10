@@ -9,6 +9,7 @@ Three-tier fallback:
 
 import os
 import warnings
+import importlib.util
 
 # =============================================================================
 # API Key resolution order: st.secrets > env var > .env file > None
@@ -58,14 +59,28 @@ try:
 except ImportError:
     warnings.warn("huggingface_hub not installed. HF Inference API unavailable.")
 
-# Local transformers
+# Local transformers — use find_spec to avoid triggering transformers'
+# internal model-registry scan (which crashes on missing torchvision).
 try:
-    import transformers  # noqa: F401
-    import torch  # noqa: F401
+    _has_transformers = importlib.util.find_spec("transformers") is not None
+    _has_torch = importlib.util.find_spec("torch") is not None
+    if _has_transformers and _has_torch:
+        # Only import transformers when BOTH are present; this still triggers
+        # the scan, but at least we know torch is there so torchvision is
+        # likely installed too. If the scan still fails, we catch it below.
+        import transformers  # noqa: F401
+        import torch  # noqa: F401
 
-    LOCAL_MODEL_AVAILABLE = True
-except ImportError:
-    warnings.warn("transformers/torch not installed. Local model fallback unavailable.")
+        LOCAL_MODEL_AVAILABLE = True
+    else:
+        warnings.warn(
+            "transformers/torch not installed. Local model fallback unavailable."
+        )
+except Exception as _e:
+    warnings.warn(
+        f"transformers import failed (likely missing torchvision): {_e}. "
+        "Local model fallback unavailable."
+    )
 
 # =============================================================================
 # Model registry
