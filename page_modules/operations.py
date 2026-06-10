@@ -253,7 +253,8 @@ def render_task_workstation():
     with tab_completed:
         df_done = df_tasks[df_tasks["Status"] == "Completed"]
         if len(df_done) > 0:
-            st.dataframe(df_done[["Task ID", "Source Zone", "Target Client", "Assigned Worker", "SKU Checklist"]], hide_index=True)
+            task_cols = [c for c in ["Task ID", "Source Zone", "Target Client", "Assigned Worker", "SKU Checklist"] if c in df_done.columns]
+            st.dataframe(df_done[task_cols] if task_cols else df_done, hide_index=True)
         else:
             st.info("No completed tasks")
 
@@ -273,7 +274,8 @@ def render_task_workstation():
     st.markdown('<div class="section-header">My Dispatched Tasks</div>', unsafe_allow_html=True)
     my_tasks = df_tasks[df_tasks["Assigned Worker"] == "Worker-01"]
     if len(my_tasks) > 0:
-        st.dataframe(my_tasks[["Task ID", "Source Zone", "Target Client", "Status", "Priority", "Est. Duration (min)"]], hide_index=True)
+        my_cols = [c for c in ["Task ID", "Source Zone", "Target Client", "Status", "Priority", "Est. Duration (min)"] if c in my_tasks.columns]
+        st.dataframe(my_tasks[my_cols] if my_cols else my_tasks, hide_index=True)
     else:
         st.info("No tasks currently dispatched to Worker-01")
 
