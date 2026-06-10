@@ -641,6 +641,10 @@ def get_labor_data() -> pd.DataFrame:
             agg['SKUs/Hour/Person'] = round(np.random.uniform(45, 75), 1)
             agg['Shift'] = 'Morning'
             return agg
+        # Ensure uploaded df has expected columns; fill missing ones
+        for col in ["Zone", "Total Headcount", "SKUs/Hour/Person", "Shift"]:
+            if col not in df.columns:
+                df[col] = np.nan if col in ["Total Headcount", "SKUs/Hour/Person"] else "Unknown"
         return df
     # Try loading pre-built demo data
     demo_path = Path(".") / "demo_data" / "workers.csv"

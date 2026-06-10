@@ -209,7 +209,12 @@ def render_task_workstation():
     with c2:
         st.markdown('<div class="section-header">Picking Efficiency by Zone</div>', unsafe_allow_html=True)
         df_eff = get_labor_data()
-        st.dataframe(df_eff[["Zone", "Total Headcount", "SKUs/Hour/Person", "Shift"]], hide_index=True, height=250)
+        # Defensive: uploaded workers CSV may lack expected columns
+        display_cols = [c for c in ["Zone", "Total Headcount", "SKUs/Hour/Person", "Shift"] if c in df_eff.columns]
+        if display_cols:
+            st.dataframe(df_eff[display_cols], hide_index=True, height=250)
+        else:
+            st.dataframe(df_eff, hide_index=True, height=250)
 
     st.markdown("---")
 

@@ -33,7 +33,7 @@ st.set_page_config(
 # IMPORT SHARED UTILITIES
 # =============================================================================
 from page_modules.shared import (
-    PRO_CSS, init_pro_session_state,
+    PRO_CSS, init_pro_session_state, init_upload_session_state,
     try_import_what_if, try_import_mos, try_import_adaptive, try_import_hf,
 )
 
@@ -69,6 +69,7 @@ from page_modules.demo import render_realtime_simulation
 # INIT SESSION STATE & CSS
 # =============================================================================
 init_pro_session_state()
+init_upload_session_state()
 
 # --- Copilot sidebar state ---
 if "copilot_expanded" not in st.session_state:
