@@ -1,0 +1,52 @@
+{
+  "heuristic_summary": {
+    "FCFS": {
+      "avg_reward": 2557.5556441288527,
+      "std_reward": 446.779709038038,
+      "avg_distance": 689.9693558711874,
+      "avg_waves": 85.8,
+      "avg_misses": 0.0,
+      "avg_violations": 37.6
+    },
+    "TEMP_FIRST": {
+      "avg_reward": -1703.494995464244,
+      "std_reward": 79.73242058934744,
+      "avg_distance": 989.7699954642654,
+      "avg_waves": 126.05,
+      "avg_misses": 0.0,
+      "avg_violations": 0.0
+    },
+    "ZONE_NN": {
+      "avg_reward": 2566.717413373337,
+      "std_reward": 450.5369463816228,
+      "avg_distance": 667.0575866267039,
+      "avg_waves": 82.55,
+      "avg_misses": 0.0,
+      "avg_violations": 37.3
+    },
+    "EDD": {
+      "avg_reward": 2537.8388930571214,
+      "std_reward": 397.48740642202216,
+      "avg_distance": 665.1861069429184,
+      "avg_waves": 82.7,
+      "avg_misses": 0.0,
+      "avg_violations": 37.0
+    },
+    "TZU": {
+      "avg_reward": 999.1442572359414,
+      "std_reward": 288.21211210374906,
+      "avg_distance": 664.630742764053,
+      "avg_waves": 82.55,
+      "avg_misses": 0.0,
+      "avg_violations": 21.6
+    }
+  },
+  "ppo_available": true,
+  "ppo_summary": {
+    "avg_reward": 4180.179795664631,
+    "avg_waves": 86.5,
+    "avg_distance": 694.3227034066203,
+    "avg_misses": 3.2,
+    "avg_violations": 38.8
+  }
+}

@@ -1,0 +1,31 @@
+task_id,source_zone,target_client,sku_checklist,priority,status,assigned_worker,est_duration_min
+TSK-00001,Zone B,Public Hospital,Insulin Glargine x2;Amoxicillin x1,Urgent,Pending,Worker-03,15
+TSK-00002,Zone A,Chain Pharmacy,Paracetamol x3;Ibuprofen x2,Standard,Active Picking,Worker-01,22
+TSK-00003,Zone C,Independent Pharmacy,Influenza Vaccine x1,Urgent,Pending,Worker-05,12
+TSK-00004,Zone D,Primary Healthcare,Metformin x2;Amlodipine x1,Standard,Completed,Worker-02,18
+TSK-00005,Zone E,Public Hospital,Insulin Aspart x3,Critical,Active Picking,Worker-04,25
+TSK-00006,Zone B,Chain Pharmacy,Valsartan x1;Azithromycin x2,Urgent,Pending,Worker-06,14
+TSK-00007,Zone A,Independent Pharmacy,Growth Hormone x1,Cool,Pending,Worker-07,20
+TSK-00008,Zone C,Public Hospital,mRNA Vaccine x2,Critical,Active Picking,Worker-03,30
+TSK-00009,Zone D,Primary Healthcare,Paracetamol x5,Standard,Completed,Worker-08,10
+TSK-00010,Zone E,Chain Pharmacy,Interferon Alfa x1,Urgent,Pending,Worker-01,28
+TSK-00011,Zone B,Public Hospital,CAR-T Cell Therapy x1,Critical,Active Picking,Worker-05,35
+TSK-00012,Zone A,Independent Pharmacy,Amoxicillin x3,Standard,Completed,Worker-02,16
+TSK-00013,Zone C,Primary Healthcare,Hepatitis B Vaccine x2,Urgent,Pending,Worker-04,19
+TSK-00014,Zone D,Chain Pharmacy,Ibuprofen x4;Metformin x1,Standard,Active Picking,Worker-06,15
+TSK-00015,Zone E,Public Hospital,Insulin Glargine x4,Critical,Pending,Worker-07,32
+TSK-00016,Zone B,Independent Pharmacy,Erythropoietin x1,Urgent,Completed,Worker-08,24
+TSK-00017,Zone A,Primary Healthcare,Amlodipine x2,Standard,Pending,Worker-03,11
+TSK-00018,Zone C,Chain Pharmacy,Azithromycin x3,Urgent,Active Picking,Worker-01,17
+TSK-00019,Zone D,Public Hospital,Dapagliflozin x2,Critical,Pending,Worker-05,21
+TSK-00020,Zone E,Independent Pharmacy,Monoclonal Antibody x1,Urgent,Completed,Worker-02,26
+TSK-00021,Zone B,Primary Healthcare,Paracetamol x6,Standard,Active Picking,Worker-04,13
+TSK-00022,Zone A,Chain Pharmacy,HPV Vaccine x1,Critical,Pending,Worker-06,29
+TSK-00023,Zone C,Public Hospital,Insulin Aspart x2;Growth Hormone x1,Urgent,Completed,Worker-07,23
+TSK-00024,Zone D,Independent Pharmacy,Valsartan x1,Standard,Pending,Worker-08,9
+TSK-00025,Zone E,Primary Healthcare,Pneumococcal Vaccine x2,Urgent,Active Picking,Worker-03,27
+TSK-00026,Zone B,Chain Pharmacy,Ibuprofen x2;Paracetamol x3,Standard,Completed,Worker-01,14
+TSK-00027,Zone A,Public Hospital,mRNA Vaccine x1,Critical,Pending,Worker-05,33
+TSK-00028,Zone C,Independent Pharmacy,Amoxicillin x4,Urgent,Active Picking,Worker-02,18
+TSK-00029,Zone D,Primary Healthcare,Metformin x3,Standard,Completed,Worker-04,12
+TSK-00030,Zone E,Chain Pharmacy,Interferon Alfa x2,Critical,Pending,Worker-06,31

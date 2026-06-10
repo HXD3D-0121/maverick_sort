@@ -1,0 +1,25 @@
+digraph KGDRL {
+    rankdir=TB;
+    node [shape=box, style=rounded, fontsize=11, fontname="Microsoft YaHei"];
+
+    start [shape=parallelogram, label="开始 / 生产需求\n(订单, 工艺, 交期)"];
+    s1 [label="S1 构建RMS调度环境与数学模型\n- 定义任务/阶段、可重构机器/切换、调度约束\n- 建立最小化总完工时间的模型"];
+    gen [label="调度算例生成\n(加工/重配置时间分布, 机器速度等)"];
+    s2 [label="S2 状态向量提取与动作掩码\n- 六维节点特征\n- 构建任务–机器联合动作与掩码"];
+    s3 [label="S3 知识引导概率计算与融合\n- 基于转换/重配置时间计算动作成本\n- softmin生成引导概率\n- 与Actor输出融合为最终动作分布"];
+    s4 [label="S4 PPO训练与策略更新（云端）\n- Actor–Critic, GAE/TD\n- 奖励 = makespan + 重配置时间\n- PPO裁剪, MSE, 熵/梯度裁剪, Adam优化"];
+    buf [label="经验回放/批量更新\n(多实例并行采样)"];
+    sx [label="SX 云—边协同\n- 边缘: 车间状态采集/仿真\n- 云端: 策略评估与更新, 下发策略参数"];
+    s5 [label="S5 动态调度执行系统（在线闭环）\n- 多实例并行 → 动作采样 → 调度执行 → 状态迁移/奖励记录\n- 触发更新条件 → 回传经验 → 云端迭代优化\n- 输出KPI(完工时间/收益/损失曲线)"];
+    end [shape=parallelogram, label="结束 / 输出调度方案与性能指标"];
+
+    # 主流程
+    start -> s1 -> s2 -> s3 -> s4 -> sx -> s5 -> end;
+
+    # 支路
+    s1 -> gen;
+
+    # 云边反馈
+    s4 -> buf;
+    s5 -> buf;
+}

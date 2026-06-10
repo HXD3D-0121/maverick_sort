@@ -1,0 +1,101 @@
+order_id,client_type,sku_count,temperature,deadline_hours,priority,volume,status,timestamp,time_window
+ORD-20260001,Chain Pharmacy,4,Cool,14.2,Urgent,45,Pending Dispatch,08:30:00,Morning Peak
+ORD-20260002,Public Hospital,2,Cold,4.5,Critical,12,Picking in Progress,10:15:00,Morning Peak
+ORD-20260003,Independent Pharmacy,1,Ambient,18.0,Standard,67,Completed,14:20:00,Afternoon
+ORD-20260004,Primary Healthcare,3,Cool,8.3,Urgent,23,Pending Dispatch,09:45:00,Morning Peak
+ORD-20260005,Public Hospital,5,Frozen,6.2,Critical,89,Picking in Progress,11:00:00,Morning Peak
+ORD-20260006,Chain Pharmacy,2,Ambient,22.0,Standard,34,Completed,16:30:00,Afternoon
+ORD-20260007,Independent Pharmacy,6,Cold,3.8,Critical,56,Picking in Progress,07:20:00,Early
+ORD-20260008,Public Hospital,1,Cool,15.0,Urgent,78,Pending Dispatch,13:10:00,Afternoon
+ORD-20260009,Primary Healthcare,3,Ambient,20.5,Standard,15,Completed,18:45:00,Evening Peak
+ORD-20260010,Chain Pharmacy,4,Frozen,5.5,Critical,92,Exception,10:50:00,Morning Peak
+ORD-20260011,Public Hospital,2,Cold,9.0,Urgent,41,Pending Dispatch,08:00:00,Morning Peak
+ORD-20260012,Independent Pharmacy,1,Ambient,24.0,Standard,63,Completed,15:25:00,Afternoon
+ORD-20260013,Primary Healthcare,5,Cool,7.5,Urgent,28,Picking in Progress,09:15:00,Morning Peak
+ORD-20260014,Chain Pharmacy,3,Cold,11.2,Urgent,55,Pending Dispatch,12:40:00,Morning Peak
+ORD-20260015,Public Hospital,2,Frozen,4.0,Critical,37,Picking in Progress,06:50:00,Early
+ORD-20260016,Independent Pharmacy,4,Ambient,19.0,Standard,84,Completed,17:10:00,Afternoon
+ORD-20260017,Primary Healthcare,1,Cool,16.5,Urgent,19,Pending Dispatch,14:00:00,Afternoon
+ORD-20260018,Chain Pharmacy,6,Cold,3.2,Critical,71,Picking in Progress,08:45:00,Morning Peak
+ORD-20260019,Public Hospital,2,Ambient,21.0,Standard,48,Completed,19:30:00,Evening Peak
+ORD-20260020,Independent Pharmacy,3,Frozen,8.0,Urgent,66,Pending Dispatch,11:20:00,Morning Peak
+ORD-20260021,Primary Healthcare,1,Cool,13.0,Urgent,25,Completed,10:05:00,Morning Peak
+ORD-20260022,Chain Pharmacy,4,Ambient,23.5,Standard,93,Pending Dispatch,20:15:00,Evening Peak
+ORD-20260023,Public Hospital,2,Cold,5.8,Critical,14,Picking in Progress,07:40:00,Early
+ORD-20260024,Independent Pharmacy,5,Cool,10.0,Urgent,52,Completed,13:50:00,Afternoon
+ORD-20260025,Primary Healthcare,1,Ambient,17.0,Standard,38,Pending Dispatch,15:00:00,Afternoon
+ORD-20260026,Chain Pharmacy,3,Frozen,4.8,Critical,81,Picking in Progress,09:30:00,Morning Peak
+ORD-20260027,Public Hospital,2,Cold,12.5,Urgent,44,Completed,16:20:00,Afternoon
+ORD-20260028,Independent Pharmacy,4,Ambient,20.0,Standard,29,Pending Dispatch,18:00:00,Evening Peak
+ORD-20260029,Primary Healthcare,1,Cool,7.0,Urgent,76,Picking in Progress,08:10:00,Morning Peak
+ORD-20260030,Chain Pharmacy,6,Cold,3.5,Critical,58,Exception,10:40:00,Morning Peak
+ORD-20260031,Public Hospital,2,Ambient,22.0,Standard,11,Completed,21:30:00,Late
+ORD-20260032,Independent Pharmacy,3,Frozen,9.2,Urgent,95,Pending Dispatch,12:00:00,Morning Peak
+ORD-20260033,Primary Healthcare,1,Cool,14.8,Urgent,33,Completed,14:45:00,Afternoon
+ORD-20260034,Chain Pharmacy,4,Ambient,18.5,Standard,62,Pending Dispatch,17:40:00,Afternoon
+ORD-20260035,Public Hospital,2,Cold,6.0,Critical,87,Picking in Progress,07:00:00,Early
+ORD-20260036,Independent Pharmacy,5,Ambient,24.0,Standard,16,Completed,19:15:00,Evening Peak
+ORD-20260037,Primary Healthcare,1,Cool,11.0,Urgent,49,Pending Dispatch,09:00:00,Morning Peak
+ORD-20260038,Chain Pharmacy,3,Frozen,5.0,Critical,73,Picking in Progress,11:50:00,Morning Peak
+ORD-20260039,Public Hospital,2,Ambient,16.0,Urgent,27,Completed,13:30:00,Afternoon
+ORD-20260040,Independent Pharmacy,4,Cold,8.5,Urgent,91,Pending Dispatch,15:50:00,Afternoon
+ORD-20260041,Primary Healthcare,1,Ambient,21.0,Standard,42,Completed,18:30:00,Evening Peak
+ORD-20260042,Chain Pharmacy,6,Cool,4.2,Critical,68,Picking in Progress,08:25:00,Morning Peak
+ORD-20260043,Public Hospital,2,Frozen,10.5,Urgent,35,Pending Dispatch,10:30:00,Morning Peak
+ORD-20260044,Independent Pharmacy,3,Ambient,19.5,Standard,54,Completed,14:15:00,Afternoon
+ORD-20260045,Primary Healthcare,1,Cold,7.8,Urgent,83,Pending Dispatch,16:00:00,Afternoon
+ORD-20260046,Chain Pharmacy,4,Ambient,23.0,Standard,20,Completed,20:45:00,Evening Peak
+ORD-20260047,Public Hospital,2,Cool,5.5,Critical,97,Picking in Progress,07:15:00,Early
+ORD-20260048,Independent Pharmacy,5,Frozen,12.0,Urgent,40,Pending Dispatch,09:55:00,Morning Peak
+ORD-20260049,Primary Healthcare,1,Ambient,17.5,Standard,61,Completed,12:20:00,Morning Peak
+ORD-20260050,Chain Pharmacy,3,Cold,6.8,Critical,26,Picking in Progress,10:10:00,Morning Peak
+ORD-20260051,Public Hospital,2,Ambient,15.0,Urgent,88,Pending Dispatch,13:40:00,Afternoon
+ORD-20260052,Independent Pharmacy,4,Cool,20.0,Standard,13,Completed,17:00:00,Afternoon
+ORD-20260053,Primary Healthcare,1,Frozen,4.5,Critical,75,Exception,08:50:00,Morning Peak
+ORD-20260054,Chain Pharmacy,6,Ambient,22.5,Standard,47,Completed,19:45:00,Evening Peak
+ORD-20260055,Public Hospital,2,Cold,9.0,Urgent,32,Pending Dispatch,11:35:00,Morning Peak
+ORD-20260056,Independent Pharmacy,3,Ambient,18.0,Standard,99,Completed,15:10:00,Afternoon
+ORD-20260057,Primary Healthcare,1,Cool,13.5,Urgent,57,Pending Dispatch,14:30:00,Afternoon
+ORD-20260058,Chain Pharmacy,4,Frozen,5.2,Critical,22,Picking in Progress,06:40:00,Early
+ORD-20260059,Public Hospital,2,Ambient,24.0,Standard,85,Completed,21:00:00,Late
+ORD-20260060,Independent Pharmacy,5,Cold,8.0,Urgent,39,Pending Dispatch,09:20:00,Morning Peak
+ORD-20260061,Primary Healthcare,1,Ambient,16.0,Urgent,64,Completed,12:50:00,Morning Peak
+ORD-20260062,Chain Pharmacy,3,Cool,7.0,Urgent,18,Pending Dispatch,10:25:00,Morning Peak
+ORD-20260063,Public Hospital,2,Frozen,4.0,Critical,96,Picking in Progress,08:05:00,Morning Peak
+ORD-20260064,Independent Pharmacy,4,Ambient,19.0,Standard,51,Completed,16:45:00,Afternoon
+ORD-20260065,Primary Healthcare,1,Cold,11.5,Urgent,30,Pending Dispatch,13:20:00,Afternoon
+ORD-20260066,Chain Pharmacy,6,Ambient,21.0,Standard,77,Completed,18:15:00,Evening Peak
+ORD-20260067,Public Hospital,2,Cool,6.5,Critical,43,Picking in Progress,07:55:00,Early
+ORD-20260068,Independent Pharmacy,3,Frozen,10.0,Urgent,12,Pending Dispatch,11:05:00,Morning Peak
+ORD-20260069,Primary Healthcare,1,Ambient,14.0,Urgent,70,Completed,14:55:00,Afternoon
+ORD-20260070,Chain Pharmacy,4,Cold,8.2,Urgent,28,Pending Dispatch,15:35:00,Afternoon
+ORD-20260071,Public Hospital,2,Ambient,23.0,Standard,90,Completed,20:00:00,Evening Peak
+ORD-20260072,Independent Pharmacy,5,Cool,5.0,Critical,36,Picking in Progress,08:35:00,Morning Peak
+ORD-20260073,Primary Healthcare,1,Frozen,9.5,Urgent,59,Pending Dispatch,10:55:00,Morning Peak
+ORD-20260074,Chain Pharmacy,3,Ambient,17.5,Standard,24,Completed,13:05:00,Afternoon
+ORD-20260075,Public Hospital,2,Cold,7.2,Critical,82,Picking in Progress,07:30:00,Early
+ORD-20260076,Independent Pharmacy,4,Ambient,20.0,Standard,46,Completed,17:25:00,Afternoon
+ORD-20260077,Primary Healthcare,1,Cool,12.0,Urgent,65,Pending Dispatch,12:10:00,Morning Peak
+ORD-20260078,Chain Pharmacy,6,Frozen,4.8,Critical,17,Exception,09:40:00,Morning Peak
+ORD-20260079,Public Hospital,2,Ambient,15.5,Urgent,94,Completed,16:30:00,Afternoon
+ORD-20260080,Independent Pharmacy,3,Cold,6.0,Critical,31,Picking in Progress,08:20:00,Morning Peak
+ORD-20260081,Primary Healthcare,1,Ambient,22.0,Standard,53,Pending Dispatch,19:20:00,Evening Peak
+ORD-20260082,Chain Pharmacy,4,Cool,8.8,Urgent,78,Completed,11:15:00,Morning Peak
+ORD-20260083,Public Hospital,2,Frozen,5.0,Critical,21,Picking in Progress,10:00:00,Morning Peak
+ORD-20260084,Independent Pharmacy,5,Ambient,18.0,Standard,66,Completed,14:40:00,Afternoon
+ORD-20260085,Primary Healthcare,1,Cold,13.0,Urgent,44,Pending Dispatch,15:55:00,Afternoon
+ORD-20260086,Chain Pharmacy,3,Ambient,24.0,Standard,86,Completed,21:15:00,Late
+ORD-20260087,Public Hospital,2,Cool,7.5,Critical,29,Picking in Progress,07:45:00,Early
+ORD-20260088,Independent Pharmacy,4,Frozen,11.0,Urgent,60,Pending Dispatch,09:10:00,Morning Peak
+ORD-20260089,Primary Healthcare,1,Ambient,16.5,Urgent,37,Completed,13:45:00,Afternoon
+ORD-20260090,Chain Pharmacy,6,Cold,5.8,Critical,98,Picking in Progress,11:25:00,Morning Peak
+ORD-20260091,Public Hospital,2,Ambient,19.0,Standard,14,Completed,17:50:00,Afternoon
+ORD-20260092,Independent Pharmacy,3,Cool,10.2,Urgent,72,Pending Dispatch,12:35:00,Morning Peak
+ORD-20260093,Primary Healthcare,1,Ambient,21.5,Standard,50,Completed,18:45:00,Evening Peak
+ORD-20260094,Chain Pharmacy,4,Frozen,4.2,Critical,84,Pending Dispatch,08:15:00,Morning Peak
+ORD-20260095,Public Hospital,2,Cold,9.5,Urgent,23,Completed,10:45:00,Morning Peak
+ORD-20260096,Independent Pharmacy,5,Ambient,17.0,Standard,69,Pending Dispatch,14:20:00,Afternoon
+ORD-20260097,Primary Healthcare,1,Cool,6.0,Critical,41,Picking in Progress,06:55:00,Early
+ORD-20260098,Chain Pharmacy,3,Ambient,20.0,Standard,92,Completed,16:00:00,Afternoon
+ORD-20260099,Public Hospital,2,Frozen,8.0,Urgent,56,Pending Dispatch,09:50:00,Morning Peak
+ORD-20260100,Independent Pharmacy,4,Cold,7.0,Urgent,15,Exception,11:40:00,Morning Peak

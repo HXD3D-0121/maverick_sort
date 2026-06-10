@@ -1,0 +1,6 @@
+Line 1141: 覆盖次数',
+Line 1159: 风险', 'Normal'],
+Line 1350: 步';
+Line 1456: 存在Temp Mixing风险（常温+冷冻）</span>`;
+Line 1461: 警报: Wave #${step.wave_count} ($
+Line 1462: 暂无')) alertLog.innerHTML = '';

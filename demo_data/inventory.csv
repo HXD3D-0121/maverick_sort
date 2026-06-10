@@ -1,0 +1,21 @@
+sku,name,category,temperature_zone,stock_qty,expiry_date
+INS-001,Insulin Glargine,Cold Chain Insulin,Cold,1200,2026-06-15
+INS-002,Insulin Aspart,Cold Chain Insulin,Cold,850,2026-07-20
+VAC-001,Influenza Vaccine,Vaccine,Frozen,2300,2026-09-10
+VAC-002,HPV Vaccine,Vaccine,Frozen,1800,2026-08-05
+ANT-001,Amoxicillin Capsules,Antibiotic,Ambient,4500,2026-12-31
+ANT-002,Azithromycin Tablets,Antibiotic,Ambient,3200,2026-11-15
+HBP-001,Amlodipine Tablets,Hypertension,Ambient,5600,2027-01-20
+HBP-002,Valsartan Capsules,Hypertension,Ambient,4100,2026-10-10
+DM-001,Metformin Tablets,Diabetes,Ambient,6200,2027-02-28
+DM-002,Dapagliflozin Tablets,Diabetes,Ambient,2800,2026-09-25
+COOL-001,Interferon Alfa,Biologic,Cool,950,2026-07-08
+COOL-002,Erythropoietin,Biologic,Cool,720,2026-06-30
+DF-001,mRNA Vaccine,Vaccine,Deep Frozen,340,2026-08-18
+DF-002,CAR-T Cell Therapy,Biologic,Deep Frozen,180,2026-07-12
+COLD-003,Growth Hormone,Hormone,Cold,1500,2026-10-05
+AMB-003,Paracetamol Tablets,OTC,Ambient,7800,2027-03-15
+AMB-004,Ibuprofen Capsules,OTC,Ambient,6500,2026-11-30
+COOL-003,Monoclonal Antibody,Biologic,Cool,680,2026-08-22
+FRZ-003,Pneumococcal Vaccine,Vaccine,Frozen,2100,2026-09-28
+COLD-004,Hepatitis B Vaccine,Vaccine,Cold,1900,2026-07-25

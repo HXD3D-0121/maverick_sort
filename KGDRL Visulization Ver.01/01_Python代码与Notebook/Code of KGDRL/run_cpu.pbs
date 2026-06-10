@@ -1,0 +1,18 @@
+#!/bin/bash
+#PBS -P JSRS
+#PBS -j oe
+#PBS -N time_test_cpu
+#PBS -q parallel24
+#PBS -l select=1:ncpus=24:mem=4gb
+#PBS -l walltime=00:10:00
+
+cd "$PBS_O_WORKDIR";
+np=$(cat ${PBS_NODEFILE} | wc -l);
+
+source /etc/profile.d/rec_modules.sh
+module load miniconda
+bash
+. ~/.bashrc
+
+conda activate py_zzl
+python time_test.py

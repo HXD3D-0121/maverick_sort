@@ -1,0 +1,41 @@
+task_id,source_zone,target_client,sku_checklist,priority,status,assigned_worker,est_duration_min
+TSK-00001,Zone B,Primary Healthcare,Ibuprofen x2;Amlodipine x5,Urgent,Completed,Worker-11,6
+TSK-00002,Zone B,Chain Pharmacy,Influenza Vaccine x5;Amoxicillin x2,Critical,Pending,Worker-07,15
+TSK-00003,Zone B,Primary Healthcare,Metformin x1;Ibuprofen x3;Metformin x1,Critical,Pending,Worker-07,43
+TSK-00004,Zone C,Public Hospital,Amlodipine x5,Urgent,Completed,Worker-02,10
+TSK-00005,Zone A,Primary Healthcare,Losartan x4;Amoxicillin x4;Losartan x5,Standard,Pending,Worker-11,48
+TSK-00006,Zone C,Chain Pharmacy,Losartan x2,Standard,Completed,Worker-06,25
+TSK-00007,Zone B,Chain Pharmacy,Interferon Alfa x5,Standard,Exception,Worker-11,29
+TSK-00008,Zone C,Chain Pharmacy,Insulin Glargine x3;Amlodipine x3;Metformin x1,Urgent,Completed,Worker-05,8
+TSK-00009,Zone B,Chain Pharmacy,Cefixime x4,Standard,Pending,Worker-01,5
+TSK-00010,Zone C,Independent Pharmacy,Influenza Vaccine x4;Amoxicillin x5;Influenza Vaccine x5,Urgent,Pending,Worker-06,37
+TSK-00011,Zone A,Primary Healthcare,Amoxicillin x5;Cefixime x1;Metformin x1,Standard,Completed,Worker-10,43
+TSK-00012,Zone D,Primary Healthcare,Cefixime x3;Amoxicillin x4;Influenza Vaccine x5,Urgent,Exception,Worker-11,57
+TSK-00013,Zone A,Primary Healthcare,Insulin Glargine x5;Amoxicillin x2;Influenza Vaccine x2,Urgent,Active Picking,Worker-02,14
+TSK-00014,Zone E,Primary Healthcare,Insulin Glargine x2;Interferon Alfa x3,Urgent,Completed,Worker-03,14
+TSK-00015,Zone D,Primary Healthcare,Influenza Vaccine x5;Amoxicillin x2;Influenza Vaccine x1,Urgent,Pending,Worker-05,29
+TSK-00016,Zone D,Public Hospital,Metformin x1;Paracetamol x5;Cefixime x5,Critical,Completed,Worker-04,37
+TSK-00017,Zone E,Public Hospital,Influenza Vaccine x4;Losartan x1,Urgent,Active Picking,Worker-11,48
+TSK-00018,Zone A,Public Hospital,Cefixime x1,Critical,Completed,Worker-09,17
+TSK-00019,Zone D,Chain Pharmacy,Cefixime x2,Standard,Active Picking,Worker-05,49
+TSK-00020,Zone D,Chain Pharmacy,Amlodipine x5;Insulin Glargine x1,Urgent,Pending,Worker-10,40
+TSK-00021,Zone A,Primary Healthcare,Paracetamol x4,Standard,Pending,Worker-11,12
+TSK-00022,Zone B,Independent Pharmacy,Ibuprofen x3,Critical,Completed,Worker-02,38
+TSK-00023,Zone A,Primary Healthcare,Losartan x1;Interferon Alfa x1;Paracetamol x2,Urgent,Completed,Worker-05,12
+TSK-00024,Zone C,Public Hospital,Losartan x2;Cefixime x4;Ibuprofen x2,Urgent,Active Picking,Worker-12,46
+TSK-00025,Zone D,Public Hospital,Paracetamol x5;Amoxicillin x2,Urgent,Active Picking,Worker-03,55
+TSK-00026,Zone B,Public Hospital,Influenza Vaccine x3,Standard,Active Picking,Worker-11,35
+TSK-00027,Zone D,Public Hospital,Losartan x3,Standard,Pending,Worker-09,34
+TSK-00028,Zone B,Chain Pharmacy,Insulin Glargine x3;Ibuprofen x1,Urgent,Completed,Worker-10,9
+TSK-00029,Zone C,Chain Pharmacy,Losartan x5,Critical,Pending,Worker-08,22
+TSK-00030,Zone D,Independent Pharmacy,Insulin Glargine x3,Standard,Pending,Worker-05,57
+TSK-00031,Zone E,Independent Pharmacy,Cefixime x3,Urgent,Active Picking,Worker-02,32
+TSK-00032,Zone E,Primary Healthcare,Paracetamol x1,Standard,Active Picking,Worker-05,39
+TSK-00033,Zone E,Chain Pharmacy,Metformin x1,Standard,Active Picking,Worker-01,57
+TSK-00034,Zone A,Public Hospital,Amlodipine x2;Metformin x4;Paracetamol x2,Urgent,Completed,Worker-06,45
+TSK-00035,Zone C,Chain Pharmacy,Interferon Alfa x5,Critical,Pending,Worker-01,18
+TSK-00036,Zone E,Primary Healthcare,Insulin Glargine x4;Paracetamol x1;Influenza Vaccine x1,Standard,Pending,Worker-06,12
+TSK-00037,Zone E,Chain Pharmacy,Losartan x4;Amlodipine x2;Ibuprofen x1,Urgent,Pending,Worker-09,15
+TSK-00038,Zone A,Chain Pharmacy,Paracetamol x1;Paracetamol x4;Ibuprofen x2,Standard,Pending,Worker-12,57
+TSK-00039,Zone A,Independent Pharmacy,Amlodipine x5;Interferon Alfa x3,Standard,Pending,Worker-08,30
+TSK-00040,Zone E,Independent Pharmacy,Ibuprofen x4;Amlodipine x1;Losartan x2,Urgent,Active Picking,Worker-07,18
