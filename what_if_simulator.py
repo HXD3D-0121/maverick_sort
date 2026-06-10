@@ -33,9 +33,12 @@ try:
         DataGenerator, PharmaWaveEnv, run_heuristic, evaluate_agent
     )
     KGDRL_AVAILABLE = True
-except ImportError:
+except Exception as _e:
     KGDRL_AVAILABLE = False
-    warnings.warn("KGDRL core not available. Simulator will run in standalone mode.")
+    warnings.warn(
+        f"KGDRL core not available. Simulator will run in standalone mode. "
+        f"Reason: {_e}"
+    )
 
 
 # =============================================================================

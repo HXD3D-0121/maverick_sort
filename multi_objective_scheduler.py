@@ -35,9 +35,12 @@ try:
     from pharma_wave_allocation import PharmaWaveEnv, DataGenerator, Order, SKU
     from kgdrl_core_v2 import KnowledgeGraph, GATEncoder
     CORE_AVAILABLE = True
-except ImportError:
+except Exception as _e:
     CORE_AVAILABLE = False
-    warnings.warn("Core modules not available. Running in standalone demo mode.")
+    warnings.warn(
+        f"Core modules not available. Running in standalone demo mode. "
+        f"Reason: {_e}"
+    )
 
 
 # =============================================================================
