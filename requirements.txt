@@ -13,8 +13,10 @@ scikit-learn==1.8.0
 pillow==12.2.0
 
 # ── AI / HuggingFace (Maverick Copilot) ──
+# NOTE: torchvision is NOT listed here because it causes dependency conflicts
+# with torch==2.12.0 and is only needed for local vision models. The code
+# gracefully degrades when torchvision is absent (see hf_integration/config.py).
 huggingface-hub==1.18.0
 transformers==5.10.2
 torch==2.12.0
-torchvision==0.22.0
 sentence-transformers==5.5.1
