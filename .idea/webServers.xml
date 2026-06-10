@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d72b5f61-12dc-441c-b7ed-a39a89330a98" name="JSRS">
+        <fileTransfer accessType="SFTP" host="atlas8" port="22" sshConfigId="427e72e7-6189-4dc8-b8b0-98f2fe7182df" sshConfig="e1100075@atlas8:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
